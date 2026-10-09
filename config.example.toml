@@ -1,0 +1,20 @@
+# Copy to config.toml (gitignored).
+[server]
+host = "0.0.0.0"    # LAN; "127.0.0.1" = this Pi only
+port = 8710
+threads = 4
+
+[ai]
+mode = "jev"                       # jev | llm | off
+jev_model = "jev-latest"
+generate_chain = ["openrouter_free"]   # [] disables all LLM use
+rewrite_prose = true
+timeout_s = 60
+
+[ai.thresholds]
+task_accept = 0.7
+task_review = 0.4
+confidence_review = 0.6
+
+[ui]
+date_format = "dd/mm/yyyy"         # dd/mm/yyyy | mm/dd/yyyy | yyyy-mm-dd

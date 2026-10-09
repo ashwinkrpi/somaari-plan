@@ -1,0 +1,4 @@
+# v1
+Extract actionable tasks. JSON only:
+{"t":[{"s":step,"n":title,"p":"H"|"M"|"L","d":"YYYY-MM-DD"|null,"m":true|false}]}
+n: imperative, max 12 words. d only if the text states a date. Max 40 tasks.

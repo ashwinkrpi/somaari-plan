@@ -1,0 +1,10 @@
+.venv/
+data/
+.env
+config.toml
+__pycache__/
+*.zip
+.claude/settings.local.json
+.pytest_cache/
+docs/MANUAL_CHECKS.md
+samples/

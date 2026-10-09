@@ -1,0 +1,39 @@
+# Status
+Update at the end of every session. Max 5 lines per stage. Newest at top.
+- Release prep: LICENSE (MIT, D-05), README (install, service, AI setup), CHANGELOG v0.1.0, [ui] in config.example.toml, GEMINI_API_KEY in .env.example. gitleaks: history clean. Screenshots: Dashboard, neutral shed-build demo data (not the seed). Neutral data: tests/fixtures/example-plan.md (book swap, 21 candidates, 6 steps) + regenerated expected; seed is a book swap week. History clean-up open (D-12). Still to do: fresh-clone test on the Pi.
+- Post-Stage 8 tweaks: --dev reloader port fix; Dashboard "Done" on open cards due today or earlier, Move disabled on done cards; weekend shading in Calendar (--weekend) and Dashboard (--weekend-cell). UI_SPEC updated.
+- Quick add shows pending cards only (D-11): Discard, Clear N, added cards drop off on return; GET /api/quick?all=1, DELETE /api/quick[/id]. tests 75.
+- Date format setting ([ui] date_format, default dd/mm/yyyy): own date field everywhere (text + 📅 picker) instead of native mm/dd/yyyy inputs. Quick add card field heights fixed. tests 74.
+- Plan dates: rules (quickparse) read dates/times first, Jev date parts only for misses; brackets ignored; undated in_text lines carry the date above (D-10). Content uses full width. tests 73.
+- Also: mdparse accepts `##heading` without a space; ai.log records the model that answered (openrouter/free → real model). Repo pushed to GitHub (private). D-09 built: inline Edit (Today, Calendar day, Dashboard; Delete with confirm) and Done page (GET /api/done, search, Reopen / Reopen on…). Edit disabled on done tasks. Reopen never lands in the past (server rule). tests +3 (72).
+- Steps (tags) on New plan: Step field for paste and Quick add, editable Step in preview, suggestions via GET /api/steps, tag hints under 01/02. Steps trimmed to 30 chars server-side. tests +2 (67).
+- Stage 8 done: routes/export.py (GET /api/export, POST /api/import add-only, validated), Settings Backup section, dom.swap keeps focus across re-renders, skip link, Today loading/retry, AI-down notice on preview. tests +3 (65).
+- Notes: import never edits/deletes (dedupe on title+due_date+created_at); replace-all not built, logged as D-08 (Open). D-03/D-07 still Open. Next: Stage 9 (Pi).
+- Manual: keyboard-only walk-through of all 5 pages; 380 px and both themes (Backup section, skip link); export then import on a real db; real Jev down (bad key) shows notice.
+- Stage 7 done: quickparse.py (rules, no AI), routes/quick.py (GET/POST /api/quick, POST /api/quick/:id/add; Jev date parts + m_ question on a miss, never an LLM), web/js/quick.js chat column on New plan (role=log, editable card, Add to plan). tests +12 (62).
+- Notes: miss + Jev down -> date today with a note to check it; added tasks are Medium priority, source kind quick; weekday rule picks next occurrence (today counts). D-03/D-07 still Open. Next: Stage 8.
+- Manual: Quick add at 380 px, both themes, keyboard (Enter submits, Tab to card); one real Jev call for a line the rules miss.
+- Stage 6 done: ingest/{mdparse,pipeline}.py, ai/questions.py (VERSION 1), dates.py, scheduler.py, routes/ingest.py (preview/commit), web/js/plan.js (New plan: upload, paste, editable preview, skipped lines, commit); persistent ai_cache so re-upload = 0 AI calls. tests +12 (50).
+- Notes: golden fixture regenerated (one trailing space trimmed); date parts asked only for in_text sources; Jev down -> LLM extraction (mode llm) else code-only list; Quick add column is a Stage 7 placeholder. D-03 still Open (no real tuning data). Next: Stage 7.
+- Manual: real Jev run on 3-4 real plans (review kept/skipped/flagged lists, propose thresholds + pin version in D-03); New plan page at 380 px, both themes, keyboard; confirm no LLM call on a real .md upload.
+- Stage 5 done: ai/{router,jev,smoke}.py + providers/{mock,remote}.py (decide/generate, cache, 429 retry, ai.log, fallback jev->llm|off), routes/{ai,settings}.py, Settings page (nav + js/settings.js), config [ai] load/validate/save, conftest forces mocks. tests +22 (38).
+- Notes: no Jev question sets yet (Stage 6); decide() returns ok/fallback dicts; `.env` loaded only by `python -m app`; ollama omitted; saving config.toml rewrites it without comments. Next: Stage 6.
+- Manual: `python -m app.ai.smoke jev` and `... openrouter_free` on the Pi (needs keys in .env); Settings page at 380 px, both themes, keyboard; Jev down (bad key) shows fallback.
+- Stage 4 done: js/dashboard.js (summary band, 7-day x High/Medium/Low board, HTML5 drag + Move/Move here/Cancel, week nav, role=status); drop PATCHes due_date+priority; nav-dash shows done/planned for current week. tests +1 (16).
+- Notes: "moved items" not shown (no move history stored); last week shows done/planned + not-done count. Next: Stage 5.
+- Manual: drag and tap-move then reload; check 380 px, both themes, keyboard.
+- Stage 3 done: js/{store,dates,dom,today,calendar}.js; Today list (priority sort, Mark done, created/closed) and Calendar Day/Week/Month via /api/tasks?from&to; toggle reloads both + nav-today "N open" (nav-dash still empty). tests +1 (15).
+- Notes: shared taskRow reused in Day view; Settings nav still deferred. Next: Stage 4.
+- Manual: tick a task in browser and watch Today/Calendar/count update; check 380 px, both themes, keyboard.
+- Stage 2 done: web/index.html shell (panel, 4 nav, 4 empty pages), css/app.css (light/dark tokens, font, <900px stack), js/app.js (hash router, IST date/week, theme toggle auto/light/dark in localStorage). tests +1.
+- Notes: Settings nav item deferred (theme toggle lives in panel footer); nav counts (N open, done/planned) filled in later stages. Next: Stage 3.
+- Manual: view all 4 routes in both themes at 380 px.
+
+- Stage 1 done: app/db.py (WAL, migrate from schema.sql, IST now_iso), routes/tasks.py (GET/POST/PATCH/DELETE /api/tasks, validated), seed.py (13 demo tasks; `python -m app.seed`), tests/test_tasks.py (8; 13 total pass).
+- Notes: create_app(db_path=None) defaults to data/somaari.db; tests use tmp_path. Task JSON adds `closed` bool. Next: Stage 2 — UI shell and themes.
+- Manual: none.
+- Stage 0 done: app skeleton (create_app, /api/health, serves web/index.html), config.py (CLI>env>toml>default, port 1024-65535), `python -m app` with busy-port error, tests/test_app.py (5 pass).
+- Notes: empty later-stage dirs hold __init__.py/.gitkeep; venv at .venv. Next: Stage 1 — data layer and task API.
+- Manual: create private GitHub repo + push; confirm /api/health on the Pi.
+- Decisions: Flask + Waitress + SQLite + vanilla JS; AI = Jev decides, openrouter_free rewrites prose only; no Claude models in the app
+- Open questions: see docs/DECISIONS.md

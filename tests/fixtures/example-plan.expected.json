@@ -1,0 +1,111 @@
+{
+ "source": "example-plan.md",
+ "count": 21,
+ "candidates": [
+  {
+   "step": "Book the hall",
+   "text": "Venue: Oak Street community hall (bookings desk, open weekdays). Payments are by cash or bank transfer; the deposit is r",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "Rooms to consider (approx. cost per evening, from the hall's price list): small room ~15, main hall ~40, garden room ~25",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "Suggested: the small room for the first swap; ask about the garden room for summer.",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "Check the hall calendar for free first Saturdays before calling.",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "Before paying: ask about the cleaning fee, not just the room price.",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "After booking: add the date to the group's shared calendar and keep the receipt.",
+   "from": "list"
+  },
+  {
+   "step": "Book the hall",
+   "text": "Check whether the hall lends folding tables and shelves.",
+   "from": "list"
+  },
+  {
+   "step": "Write the flyer",
+   "text": "Write the flyer",
+   "from": "heading"
+  },
+  {
+   "step": "Set up the sign-up form",
+   "text": "Set up the sign-up form",
+   "from": "heading"
+  },
+  {
+   "step": "Spread the word",
+   "text": "Noticeboards → library, corner shop, school gate → ask before pinning.",
+   "from": "list"
+  },
+  {
+   "step": "Spread the word",
+   "text": "Post the flyer in the neighbourhood group and pin the <FORM-LINK> post.",
+   "from": "list"
+  },
+  {
+   "step": "Spread the word",
+   "text": "Hand out flyers",
+   "from": "list"
+  },
+  {
+   "step": "Spread the word",
+   "text": "Send a reminder to everyone who signed up. You get a count of helpers to plan with.",
+   "from": "list"
+  },
+  {
+   "step": "Spread the word",
+   "text": "Every new sign-up gets a thank-you reply.",
+   "from": "list"
+  },
+  {
+   "step": "Run the day",
+   "text": "On the morning → Unlock → Set up tables → put up a sign for each type of book (fiction, non-fiction, children's).",
+   "from": "list"
+  },
+  {
+   "step": "Run the day",
+   "text": "Because the hall has to be empty by 14:00, plan the pack-down",
+   "from": "list"
+  },
+  {
+   "step": "Run the day",
+   "text": "Back at home, count the books swapped and the people who came. Share the numbers in the group.",
+   "from": "list"
+  },
+  {
+   "step": "Run the day",
+   "text": "Optional: ask people to leave a note on a card (what they liked, what to change) so the next swap is better.",
+   "from": "list"
+  },
+  {
+   "step": "Making it a monthly swap",
+   "text": "Book the same room for the next three months and share the dates; the group calendar updates itself.",
+   "from": "list"
+  },
+  {
+   "step": "Making it a monthly swap",
+   "text": "If the swap outgrows the small room, try the garden room or split it into two sessions such as children's books in the m",
+   "from": "list"
+  },
+  {
+   "step": "Making it a monthly swap",
+   "text": "When enough people ask for it, add a \"wanted\" board where people pin the titles they are looking for, and change the fly",
+   "from": "list"
+  }
+ ]
+}

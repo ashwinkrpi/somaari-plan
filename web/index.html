@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>somaari-plan</title>
+<script>
+try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}
+</script>
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="shell">
+  <aside class="panel">
+    <div class="logo">somaari—plan</div>
+    <div class="bigdate"><span id="date-day" class="num">--</span><span id="date-rest" class="rest"></span></div>
+    <nav aria-label="Main">
+      <button type="button" class="nav" data-route="today"><span>Today</span><small id="nav-today"></small></button>
+      <button type="button" class="nav" data-route="calendar"><span>Calendar</span></button>
+      <button type="button" class="nav" data-route="dashboard"><span>Dashboard</span><small id="nav-dash"></small></button>
+      <button type="button" class="nav" data-route="done"><span>Done</span></button>
+      <button type="button" class="nav" data-route="new"><span>New plan ↗</span></button>
+      <button type="button" class="nav nav-small" data-route="settings"><span>Settings</span></button>
+    </nav>
+    <div class="foot">
+      <span id="week-label"></span>
+      <button type="button" id="theme-toggle" class="theme" aria-label="Switch theme">Theme</button>
+    </div>
+  </aside>
+  <main class="main" id="main" tabindex="-1">
+    <div class="content">
+      <section id="page-today" class="page" hidden aria-labelledby="h-today">
+        <h1 id="h-today">Today</h1>
+        <div class="list-host"><p class="empty">Loading…</p></div>
+      </section>
+      <section id="page-calendar" class="page" hidden aria-labelledby="h-calendar">
+        <h1 id="h-calendar">Calendar</h1>
+        <div class="cal-bar">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-view="day" aria-pressed="false">Day</button>
+            <button type="button" data-view="week" aria-pressed="true">Week</button>
+            <button type="button" data-view="month" aria-pressed="false">Month</button>
+          </div>
+          <div class="seg">
+            <button type="button" data-nav="prev" aria-label="Previous">←</button>
+            <button type="button" data-nav="today">Today</button>
+            <button type="button" data-nav="next" aria-label="Next">→</button>
+          </div>
+        </div>
+        <div class="cal-body"><p class="empty">No tasks on the calendar yet.</p></div>
+      </section>
+      <section id="page-dashboard" class="page" hidden aria-labelledby="h-dashboard">
+        <h1 id="h-dashboard">Dashboard</h1>
+        <div class="dash-host"><p class="empty">No tasks on the board yet.</p></div>
+      </section>
+      <section id="page-done" class="page" hidden aria-labelledby="h-done">
+        <h1 id="h-done">Done</h1>
+        <div class="fld done-search"><label for="done-q">Search done tasks</label>
+          <input id="done-q" type="search" autocomplete="off" placeholder="Title or step"></div>
+        <div class="done-host"><p class="empty">Loading…</p></div>
+      </section>
+      <section id="page-new" class="page" hidden aria-labelledby="h-new">
+        <h1 id="h-new">Plan in. Tasks out.</h1>
+        <div class="plan-host"></div>
+      </section>
+      <section id="page-settings" class="page" hidden aria-labelledby="h-settings">
+        <h1 id="h-settings">Settings</h1>
+        <div class="settings-host"><p class="empty">Loading settings…</p></div>
+      </section>
+    </div>
+  </main>
+</div>
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>

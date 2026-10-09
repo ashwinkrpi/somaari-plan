@@ -1,0 +1,3 @@
+# v1
+Rewrite each numbered sentence as one task title: imperative, max 12 words, keep product names.
+If a sentence is not a task, return null for it. JSON only: {"r": ["title" | null, ...]}
