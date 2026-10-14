@@ -8,3 +8,6 @@ __pycache__/
 .pytest_cache/
 docs/MANUAL_CHECKS.md
 samples/
+
+# Raw demo recordings (somaari-site/scripts/demo)
+docs/demo/
