@@ -35,14 +35,7 @@ data/                somaari.db (gitignored)
 ```
 
 ## Server config
-`config.toml`:
-```toml
-[server]
-host = "0.0.0.0"    # LAN; "127.0.0.1" = this Pi only
-port = 8710
-threads = 4
-```
-Precedence, highest first: CLI flags (`--host`, `--port`) → env (`SOMAARI_HOST`, `SOMAARI_PORT`) → `config.toml` → defaults above.
+Settings, defaults and precedence (CLI → env → `config.toml` → defaults): [GUIDE.md → Server](GUIDE.md#server). `app/config.py` implements them.
 - Validate: port 1024–65535. If the port is busy, exit with a clear message naming the port and how to change it; never pick another port silently.
 - Log the final URL at start-up, e.g. `somaari-plan on http://0.0.0.0:8710`.
 - The UI uses relative URLs only (`/api/...`), so a port change needs no frontend edit.

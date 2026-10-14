@@ -30,24 +30,8 @@ Jev never generates text. Code splits plans into lines and owns titles and dates
 
 No Claude models are used by the app (decision D-02). A Gemini app subscription includes no API access, so it works only through `gemini_cli`; verify flags with `gemini --help` first.
 
-## Config — `config.toml` (committed as `config.example.toml`)
-```toml
-[ai]
-mode = "jev"                       # jev | llm | off
-jev_model = "jev-latest"
-generate_chain = ["openrouter_free"]   # [] disables all LLM use
-rewrite_prose = true               # send prose-heavy blocks to generate_chain
-timeout_s = 60
-
-[ai.thresholds]
-task_accept = 0.70                 # noul at or above → task
-task_review = 0.40                 # between review and accept → flagged in preview
-confidence_review = 0.60           # choice confidence below → flagged
-```
-- `mode = "jev"`: Jev decides; LLM only rewrites prose (if `rewrite_prose`).
-- `mode = "llm"`: for users without a TypeSafe key. `generate_chain` does full extraction with the JSON prompt in AI_PROMPTS.md.
-- `mode = "off"`: code parsing only; every line becomes a draft task for manual review.
-Keys live only in `.env` (`TYPESAFE_API_KEY`, optional others). The Settings page edits mode, model, chain and thresholds, never keys.
+## Config
+Modes, providers, keys, thresholds and the `[ai]` block: [GUIDE.md → AI](GUIDE.md#ai) (user-facing; keep it current when these change). `mode = "llm"` uses the full-extraction prompt in AI_PROMPTS.md. The Settings page edits mode, model, chain and thresholds, never keys.
 
 ## Defaults by phase
 - Tests: `decide` → `mock_jev`, `generate` → `mock_llm` (forced in `conftest.py`). No network.

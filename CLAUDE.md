@@ -38,7 +38,8 @@ Runs on Raspberry Pi 5 (8 GB, Twister OS). Single user, LAN only.
 | docs/AI_PROMPTS.md | Parsing, Jev questions, quick add, fallback prompts |
 | docs/UI_SPEC.md | Any frontend work |
 | docs/TESTING.md | Writing tests |
-| docs/DEPLOY_PI.md | Running on the Pi as a service |
+| docs/GUIDE.md | User docs: install, service, config, AI setup, using the app. Update when behaviour users see changes |
+| docs/DEPLOY_PI.md | Pi performance targets, dev notes |
 | docs/RELEASE_CHECKLIST.md | Before making the repo public |
 
 ## TypeSafe skill

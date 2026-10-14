@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400">
+  <title>somaari-plan — turn plans into dated tasks</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0b0b"/>
+      <stop offset="1" stop-color="#171717"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.35" r="0.55">
+      <stop offset="0" stop-color="#ff4f00" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#ff4f00" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#a3a3a3" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="400" rx="20" fill="url(#bg)"/>
+  <rect width="1280" height="400" rx="20" fill="url(#dots)"/>
+  <rect width="1280" height="400" rx="20" fill="url(#glow)"/>
+
+  <!-- left: logo (a checked task card) + wordmark -->
+  <g transform="translate(72 96)">
+    <rect width="96" height="96" rx="22" fill="#ff4f00"/>
+    <rect x="22" y="22" width="52" height="52" fill="none" stroke="#0b0b0c" stroke-width="6"/>
+    <path d="M33 48 L44 59 L64 36" fill="none" stroke="#0b0b0c" stroke-width="7" stroke-linecap="square"/>
+  </g>
+  <text x="72" y="248" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif"
+        font-size="64" font-weight="700" fill="#f2f2f2" letter-spacing="-1">somaari<tspan fill="#ff4f00">-plan</tspan></text>
+  <text x="74" y="294" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif"
+        font-size="22" fill="#a3a3a3">Plans in, dated tasks out.</text>
+  <text x="74" y="328" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif"
+        font-size="22" fill="#a3a3a3">A small planner for your Raspberry Pi.</text>
+
+  <!-- right: app window with the Dashboard board -->
+  <g transform="translate(600 64)" font-family="DejaVu Sans, Segoe UI, Helvetica, Arial, sans-serif">
+    <rect width="616" height="272" rx="14" fill="#ffffff"/>
+    <!-- side panel -->
+    <path d="M14 0 h106 v272 h-106 a14 14 0 0 1 -14 -14 v-244 a14 14 0 0 1 14 -14 z" fill="#111111"/>
+    <text x="14" y="26" font-size="11" font-weight="700" fill="#fafafa">somaari—plan</text>
+    <text x="14" y="70" font-size="38" font-weight="800" fill="#fafafa" letter-spacing="-2">14</text>
+    <g font-size="10" font-weight="700">
+      <rect x="10" y="88" width="100" height="22" fill="none" stroke="#3a3a3a"/>
+      <text x="18" y="103" fill="#fafafa">Today</text>
+      <rect x="10" y="114" width="100" height="22" fill="none" stroke="#3a3a3a"/>
+      <text x="18" y="129" fill="#fafafa">Calendar</text>
+      <rect x="10" y="140" width="100" height="22" fill="#ff4f00"/>
+      <text x="18" y="155" fill="#0b0b0c">Dashboard</text>
+      <rect x="10" y="166" width="100" height="22" fill="none" stroke="#3a3a3a"/>
+      <text x="18" y="181" fill="#fafafa">Done</text>
+      <rect x="10" y="192" width="100" height="22" fill="none" stroke="#3a3a3a"/>
+      <text x="18" y="207" fill="#fafafa">New plan ↗</text>
+    </g>
+
+    <!-- main: title, rule, board -->
+    <text x="136" y="40" font-size="28" font-weight="800" fill="#0a0a0a" letter-spacing="-1.5">Dashboard</text>
+    <rect x="136" y="50" width="464" height="2" fill="#0a0a0a"/>
+    <g font-size="9" font-weight="700" fill="#0a0a0a">
+      <text x="176" y="72">Mon</text><text x="236" y="72">Tue</text><text x="296" y="72">Wed</text>
+      <text x="356" y="72">Thu</text><text x="416" y="72">Fri</text><text x="476" y="72">Sat</text><text x="536" y="72">Sun</text>
+      <text x="138" y="96">High</text><text x="138" y="160">Med</text><text x="138" y="222">Low</text>
+    </g>
+    <!-- cells -->
+    <g fill="#f6f6f6">
+      <rect x="172" y="80" width="56" height="60"/><rect x="232" y="80" width="56" height="60"/>
+      <rect x="352" y="80" width="56" height="60"/><rect x="412" y="80" width="56" height="60"/>
+      <rect x="172" y="144" width="56" height="60"/><rect x="232" y="144" width="56" height="60"/>
+      <rect x="352" y="144" width="56" height="60"/><rect x="412" y="144" width="56" height="60"/>
+      <rect x="172" y="208" width="56" height="52"/><rect x="232" y="208" width="56" height="52"/>
+      <rect x="352" y="208" width="56" height="52"/><rect x="412" y="208" width="56" height="52"/>
+    </g>
+    <g fill="#ebebeb">
+      <rect x="472" y="80" width="56" height="60"/><rect x="532" y="80" width="56" height="60"/>
+      <rect x="472" y="144" width="56" height="60"/><rect x="532" y="144" width="56" height="60"/>
+      <rect x="472" y="208" width="56" height="52"/><rect x="532" y="208" width="56" height="52"/>
+    </g>
+    <g fill="#fff4ee">
+      <rect x="292" y="80" width="56" height="60"/><rect x="292" y="144" width="56" height="60"/><rect x="292" y="208" width="56" height="52"/>
+    </g>
+    <!-- cards -->
+    <g fill="#ffffff" stroke="#0a0a0a" stroke-width="1.5">
+      <rect x="236" y="86" width="48" height="30"/><rect x="296" y="86" width="48" height="30"/>
+      <rect x="416" y="86" width="48" height="30"/><rect x="476" y="86" width="48" height="30"/>
+      <rect x="296" y="150" width="48" height="30"/><rect x="356" y="150" width="48" height="30"/>
+      <rect x="236" y="150" width="48" height="30"/><rect x="176" y="214" width="48" height="30"/>
+      <rect x="416" y="214" width="48" height="30"/><rect x="536" y="86" width="48" height="30"/>
+    </g>
+    <g fill="#0a0a0a">
+      <rect x="241" y="93" width="34" height="4"/><rect x="301" y="93" width="38" height="4"/>
+      <rect x="421" y="93" width="30" height="4"/><rect x="481" y="93" width="36" height="4"/>
+      <rect x="301" y="157" width="32" height="4"/><rect x="361" y="157" width="38" height="4"/>
+      <rect x="241" y="157" width="36" height="4"/><rect x="421" y="221" width="34" height="4"/>
+      <rect x="541" y="93" width="34" height="4"/>
+    </g>
+    <!-- done cards: struck through, muted -->
+    <g fill="#9c9c9c"><rect x="181" y="221" width="36" height="2"/></g>
+    <g fill="#ff4f00">
+      <rect x="241" y="103" width="18" height="6"/><rect x="301" y="103" width="18" height="6"/>
+      <rect x="421" y="103" width="18" height="6"/><rect x="481" y="103" width="18" height="6"/>
+      <rect x="541" y="103" width="18" height="6"/>
+    </g>
+  </g>
+</svg>

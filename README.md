@@ -1,104 +1,185 @@
-# somaari-plan
+<div align="center">
 
-A small planner web app for a Raspberry Pi. Upload a Markdown plan, paste loose text, or type a quick line, and it turns them into dated tasks you can see by day, week and priority.
+<img src="docs/images/banner.svg" alt="somaari-plan — turn plans into dated tasks" width="100%">
 
-It is built for one person on a home network: Flask + Waitress + SQLite, plain HTML/CSS/JS, no build step, idle under 80 MB of RAM on a Pi 5.
+<br>
+
+**Drop in a plan, get a week of dated tasks.**<br>
+Upload a Markdown plan, paste loose text, or type a quick line, and somaari-plan turns it into
+dated tasks you can see by day, week and priority. One person, one Raspberry Pi, your home network.
+
+<br>
+
+[![Python](https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Waitress-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-one%20file-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![No build step](https://img.shields.io/badge/frontend-no%20build%20step-ff4f00)](#%EF%B8%8F-development)
+[![TypeSafe Jev](https://img.shields.io/badge/AI-optional-6a6a6a)](docs/GUIDE.md#ai)
+[![Raspberry Pi 5](https://img.shields.io/badge/Raspberry%20Pi-5-C51A4A?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com/products/raspberry-pi-5/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-61afef)](LICENSE)
+
+[Features](#-features) ·
+[Install](#-install) ·
+[Usage](#-usage) ·
+[How it works](#-how-it-works) ·
+[Privacy](#-privacy) ·
+[Security](#%EF%B8%8F-security-model) ·
+[Development](#%EF%B8%8F-development) ·
+[Guide](docs/GUIDE.md)
+
+</div>
 
 | Light | Dark |
 |---|---|
-| ![Light theme](docs/screenshots/light.png) | ![Dark theme](docs/screenshots/dark.png) |
+| ![Dashboard, light theme (demo data)](docs/screenshots/light.png) | ![Dashboard, dark theme (demo data)](docs/screenshots/dark.png) |
 
-## What it does
+> [!WARNING]
+> There's no login: anyone who can reach the port can read and change your tasks. Keep it on your
+> home network or a private one (ZeroTier, Tailscale, WireGuard) and **never port-forward it to
+> the internet.** See [Who can reach it](docs/GUIDE.md#who-can-reach-it).
 
-- **New plan:** upload a `.md` plan or paste text. You get an editable preview (titles, dates, priority, step) and a list of skipped lines before anything is saved.
-- **Quick add:** type a line like `call the plumber friday` and get a task card to check and add.
-- **Today, Calendar, Dashboard, Done:** today's list, day/week/month views, a 7-day board by priority (drag or tap to move), and a searchable list of finished tasks you can reopen.
-- **Backup:** JSON export and add-only import from Settings.
-- Light and dark themes, keyboard friendly, works at phone width.
+---
 
-Code does the parsing, titles, dates and scheduling. AI is optional and only answers small typed questions (see [AI setup](#ai-setup)).
+## ✨ Features
 
-## Install on a Raspberry Pi
+- 📝 **Plans in**: upload `.md` plans or paste text. `## Headings` become steps, list items become
+  tasks, and dates in the text ("Thu 15 Oct", "friday", "4pm") are read by rules, not guessed.
+- 👀 **Review before saving**: an editable preview (title, step, priority, date), flagged tasks to
+  check, and skipped lines you can restore with one click.
+- ⚡ **Quick add**: type `call the plumber friday at 5pm` and get a task card to check and add.
+- 📅 **Today, Calendar, Dashboard, Done**: today's list by priority; day, week and month views; a
+  7-day board by priority (drag, or tap to move); finished tasks to search and reopen.
+- ✏️ **Edit in place**: title, step, priority, date and time, right in the list or on the board.
+- 🤖 **AI optional**: [TypeSafe](https://typesafe.ai) Jev answers small typed questions, a free LLM
+  only rewrites loose prose, and `mode = "off"` works with no AI at all. Answers are cached.
+- 💾 **Backups**: JSON export and add-only import from Settings.
+- 🌗 **Light and dark**, keyboard friendly, works at phone width.
+- 🪶 **Light on the Pi**: Flask + Waitress + SQLite, plain HTML/CSS/JS, idle under 80 MB of RAM.
 
-Needs Python 3.11+ (Raspberry Pi OS Bookworm ships it) and git.
+## 🚀 Install
 
-```sh
-git clone https://github.com/ashwinkrpi/somaari-plan.git
-cd somaari-plan
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-cp config.example.toml config.toml
-cp .env.example .env && chmod 600 .env
-.venv/bin/python -m app
-```
-
-Open `http://<pi-address>:8710` from any device on your network. Host and port come from `[server]` in `config.toml` (or `SOMAARI_HOST` / `SOMAARI_PORT` in `.env`, or `--host` / `--port`). Use `host = "127.0.0.1"` to keep it on the Pi only.
-
-Optional demo data: `.venv/bin/python -m app.seed`.
-
-### Run as a service
-
-`~/.config/systemd/user/somaari-plan.service`:
-
-```ini
-[Unit]
-Description=somaari-plan
-
-[Service]
-WorkingDirectory=%h/somaari-plan
-EnvironmentFile=%h/somaari-plan/.env
-ExecStart=%h/somaari-plan/.venv/bin/python -m app
-Restart=on-failure
-
-[Install]
-WantedBy=default.target
-```
+You need a Raspberry Pi (or any Linux machine) with Python 3.11+ and git:
 
 ```sh
-systemctl --user daemon-reload
-systemctl --user enable --now somaari-plan
-loginctl enable-linger "$USER"   # keep it running after logout
+git clone https://github.com/ashwinkrpi/somaari-plan.git && cd somaari-plan
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cp config.example.toml config.toml && cp .env.example .env && chmod 600 .env
+.venv/bin/python -m app       # then open http://<pi-address>:8710
 ```
 
-Adjust the paths if you cloned somewhere else. More notes (backups, logs, changing the port) are in [docs/DEPLOY_PI.md](docs/DEPLOY_PI.md).
+The [guide](docs/GUIDE.md) covers the rest:
+- [Who can reach it](docs/GUIDE.md#who-can-reach-it), [run as a service](docs/GUIDE.md#run-as-a-service)
+  (systemd), [updating](docs/GUIDE.md#updating) and [demo data](docs/GUIDE.md#try-it-with-demo-data)
+- [Server](docs/GUIDE.md#server): host, port and where each setting can come from
+- [AI](docs/GUIDE.md#ai): modes, providers and keys, or no AI at all
+- [Backups](docs/GUIDE.md#backups) and [logs](docs/GUIDE.md#logs)
 
-Your data lives in `data/somaari.db` (SQLite). It is not committed to git.
+## 🧑‍💻 Usage
 
-## AI setup
+| Do this… | What happens |
+|---|---|
+| **New plan ↗** → upload a `.md` or paste text → **Generate plan →** | A preview of dated tasks to edit, then **Add N tasks to plan** |
+| Type a line in **Quick add** | A task card with the date and time read from it |
+| **Today** → **Mark done** | The task is closed, with the time it was closed |
+| **Edit** on any task | Change title, step, priority, date or time in place |
+| **Calendar** → Day / Week / Month | Tasks by date; weekends shaded |
+| **Dashboard** → drag a card (or **Move** → **Move here**) | Reschedules it to that day and priority |
+| **Done** → search → **Reopen** | Brings a finished task back |
+| **Settings** | AI mode and providers, date format, thresholds, backups |
 
-Put keys in `.env` only; they are never shown in the UI or written to logs. Pick a mode in `config.toml` under `[ai]` or on the Settings page:
+Everything else, with screenshots: [Using the app](docs/GUIDE.md#-using-the-app).
 
-| `mode` | Needs | What happens |
-|---|---|---|
-| `jev` (default) | `TYPESAFE_API_KEY` | [TypeSafe](https://typesafe.ai) Jev answers typed questions (is this line a task, which date parts). An LLM from `generate_chain` only rewrites loose prose into titles, if `rewrite_prose = true`. |
-| `llm` | a key for a provider in `generate_chain` | For users without a TypeSafe key. The LLM does the full extraction. |
-| `off` | nothing | Code parsing only; every line becomes a draft task for you to review. |
+## 🧠 How it works
 
-`generate_chain` providers:
+```mermaid
+flowchart LR
+    B[🖥️ Browser<br/>HTML · CSS · JS] -- "JSON /api" --> W[Waitress + Flask]
+    W --> P[mdparse<br/>headings · lists]
+    P --> R[Rules:<br/>dates · times]
+    R --> J{AI mode}
+    J -- jev --> T[TypeSafe Jev<br/>typed questions]
+    J -- llm --> L[LLM chain<br/>OpenRouter · Gemini]
+    J -- off --> S
+    T --> S[Scheduler]
+    L --> S
+    S --> D[(SQLite<br/>data/somaari.db)]
+    W --> D
+```
 
-| Provider | Key | Notes |
-|---|---|---|
-| `openrouter_free` | `OPENROUTER_API_KEY` | free, rate-limited; upstream may log prompts, so only the prose sentences are sent |
-| `gemini_api` | `GEMINI_API_KEY` | free tier available |
-| `gemini_cli` | none (CLI login) | needs the `gemini` CLI installed and logged in for the same user |
+<details>
+<summary><b>Step by step</b></summary>
 
-Set `generate_chain = []` to never call an LLM.
+<br>
 
-**Subscription vs API:** a chat subscription (Gemini app, ChatGPT, Claude) does not include API access. A Gemini subscription works here only through `gemini_cli`; everything else needs an API key.
+One Python process (Waitress serving Flask), one SQLite file, no background workers.
+1. **Parse in code:** `mdparse` drops code blocks, tables and paragraphs, turns `## headings` into
+   steps and list items into candidate tasks; nested items become notes.
+2. **Dates by rules:** each line is read for dates and times ("14 Oct", "friday", "4pm",
+   "3rd of next month"); undated lines take the date of the line above.
+3. **AI answers typed questions only:** in `jev` mode, Jev scores each line (is it a task? which
+   priority? a meeting? which date parts, when the rules found none). Code applies the
+   thresholds. Jev never writes text; an LLM only rewrites loose prose into titles, or does the
+   whole extraction in `llm` mode. Answers are cached by content, so repeats cost nothing.
+4. **Schedule in code:** dates from the text, a week (High tasks early, a per-day limit), or one
+   day.
+5. **Review, then commit:** nothing is saved until you add the preview's tasks.
 
-If Jev fails, the app falls back to `llm` (if a chain is set) or `off`, and the page tells you. Answers are cached, so uploading the same plan again makes no AI calls.
+The browser fetches JSON from `/api/…` and renders everything itself; there's no frontend build.
+Routes and modules: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-Check a provider from the Pi: `.venv/bin/python -m app.ai.smoke jev` or `... smoke openrouter_free`.
+</details>
 
-## Development
+## 🔒 Privacy
+
+> [!IMPORTANT]
+> **TL;DR:** your tasks stay in one SQLite file on your Pi. With AI off, nothing leaves it. With
+> AI on, only the lines being decided go to the provider you chose; there's no analytics or
+> telemetry.
+
+<details>
+<summary><b>What leaves your Pi, and what doesn't</b></summary>
+
+<br>
+
+- **Tasks** are stored only in `data/somaari.db`. Back it up with Export or a nightly copy
+  ([Backups](docs/GUIDE.md#backups)).
+- **Jev** (`mode = "jev"`) receives the plan's candidate lines, their steps and today's date.
+- **LLM providers** receive only the prose sentences to rewrite (`rewrite_prose`), or the plan
+  text in `mode = "llm"`. Free tiers such as OpenRouter's may log prompts upstream.
+- **Quick add** uses rules first and asks Jev only for a date the rules miss; never an LLM.
+- **The page** loads nothing from the internet: the font is bundled, there's no CDN.
+- **Logs** (`data/ai.log`) record provider, model, token count and time, never content or keys.
+
+</details>
+
+## 🛡️ Security model
+
+| Layer | Protection |
+|---|---|
+| 🌐 **Network** | Meant for a home LAN or a private network. No login, so access to the port is access to your tasks |
+| 🔑 **Keys** | Only in `.env` (gitignored, `chmod 600`). Never shown in the app, sent to the browser or logged |
+| 📥 **Uploads** | 24 MB request limit; files are parsed as text, never run |
+| 💾 **Import** | Add-only: a backup can add tasks but never change or delete existing ones |
+
+Bind to `127.0.0.1` to keep it on the Pi itself, or to a single VPN address; see
+[Who can reach it](docs/GUIDE.md#who-can-reach-it).
+
+## 🛠️ Development
 
 ```sh
-.venv/bin/python -m app --dev      # Flask debug server
+.venv/bin/python -m app --dev      # Flask debug server with reload
 .venv/bin/python -m pytest -q      # tests use mocks; no real AI calls
+.venv/bin/python -m app.ai.smoke jev   # one real call to check a provider (needs a key)
 ```
 
-Design and build docs are in [docs/](docs/).
+Design and build docs are in [docs/](docs/): architecture, data model, AI providers and prompts,
+UI spec. Screenshots in `docs/screenshots/` come from neutral demo data only.
 
 ## Licence
 
 MIT, see [LICENSE](LICENSE). The bundled Bricolage Grotesque font is under the SIL Open Font License ([web/fonts/OFL.txt](web/fonts/OFL.txt)).
+
+<div align="center">
+<br>
+<sub>Made for a Raspberry Pi 5 and a week that needs a plan.</sub>
+</div>
