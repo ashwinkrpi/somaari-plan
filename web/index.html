@@ -22,6 +22,7 @@ try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.docu
       <button type="button" class="nav" data-route="done"><span>Done</span></button>
       <button type="button" class="nav" data-route="new"><span>New plan ↗</span></button>
       <button type="button" class="nav nav-small" data-route="settings"><span>Settings</span></button>
+      <button type="button" class="nav nav-small" data-route="about"><span>About</span></button>
     </nav>
     <div class="foot">
       <span id="week-label"></span>
@@ -67,6 +68,10 @@ try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.docu
       <section id="page-settings" class="page" hidden aria-labelledby="h-settings">
         <h1 id="h-settings">Settings</h1>
         <div class="settings-host"><p class="empty">Loading settings…</p></div>
+      </section>
+      <section id="page-about" class="page" hidden aria-labelledby="h-about">
+        <h1 id="h-about">About</h1>
+        <div class="about-host"><p class="empty">Loading…</p></div>
       </section>
     </div>
   </main>

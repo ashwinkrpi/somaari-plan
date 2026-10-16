@@ -11,3 +11,6 @@ samples/
 
 # Raw demo recordings (somaari-site/scripts/demo)
 docs/demo/
+
+# Build stamp written at release time (python -m app.stamp)
+app/_build_info.py

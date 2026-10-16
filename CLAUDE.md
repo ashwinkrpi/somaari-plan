@@ -42,6 +42,8 @@ Runs on Raspberry Pi 5 (8 GB, Twister OS). Single user, LAN only.
 | docs/DEPLOY_PI.md | Pi performance targets, dev notes |
 | docs/RELEASE_CHECKLIST.md | Before making the repo public |
 
+About section: follow somaari-common/docs/ABOUT_SPEC.md.
+
 ## TypeSafe skill
 Installed as a Claude Code plugin. Use it for Jev API details instead of fetching the TypeSafe docs.
 

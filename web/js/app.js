@@ -5,9 +5,10 @@ import { initDashboard } from "./dashboard.js";
 import { initSettings } from "./settings.js";
 import { initPlan } from "./plan.js";
 import { initDone } from "./done.js";
+import { initAbout } from "./about.js";
 import { loadDateFormat } from "./datefmt.js";
 
-const ROUTES = ["today", "calendar", "dashboard", "done", "new", "settings"];
+const ROUTES = ["today", "calendar", "dashboard", "done", "new", "settings", "about"];
 const IST = "Asia/Kolkata";
 
 function route() {
@@ -79,3 +80,4 @@ initDashboard();
 initSettings();
 initPlan();
 initDone();
+initAbout();

@@ -128,6 +128,7 @@ Adjust the paths if you cloned somewhere other than `~/somaari-plan`. Check on i
 cd ~/somaari-plan
 git pull
 .venv/bin/pip install -r requirements.txt
+.venv/bin/python -m app.stamp             # optional: About shows this commit instead of "dev"
 systemctl --user restart somaari-plan    # or stop and start python -m app
 ```
 
@@ -260,6 +261,13 @@ and shows host and port read-only.
 
 > [!NOTE]
 > Saving from the Settings page rewrites `config.toml` without its comments.
+
+### About
+
+**About** (last in the menu) shows the app version and build, developer contacts, and debug info
+(OS, device, Python, key packages, data/config/log folders, AI provider and model *names*).
+**Copy debug info** copies it as plain text to paste into a bug report. It never includes keys.
+Build shows `dev` / `unknown` unless you ran `.venv/bin/python -m app.stamp` (see Updating).
 
 ### Backups
 

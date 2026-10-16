@@ -38,6 +38,10 @@ Decision: _
 
 ## Decided
 
+### D-13 · About in the menu · About section · Decided
+Question: The brief says About goes after New plan, but the menu also has Done and Settings. Built as the last item, small like Settings. OK?
+Decision: A. Last in the menu, small like Settings (2026-10-16)
+
 ### D-12 · Personal plan in git history · Stage 10 · Decided
 Question: The old fixture and seed (personal website plan: name, city, GitHub account, domain plans) are gone from main but still in history. Clean it before going public?
 Options: A) publish a fresh repo with one squashed commit B) rewrite history (git filter-repo) and force-push C) leave it — Recommend: A (simplest, nothing to force-push)

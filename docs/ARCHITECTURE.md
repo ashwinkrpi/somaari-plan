@@ -9,7 +9,8 @@ app/
   db.py              sqlite connect, migrate
   schema.sql
   seed.py            13 hand-written neutral demo tasks (Stage 1)
-  routes/            tasks.py · ingest.py · quick.py · ai.py · settings.py · export.py
+  routes/            tasks.py · ingest.py · quick.py · ai.py · settings.py · export.py · about.py (GET /api/about)
+  stamp.py           writes git-ignored _build_info.py (commit, UTC date) for About
   scheduler.py       assigns due dates (pure functions, no I/O)
   ingest/mdparse.py  markdown → steps + candidate lines (no AI)
   ingest/pipeline.py candidates → Jev scores / LLM fallback → draft tasks (ai_cache)

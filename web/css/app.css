@@ -177,3 +177,18 @@ a.set-btn{display:inline-flex;align-items:center;text-decoration:none;color:inhe
 .date-btn{min-width:44px;min-height:44px;padding:0;background:var(--field);color:var(--fg);border:1px solid var(--line);font-size:16px;line-height:1}
 .date-native{position:absolute;left:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0}
 .edit-form .date-field input.date-text{width:100%;flex:1 1 auto}.edit-form .date-field{display:flex}
+
+/* About */
+.about{display:flex;flex-direction:column;gap:28px;max-width:760px}
+.about-app{border-bottom:1px solid var(--line);padding-bottom:16px}
+.about-name{margin:0;font-size:48px;font-weight:800;letter-spacing:-.04em;line-height:1.1;overflow-wrap:anywhere}
+.about-ver{margin:6px 0 0;font-size:16px;color:var(--muted-fg)}
+.about-sec h2{font-size:20px;font-weight:800;margin:0 0 4px;border-top:2px solid var(--fg);padding-top:10px}
+.about-dl{display:grid;grid-template-columns:minmax(120px,180px) 1fr;margin:0 0 12px}
+.about-dl dt,.about-dl dd{margin:0;padding:8px 0;border-bottom:1px solid var(--line);min-width:0;overflow-wrap:anywhere}
+.about-dl dt{font-size:14px;color:var(--muted-fg);padding-right:12px}
+.about-dl a{color:var(--accent-text);font-weight:600}
+.about-raw summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600}
+.about-raw pre{margin:0;padding:12px;background:var(--field);border:1px solid var(--line);font:13px/1.5 ui-monospace,monospace;overflow-x:auto;white-space:pre}
+.about-copy-buf{position:fixed;left:-9999px;top:0}
+@media (max-width:480px){.about-dl{grid-template-columns:1fr}.about-dl dt{border-bottom:0;padding-bottom:0}.about-name{font-size:36px}}

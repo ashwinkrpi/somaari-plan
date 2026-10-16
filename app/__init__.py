@@ -1,8 +1,11 @@
+__version__ = "0.1.0"  # single version source (CHANGELOG.md tracks it)
+
 from pathlib import Path
 
 from flask import Flask, jsonify, send_from_directory
 
 from .db import DEFAULT_DB, init_db
+from .routes.about import bp as about_bp
 from .routes.ai import bp as ai_bp
 from .routes.export import bp as export_bp
 from .routes.ingest import bp as ingest_bp
@@ -23,6 +26,7 @@ def create_app(db_path=None):
     app.register_blueprint(ingest_bp)
     app.register_blueprint(quick_bp)
     app.register_blueprint(export_bp)
+    app.register_blueprint(about_bp)
     app.config.setdefault("MAX_CONTENT_LENGTH", 24 * 1024 * 1024)
 
     @app.get("/")
