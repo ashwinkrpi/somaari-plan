@@ -32,6 +32,15 @@ CREATE TABLE tasks (
 );
 CREATE INDEX tasks_due ON tasks(due_date);
 
+CREATE TABLE task_moves (          -- D-07: one row per due_date change (drag, Move, edit, reopen)
+  id          INTEGER PRIMARY KEY,
+  task_id     INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  from_date   TEXT NOT NULL,        -- YYYY-MM-DD before the change
+  to_date     TEXT NOT NULL,        -- YYYY-MM-DD after
+  moved_at    TEXT NOT NULL         -- ISO 8601 with +05:30
+);
+CREATE INDEX task_moves_from ON task_moves(from_date);
+
 CREATE TABLE ai_cache (
   key         TEXT PRIMARY KEY,     -- sha256(provider + model + prompt/question-set version + state)
   provider    TEXT, model TEXT,     -- e.g. jev / jev-1.13.0
@@ -48,7 +57,9 @@ CREATE TABLE chat (
 ## Rules
 - "Done" means `closed_at IS NOT NULL`. There is no separate status column.
 - Week = Monday–Sunday.
-- Rescheduling changes `due_date`; it never touches `created_at`.
+- Rescheduling changes `due_date`; it never touches `created_at`. Every actual `due_date` change adds a `task_moves` row; deleting a task deletes its moves.
+- "Moved" for a week = tasks with a move whose `from_date` is in that week and whose current `due_date` is outside it.
+- Backups carry `moves`; import adds them only for tasks it adds (backups without `moves` still import).
 - User-entered steps (preview, paste, quick add, PATCH) are whitespace-collapsed and cut to 30 chars; blank → NULL.
 - Reopening (closed → open) never leaves a task in the past: a past `due_date` becomes today; an explicit past date is refused (400). Future due dates are kept.
 - Archive = done: there is no archive flag. Done tasks stay where they are; the Done page lists them by `closed_at` (D-09).

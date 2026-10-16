@@ -19,24 +19,24 @@ Decision: _ (date)
 
 ## Open
 
-### D-07 · "Moved items" in Dashboard summary · After Stage 4 · Open
-Question: UI_SPEC summary band wants "Last week … + moved items", but no move history is stored. Stage 4 shows a "not done" count instead.
-Options: A) add a reschedule counter/log to tasks (schema change) B) redefine as "not done last week" and update UI_SPEC — Recommend: B (no schema change, same signal)
-Decision: _
+## Decided
 
-### D-03 · Jev thresholds and version pin · After Stage 6 · Open
-Question: Final `task_accept` / `task_review` / `confidence_review` values and the Jev version to pin, after testing on real plan files.
-Options: values proposed by Claude Code from the test runs — Recommend: decide after Stage 6 tuning
-Stage 6 note: no real Jev run yet (needs key on the Pi), so no tuning data. Keep defaults 0.70 / 0.40 / 0.60 for now; run the preview on 3-4 real plans, check the skipped/flagged lists, then pin a Jev version (currently `jev-latest`).
-Decision: _
-
-### D-08 · Import: merge or replace? · Stage 8 · Open
+### D-08 · Import: merge or replace? · Stage 8 · Decided
 Question: Should `POST /api/import` only add missing tasks, or replace everything in the database with the backup?
 Options: A) add-only (skip a task with the same title, due date and created_at; never edits or deletes) B) replace all (wipes current tasks first) — Recommend: A
 Stage 8 note: only A is built, so no data can be lost. Restoring onto a fresh database works; replace needs your call.
-Decision: _
+Decision: A, add-only (already built; no replace-all) (2026-10-16)
 
-## Decided
+### D-03 · Jev thresholds and version pin · After Stage 6 · Decided
+Question: Final `task_accept` / `task_review` / `confidence_review` values and the Jev version to pin, after testing on real plan files.
+Options: values proposed by Claude Code from the test runs — Recommend: decide after Stage 6 tuning
+Stage 6 note: no real Jev run yet (needs key on the Pi), so no tuning data. Keep defaults 0.70 / 0.40 / 0.60 for now; run the preview on 3-4 real plans, check the skipped/flagged lists, then pin a Jev version (currently `jev-latest`).
+Decision: keep Claude Code's recommended defaults 0.70 / 0.40 / 0.60; model stays `jev-latest` (2026-10-16)
+
+### D-07 · "Moved items" in Dashboard summary · After Stage 4 · Decided
+Question: UI_SPEC summary band wants "Last week … + moved items", but no move history is stored. Stage 4 shows a "not done" count instead.
+Options: A) add a reschedule counter/log to tasks (schema change) B) redefine as "not done last week" and update UI_SPEC — Recommend: B (no schema change, same signal)
+Decision: A, move log table `task_moves` + GET /api/moved; Dashboard shows moved and not done (2026-10-16)
 
 ### D-14 · Adopt uv for setup and running? · After release · Decided
 Question: Replace `python3 -m venv` + `pip install -r requirements.txt` with uv (`uv sync`, `uv run somaari-plan`, `uv.lock`)?

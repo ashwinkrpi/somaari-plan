@@ -57,7 +57,7 @@ Title = range label. Segmented Day / Week / Month (active = 800 weight + 2px und
 Wide content scrolls horizontally inside its own container.
 
 ## Dashboard
-1. Summary band (3 cells, 1px dividers): This week done/planned · progress by step (4px bars) · Last week done/planned + moved items.
+1. Summary band (3 cells, 1px dividers): This week done/planned · progress by step (4px bars) · Last week done/planned + moved items (from `/api/moved`, D-07) + not done.
 2. Board: header row of days; lanes High / Medium / Low; cells `--field`, today column `--today-cell`.
    Weekend: Sat/Sun headers `--weekend`, Sat/Sun cells `--weekend-cell`; today and drop-hover win.
    Cards: `--bg`, 1.5px fg border, title 13px/600, step, small "Move" and "Edit" buttons (inline editor as above, fields stacked).

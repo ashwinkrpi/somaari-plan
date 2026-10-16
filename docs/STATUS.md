@@ -1,5 +1,9 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
+- D-08 decided (2026-10-16): A, import stays add-only (already built). No open decisions left.
+- D-03 decided (2026-10-16): thresholds stay 0.70 / 0.40 / 0.60 (already the defaults), model `jev-latest`. Docs only. Open decisions left: D-08.
+- D-07 A (2026-10-16): task_moves table logs every due_date change (PATCH; cascade on delete); GET /api/moved?from&to; Dashboard Last week shows "N moved, M not done"; export/import carry moves (add-only, remapped ids). tests 80.
+- Manual: move a card to next week, then view next week's Dashboard; Last week should show 1 moved. Check 380 px.
 - uv (D-14 B, 2026-10-16): deps in pyproject.toml (pytest in dev group, somaari-common via [tool.uv.sources]) + uv.lock; requirements.txt removed. Setup `uv sync`, run `uv run somaari-plan`; service ExecStart `.venv/bin/somaari-plan`. uv installed on the Pi in ~/.local/bin. tests 78.
 - Fresh-clone test on the Pi passed (2026-10-16): clone, venv, pip (somaari-common pulled from public GitHub), 78 tests, app on 8710, seed, /api/about. GUIDE requirements line now names somaari-common. Checklist complete; only step left: make the repo public (Ashwin Koppam Raghavendra).
 - About section (somaari-common ABOUT_SPEC): routes/about.py (GET /api/about via somaari_about.collect), web/js/about.js, About last in menu; version source `app.__version__`; `python -m app.stamp` writes git-ignored app/_build_info.py. somaari-common added to requirements.txt. tests 78. D-13 decided: A (About last, small like Settings).

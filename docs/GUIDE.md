@@ -233,7 +233,7 @@ Set `generate_chain = []` to never call an LLM.
 ```toml
 [ai]
 mode = "jev"                           # jev | llm | off
-jev_model = "jev-latest"               # pin e.g. "jev-1.13.0" once thresholds are tuned
+jev_model = "jev-latest"               # or pin a version, e.g. "jev-1.13.0"
 generate_chain = ["openrouter_free"]   # [] disables all LLM use
 rewrite_prose = true                   # send prose-heavy blocks to generate_chain
 timeout_s = 60
@@ -341,7 +341,7 @@ A summary of the week, then a board of the next seven days by priority (see the 
 top).
 
 - **This week:** done / planned. **Progress by step:** a bar per step. **Last week:** done /
-  planned and how many were left undone.
+  planned, how many were moved to another week, and how many were left undone.
 - **Move a task:** drag a card to another day or priority. Or, without a mouse, press **Move**,
   then **Move here** in the cell you want; **Cancel** stops.
 - Open cards due today or earlier have a **Done** button. Done cards are struck through and can't

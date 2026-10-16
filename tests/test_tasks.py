@@ -175,3 +175,46 @@ def test_reopen_never_in_the_past(client):
     assert client.patch(f"/api/tasks/{d}", json={"closed": False}).get_json()["due_date"] == iso(4)
     e = client.post("/api/tasks", json={"title": "open", "due_date": iso(-2)}).get_json()["id"]
     assert client.patch(f"/api/tasks/{e}", json={"closed": False}).get_json()["due_date"] == iso(-2)   # already open: untouched
+
+
+def test_moves_logged_and_counted(client):
+    # D-07: every due_date change is logged; /api/moved counts tasks moved out of a range
+    a = mk(client, due_date="2026-10-06").get_json()["id"]
+    b = mk(client, due_date="2026-10-07").get_json()["id"]
+    mk(client, due_date="2026-10-08")
+    client.patch(f"/api/tasks/{a}", json={"due_date": "2026-10-14"})                # out of the week
+    client.patch(f"/api/tasks/{b}", json={"due_date": "2026-10-09"})                # moved within the week
+    client.patch(f"/api/tasks/{b}", json={"priority": "High", "due_date": "2026-10-09"})  # same date: not a move
+    rng = "from=2026-10-05&to=2026-10-11"
+    assert client.get(f"/api/moved?{rng}").get_json() == {"moved": 1}
+    client.patch(f"/api/tasks/{a}", json={"due_date": "2026-10-10"})                # moved back in
+    assert client.get(f"/api/moved?{rng}").get_json() == {"moved": 0}
+    client.patch(f"/api/tasks/{b}", json={"due_date": "2026-10-20"})
+    assert client.get(f"/api/moved?{rng}").get_json() == {"moved": 1}
+    conn = connect(client.application.config["DB_PATH"])
+    assert conn.execute("SELECT COUNT(*) FROM task_moves").fetchone()[0] == 4
+    client.delete(f"/api/tasks/{b}")                                                 # log goes with the task
+    assert conn.execute("SELECT COUNT(*) FROM task_moves").fetchone()[0] == 2
+    conn.close()
+    assert client.get("/api/moved?from=bad&to=2026-10-11").status_code == 400
+
+
+def test_export_import_carries_moves(client, tmp_path):
+    from app import create_app
+    tid = mk(client, due_date="2026-10-06").get_json()["id"]
+    client.patch(f"/api/tasks/{tid}", json={"due_date": "2026-10-13"})
+    j = client.get("/api/export").get_json()
+    assert [(m["from_date"], m["to_date"]) for m in j["moves"]] == [("2026-10-06", "2026-10-13")]
+    c2 = create_app(db_path=tmp_path / "other.db").test_client()
+    mk(c2, title="Already here")                                   # shifts ids, so the move must be remapped
+    assert c2.post("/api/import", json=j).get_json() == {"added": 1, "skipped": 0}
+    assert c2.get("/api/moved?from=2026-10-05&to=2026-10-11").get_json() == {"moved": 1}
+    assert c2.post("/api/import", json=j).get_json() == {"added": 0, "skipped": 1}  # no duplicate log rows
+    conn = connect(tmp_path / "other.db")
+    assert conn.execute("SELECT COUNT(*) FROM task_moves").fetchone()[0] == 1
+    conn.close()
+    old = {k: v for k, v in j.items() if k != "moves"}                # older backups have no moves key
+    c3 = create_app(db_path=tmp_path / "third.db").test_client()
+    assert c3.post("/api/import", json=old).get_json() == {"added": 1, "skipped": 0}
+    bad = {**j, "moves": [{"task_id": "x"}]}
+    assert c3.post("/api/import", json=bad).status_code == 400

@@ -5,14 +5,15 @@ import { subscribe, toggleDone } from "./store.js";
 import { editButton, editForm, isEditing, onEditChange } from "./editor.js";
 
 const LANES = ["High", "Medium", "Low"];
-const db = { anchor: weekStart(todayIso()), tasks: [], error: "", moving: null, status: "" };
+const db = { anchor: weekStart(todayIso()), tasks: [], lastMoved: 0, error: "", moving: null, status: "" };
 
 async function load() {
   const from = addDays(db.anchor, -7), to = addDays(db.anchor, 6);
   try {
-    const r = await fetch(`/api/tasks?from=${from}&to=${to}`);
-    if (!r.ok) throw new Error("Could not load tasks");
-    db.tasks = await r.json(); db.error = "";
+    const [r, m] = await Promise.all([fetch(`/api/tasks?from=${from}&to=${to}`),
+      fetch(`/api/moved?from=${from}&to=${addDays(db.anchor, -1)}`)]);
+    if (!r.ok || !m.ok) throw new Error("Could not load tasks");
+    db.tasks = await r.json(); db.lastMoved = (await m.json()).moved; db.error = "";
   } catch (e) { db.error = e.message; }
   render();
 }
@@ -26,7 +27,7 @@ export async function moveTask(id, due_date, priority) {
   await load();
 }
 
-export function summarise(tasks, anchor) {
+export function summarise(tasks, anchor, lastMoved = 0) {
   const end = addDays(anchor, 6), prev = addDays(anchor, -7);
   const cur = tasks.filter((t) => t.due_date >= anchor && t.due_date <= end);
   const last = tasks.filter((t) => t.due_date >= prev && t.due_date < anchor);
@@ -39,7 +40,7 @@ export function summarise(tasks, anchor) {
   return {
     done: cur.filter((t) => t.closed).length, planned: cur.length, steps,
     lastDone: last.filter((t) => t.closed).length, lastPlanned: last.length,
-    carried: last.filter((t) => !t.closed).length,
+    carried: last.filter((t) => !t.closed).length, lastMoved,
   };
 }
 
@@ -56,7 +57,7 @@ function band(s) {
         : el("div", { class: "bsub" }, "No tasks this week")),
     el("div", { class: "bcell" }, el("div", { class: "blab" }, "Last week"),
       el("div", { class: "bbig" }, `${s.lastDone}/${s.lastPlanned}`),
-      el("div", { class: "bsub" }, `done / planned, ${s.carried} not done`)));
+      el("div", { class: "bsub" }, `done / planned, ${s.lastMoved} moved, ${s.carried} not done`)));
 }
 
 async function markDone(t) {
@@ -104,7 +105,7 @@ function board() {
 
 function render() {
   const page = document.getElementById("page-dashboard");
-  const s = summarise(db.tasks, db.anchor);
+  const s = summarise(db.tasks, db.anchor, db.lastMoved);
   const cur = db.anchor === weekStart(todayIso());
   document.getElementById("nav-dash").textContent = cur ? `${s.done}/${s.planned}` : "";
   const host = page.querySelector(".dash-host");

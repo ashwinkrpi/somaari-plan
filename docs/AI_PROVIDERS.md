@@ -13,7 +13,7 @@ Jev never generates text. Code splits plans into lines and owns titles and dates
 - Endpoint: `POST https://api.typesafe.ai/v1/systemone`, `Authorization: Bearer $TYPESAFE_API_KEY`. Call it with stdlib `urllib`; no SDK.
 - Body: `{"state": ..., "model": ..., "questions": {id: {type, instructions, criteria?}}}`.
 - Question types: `noul` → `noul` 0–1 · `choice` → `choice`, `probabilities`, `confidence` · `score` → `score`, `probabilities`, `confidence`.
-- Model: `jev-latest` while building. Pin a version (e.g. `jev-1.13.0`) once thresholds are tuned, because the alias moves.
+- Model: `jev-latest` (D-03). The alias moves; pin a version (e.g. `jev-1.13.0`) in `jev_model` if results change after a Jev release.
 - Limits: 64k tokens per request; 32k for state plus the longest question. Batch up to 40 lines per request.
 - 429 → honour `retry-after`, max 3 tries.
 - Billed per input token only. Log `usage.input_tokens` per call.

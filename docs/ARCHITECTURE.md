@@ -47,9 +47,10 @@ Settings, defaults and precedence (CLI → env → `config.toml` → defaults): 
 |---|---|---|
 | GET | /api/tasks?from=YYYY-MM-DD&to=YYYY-MM-DD | due_date in range |
 | POST | /api/tasks | single task |
-| PATCH | /api/tasks/:id | title, step, due_date, due_time, priority, closed (bool); reopening moves a past due date to today |
+| PATCH | /api/tasks/:id | title, step, due_date, due_time, priority, closed (bool); reopening moves a past due date to today; a due_date change is logged in task_moves |
 | DELETE | /api/tasks/:id | |
 | GET | /api/done?q=&limit= | done tasks, newest closed first; q matches title or step (Done page) |
+| GET | /api/moved?from=&to= | `{moved: N}`: tasks once due in the range that now sit outside it (Dashboard "Last week … moved", D-07) |
 | GET | /api/steps | distinct steps in use, most recent first (step suggestions) |
 | POST | /api/ingest/preview | multipart files and/or text + schedule options → draft tasks |
 | POST | /api/ingest/commit | draft tasks → saved, dates assigned |

@@ -11,6 +11,7 @@ VERSION = 1
 SRC_COLS = ["id", "kind", "name", "content_sha", "schedule", "anchor_date", "per_day", "created_at"]
 TASK_COLS = ["id", "source_id", "title", "step", "type", "priority", "due_date", "due_time", "sort_order",
              "ai_conf", "reviewed", "created_at", "closed_at"]
+MOVE_COLS = ["task_id", "from_date", "to_date", "moved_at"]
 KINDS = ("file", "text", "quick")
 SCHEDULES = (None, "week", "day", "in_text")
 
@@ -27,6 +28,7 @@ def export():
             "app": "somaari-plan", "version": VERSION, "exported_at": now_iso(),
             "sources": [dict(r) for r in conn.execute(f"SELECT {', '.join(SRC_COLS)} FROM sources ORDER BY id")],
             "tasks": [dict(r) for r in conn.execute(f"SELECT {', '.join(TASK_COLS)} FROM tasks ORDER BY id")],
+            "moves": [dict(r) for r in conn.execute(f"SELECT {', '.join(MOVE_COLS)} FROM task_moves ORDER BY id")],
         }
     finally:
         conn.close()
@@ -86,9 +88,13 @@ def import_():
         return _err("This is not a somaari-plan backup")
     if body.get("version") != VERSION:
         return _err("Unsupported backup version")
-    srcs, tasks = body.get("sources", []), body.get("tasks", [])
-    if not isinstance(srcs, list) or not isinstance(tasks, list):
-        return _err("sources and tasks must be lists")
+    srcs, tasks, moves = body.get("sources", []), body.get("tasks", []), body.get("moves", [])
+    if not isinstance(srcs, list) or not isinstance(tasks, list) or not isinstance(moves, list):
+        return _err("sources, tasks and moves must be lists")
+    for m in moves:
+        if (not isinstance(m, dict) or not isinstance(m.get("task_id"), int) or not _valid_date(m.get("from_date"))
+                or not _valid_date(m.get("to_date")) or not isinstance(m.get("moved_at"), str)):
+            return _err("A move in the backup is invalid")
     clean_src = {}
     for s in srcs:
         c = _clean_source(s)
@@ -103,7 +109,7 @@ def import_():
         sid = t.get("source_id")
         if sid is not None and sid not in clean_src:
             return _err("A task points to a missing source")
-        clean.append((c, sid))
+        clean.append((c, sid, t.get("id")))
     conn = connect(current_app.config["DB_PATH"])
     try:
         idmap = {}
@@ -116,15 +122,22 @@ def import_():
                 cur = conn.execute(f"INSERT INTO sources ({', '.join(c)}) VALUES ({', '.join('?' * len(c))})", list(c.values()))
                 idmap[old] = cur.lastrowid
         added = skipped = 0
-        for c, sid in clean:
+        task_ids = {}   # backup task id -> new id, for added tasks only
+        for c, sid, old in clean:
             dup = conn.execute("SELECT 1 FROM tasks WHERE title=? AND due_date=? AND created_at=?",
                                (c["title"], c["due_date"], c["created_at"])).fetchone()
             if dup:
                 skipped += 1
                 continue
             c = {**c, "source_id": idmap.get(sid)}
-            conn.execute(f"INSERT INTO tasks ({', '.join(c)}) VALUES ({', '.join('?' * len(c))})", list(c.values()))
+            cur = conn.execute(f"INSERT INTO tasks ({', '.join(c)}) VALUES ({', '.join('?' * len(c))})", list(c.values()))
+            if isinstance(old, int):
+                task_ids[old] = cur.lastrowid
             added += 1
+        for m in moves:   # move history follows only the tasks this import added
+            if m["task_id"] in task_ids:
+                conn.execute("INSERT INTO task_moves (task_id, from_date, to_date, moved_at) VALUES (?, ?, ?, ?)",
+                             (task_ids[m["task_id"]], m["from_date"], m["to_date"], m["moved_at"]))
         conn.commit()
     finally:
         conn.close()

@@ -158,6 +158,9 @@ def patch_task(tid):
         if f:
             sets = ", ".join(f"{k}=?" for k in f)
             conn.execute(f"UPDATE tasks SET {sets} WHERE id=?", [*f.values(), tid])
+            if f.get("due_date", cur["due_date"]) != cur["due_date"]:   # D-07: log every reschedule
+                conn.execute("INSERT INTO task_moves (task_id, from_date, to_date, moved_at) VALUES (?, ?, ?, ?)",
+                             (tid, cur["due_date"], f["due_date"], now_iso()))
             conn.commit()
         return jsonify(_row(conn.execute(f"SELECT {COLS} FROM tasks WHERE id=?", (tid,)).fetchone()))
     finally:
@@ -181,6 +184,22 @@ def list_done():
     conn = _db()
     try:
         return jsonify([_row(r) for r in conn.execute(sql, [*args, limit])])
+    finally:
+        conn.close()
+
+
+@bp.get("/api/moved")
+def moved_count():
+    """Tasks once due in from..to that now sit outside it (Dashboard "moved", D-07)."""
+    frm, to = request.args.get("from"), request.args.get("to")
+    if not (_valid_date(frm) and _valid_date(to)):
+        return _err("from and to must be YYYY-MM-DD")
+    conn = _db()
+    try:
+        n = conn.execute("SELECT COUNT(DISTINCT m.task_id) FROM task_moves m JOIN tasks t ON t.id = m.task_id"
+                         " WHERE m.from_date BETWEEN ? AND ? AND t.due_date NOT BETWEEN ? AND ?",
+                         (frm, to, frm, to)).fetchone()[0]
+        return jsonify({"moved": n})
     finally:
         conn.close()
 

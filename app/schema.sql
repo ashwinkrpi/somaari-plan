@@ -29,6 +29,15 @@ CREATE TABLE IF NOT EXISTS tasks (
 );
 CREATE INDEX IF NOT EXISTS tasks_due ON tasks(due_date);
 
+CREATE TABLE IF NOT EXISTS task_moves (
+  id          INTEGER PRIMARY KEY,
+  task_id     INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  from_date   TEXT NOT NULL,
+  to_date     TEXT NOT NULL,
+  moved_at    TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS task_moves_from ON task_moves(from_date);
+
 CREATE TABLE IF NOT EXISTS ai_cache (
   key         TEXT PRIMARY KEY,
   provider    TEXT, model TEXT,
