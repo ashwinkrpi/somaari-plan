@@ -1,10 +1,10 @@
 # Manual decisions
 
-Decisions only Ashwin can make. Claude Code adds entries; Ashwin fills in `Decision`.
+Decisions only Ashwin Koppam Raghavendra can make. Claude Code adds entries; Ashwin Koppam Raghavendra fills in `Decision`.
 Keep each entry ≤6 lines. Open items at the top, decided items move to the bottom.
 
 ## How Claude Code uses this file
-- Hit a choice that needs Ashwin (cost, account, legal, UX taste, data loss, new dependency, anything not settled in docs/) → add an entry here, ask in chat, and work on something else until it's answered.
+- Hit a choice that needs Ashwin Koppam Raghavendra (cost, account, legal, UX taste, data loss, new dependency, anything not settled in docs/) → add an entry here, ask in chat, and work on something else until it's answered.
 - Before adding, check this file; don't duplicate. Reopen an entry rather than writing a new one.
 - Once decided: set Status, fill Decision and the date, move it under Decided, and update the affected doc if the decision changes it.
 - Never decide an open item yourself, even if one option looks obvious. Recommend one instead.

@@ -24,13 +24,13 @@ Runs on Raspberry Pi 5 (8 GB, Twister OS). Single user, LAN only.
 5. Tasks store `created_at` / `closed_at` (ISO 8601, Asia/Kolkata). No duration tracking.
 6. Secrets live in `.env` (gitignored). Never print or log keys.
 7. UI must match docs/UI_SPEC.md, light and dark.
-8. Need a decision only Ashwin can make (cost, accounts, legal, UX taste, data loss, new dependency)? Log it in docs/DECISIONS.md, ask in chat, and carry on with other work. Never decide it yourself.
+8. Need a decision only Ashwin Koppam Raghavendra can make (cost, accounts, legal, UX taste, data loss, new dependency)? Log it in docs/DECISIONS.md, ask in chat, and carry on with other work. Never decide it yourself.
 
 ## Docs — read only what the current task needs
 | File | Read when |
 |---|---|
 | docs/STATUS.md | Always first. Update at session end (≤5 lines) |
-| docs/DECISIONS.md | Before asking Ashwin anything; when a decision is answered |
+| docs/DECISIONS.md | Before asking Ashwin Koppam Raghavendra anything; when a decision is answered |
 | docs/BUILD_PLAN.md | Starting a stage — read that stage's section only |
 | docs/ARCHITECTURE.md | Adding files, routes, modules |
 | docs/DATA_MODEL.md | Touching the DB |

@@ -5,7 +5,7 @@ A stage is done when its "Done when" checks pass, docs/STATUS.md is updated, and
 
 ## Stage 0 — Repo and skeleton
 Read: ARCHITECTURE.md
-- Repo at `~/code/ai-projects/somaari-plan`. Creating the private GitHub repo and pushing is Ashwin's (manual check).
+- Repo at `~/code/ai-projects/somaari-plan`. Creating the private GitHub repo and pushing is Ashwin Koppam Raghavendra's (manual check).
 - Create the folder tree from ARCHITECTURE.md, `requirements.txt` (flask, waitress, pytest), `.gitignore` (`.venv/ data/ .env config.toml __pycache__/ *.zip .claude/settings.local.json`), `.env.example`, `config.example.toml`.
 - `create_app()` serves `web/index.html` and `GET /api/health`.
 - `python -m app` reads host/port per ARCHITECTURE.md → Server config (CLI > env > config.toml > default).
@@ -54,8 +54,8 @@ Read: AI_PROMPTS.md (§1–4, §6), DATA_MODEL.md (sources)
 - Pasted text: dates in text / week starting / single day; tasks per day.
 - `mdparse.py` (code) → Jev line decisions → Jev date parts for dated lines → prose rewrite only if needed.
 - Flow: upload → `POST /api/ingest/preview` → editable preview (flagged rows highlighted, skipped lines collapsed) → `POST /api/ingest/commit` → `scheduler.py` assigns dates.
-- Tune thresholds on 3–4 of your real plan files; propose values in D-03 (Ashwin decides), then pin the Jev version.
-Done when: `tests/fixtures/example-plan.md` gives the 21 expected candidates, Jev keeps the real tasks (Ashwin reviews the list), no LLM call is made, and re-upload makes zero AI calls.
+- Tune thresholds on 3–4 of your real plan files; propose values in D-03 (Ashwin Koppam Raghavendra decides), then pin the Jev version.
+Done when: `tests/fixtures/example-plan.md` gives the 21 expected candidates, Jev keeps the real tasks (Ashwin Koppam Raghavendra reviews the list), no LLM call is made, and re-upload makes zero AI calls.
 
 ## Stage 7 — Quick add
 Read: AI_PROMPTS.md (Quick add)

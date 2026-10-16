@@ -5,7 +5,7 @@
 - Record a real Jev response once (`python -m app.ai.smoke jev --save`) to keep fixtures realistic.
 - Port resolution test: CLI beats env beats config beats default; out-of-range and busy ports fail clearly.
 - Test the pure parts hardest: `mdparse.py`, `dates.py`, `scheduler.py`, `quickparse.py`, threshold logic.
-- `mdparse` golden test: `tests/fixtures/example-plan.md` must produce exactly `tests/fixtures/example-plan.expected.json` (21 candidates, 6 steps). If the rules in AI_PROMPTS.md change, regenerate the expected file and show Ashwin the diff.
+- `mdparse` golden test: `tests/fixtures/example-plan.md` must produce exactly `tests/fixtures/example-plan.expected.json` (21 candidates, 6 steps). If the rules in AI_PROMPTS.md change, regenerate the expected file and show Ashwin Koppam Raghavendra the diff.
 - `quickparse` table test (no AI):
   | input (TODAY=2026-10-06) | date | time | type |
   |---|---|---|---|
