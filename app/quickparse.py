@@ -1,6 +1,5 @@
 """Rule-based quick-add parser. No AI. Finds a date and/or time, removes the matched span from the title."""
 import re
-from datetime import date, timedelta
 
 from . import dates
 from .ai.questions import MONTHS, WEEKDAYS

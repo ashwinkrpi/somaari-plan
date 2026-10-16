@@ -124,7 +124,7 @@ h1{font-size:72px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:0 0
 .set-form fieldset{border:0;border-top:1px solid var(--line);margin:0;padding:12px 0 0}
 .set-form legend{font-weight:800;font-size:18px;padding:0 8px 0 0}
 .fld{display:flex;flex-direction:column;gap:4px;margin:10px 0}
-.fld label,.fld .lab{font-size:14px;color:var(--muted-fg)}
+.fld label{font-size:14px;color:var(--muted-fg)}
 .fld input[type=text],.fld input[type=number],.fld select{min-height:44px;padding:0 10px;background:var(--field);color:var(--fg);border:1px solid var(--line);font:inherit}
 .fld .hint{font-size:13px;color:var(--muted-fg)}
 .chain{list-style:none;margin:0;padding:0}

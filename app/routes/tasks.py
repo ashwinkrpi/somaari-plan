@@ -13,11 +13,11 @@ TYPES = ("task", "meeting")
 COLS = "id, source_id, title, step, type, priority, due_date, due_time, sort_order, ai_conf, reviewed, created_at, closed_at"
 
 
-def _err(msg, code=400):
+def err(msg, code=400):
     return jsonify({"error": msg}), code
 
 
-def _valid_date(v):
+def valid_date(v):
     try:
         return isinstance(v, str) and bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", v)) and date.fromisoformat(v) is not None
     except ValueError:
@@ -34,7 +34,7 @@ def norm_step(v):
     return v or None
 
 
-def _valid_time(v):
+def valid_time(v):
     return v is None or (isinstance(v, str) and re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", v) is not None)
 
 
@@ -54,11 +54,11 @@ def _check(body, partial):
             return None, "title is required"
         out["title"] = t.strip()
     if "due_date" in body or not partial:
-        if not _valid_date(body.get("due_date")):
+        if not valid_date(body.get("due_date")):
             return None, "due_date must be YYYY-MM-DD"
         out["due_date"] = body["due_date"]
     if "due_time" in body:
-        if not _valid_time(body["due_time"]):
+        if not valid_time(body["due_time"]):
             return None, "due_time must be HH:MM"
         out["due_time"] = body["due_time"]
     if "priority" in body:
@@ -81,7 +81,7 @@ def _check(body, partial):
     return out, None
 
 
-def _db():
+def open_db():
     return connect(current_app.config["DB_PATH"])
 
 
@@ -89,8 +89,8 @@ def _db():
 def list_tasks():
     frm, to = request.args.get("from"), request.args.get("to")
     for v in (frm, to):
-        if v is not None and not _valid_date(v):
-            return _err("from/to must be YYYY-MM-DD")
+        if v is not None and not valid_date(v):
+            return err("from/to must be YYYY-MM-DD")
     sql, args = f"SELECT {COLS} FROM tasks WHERE 1=1", []
     if frm:
         sql += " AND due_date >= ?"
@@ -99,7 +99,7 @@ def list_tasks():
         sql += " AND due_date <= ?"
         args.append(to)
     sql += " ORDER BY due_date, due_time IS NULL, due_time, sort_order, id"
-    conn = _db()
+    conn = open_db()
     try:
         return jsonify([_row(r) for r in conn.execute(sql, args)])
     finally:
@@ -110,15 +110,15 @@ def list_tasks():
 def create_task():
     body = request.get_json(silent=True)
     if not isinstance(body, dict):
-        return _err("JSON body required")
+        return err("JSON body required")
     f, e = _check(body, partial=False)
     if e:
-        return _err(e)
+        return err(e)
     f.setdefault("priority", "Medium")
     f.setdefault("type", "task")
     f["created_at"] = now_iso()
     cols = ", ".join(f)
-    conn = _db()
+    conn = open_db()
     try:
         cur = conn.execute(f"INSERT INTO tasks ({cols}) VALUES ({', '.join('?' * len(f))})", list(f.values()))
         conn.commit()
@@ -132,18 +132,18 @@ def create_task():
 def patch_task(tid):
     body = request.get_json(silent=True)
     if not isinstance(body, dict):
-        return _err("JSON body required")
+        return err("JSON body required")
     f, e = _check(body, partial=True)
     if e:
-        return _err(e)
+        return err(e)
     if "closed" in body:
         if not isinstance(body["closed"], bool):
-            return _err("closed must be true or false")
-    conn = _db()
+            return err("closed must be true or false")
+    conn = open_db()
     try:
         cur = conn.execute("SELECT closed_at, due_date FROM tasks WHERE id=?", (tid,)).fetchone()
         if cur is None:
-            return _err("not found", 404)
+            return err("not found", 404)
         if "closed" in body:
             if body["closed"] and cur["closed_at"] is None:
                 f["closed_at"] = now_iso()
@@ -152,7 +152,7 @@ def patch_task(tid):
                 if cur["closed_at"] is not None:    # reopening: never leave the task in the past
                     today = datetime.now(IST).date().isoformat()
                     if "due_date" in f and f["due_date"] < today:
-                        return _err("a reopened task can't be due in the past")
+                        return err("a reopened task can't be due in the past")
                     if f.get("due_date", cur["due_date"]) < today:
                         f["due_date"] = today
         if f:
@@ -174,14 +174,14 @@ def list_done():
     try:
         limit = max(1, min(int(request.args.get("limit", 500)), 2000))
     except ValueError:
-        return _err("limit must be a number")
+        return err("limit must be a number")
     sql, args = f"SELECT {COLS} FROM tasks WHERE closed_at IS NOT NULL", []
     if q:
         like = "%" + q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
         sql += " AND (title LIKE ? ESCAPE '\\' OR step LIKE ? ESCAPE '\\')"
         args += [like, like]
     sql += " ORDER BY closed_at DESC, id DESC LIMIT ?"
-    conn = _db()
+    conn = open_db()
     try:
         return jsonify([_row(r) for r in conn.execute(sql, [*args, limit])])
     finally:
@@ -192,9 +192,9 @@ def list_done():
 def moved_count():
     """Tasks once due in from..to that now sit outside it (Dashboard "moved", D-07)."""
     frm, to = request.args.get("from"), request.args.get("to")
-    if not (_valid_date(frm) and _valid_date(to)):
-        return _err("from and to must be YYYY-MM-DD")
-    conn = _db()
+    if not (valid_date(frm) and valid_date(to)):
+        return err("from and to must be YYYY-MM-DD")
+    conn = open_db()
     try:
         n = conn.execute("SELECT COUNT(DISTINCT m.task_id) FROM task_moves m JOIN tasks t ON t.id = m.task_id"
                          " WHERE m.from_date BETWEEN ? AND ? AND t.due_date NOT BETWEEN ? AND ?",
@@ -207,7 +207,7 @@ def moved_count():
 @bp.get("/api/steps")
 def list_steps():
     """Distinct steps in use, most recently used first (for step suggestions)."""
-    conn = _db()
+    conn = open_db()
     try:
         rows = conn.execute("SELECT step FROM tasks WHERE step IS NOT NULL AND step <> ''"
                             " GROUP BY step ORDER BY MAX(created_at) DESC, step LIMIT 50")
@@ -218,12 +218,12 @@ def list_steps():
 
 @bp.delete("/api/tasks/<int:tid>")
 def delete_task(tid):
-    conn = _db()
+    conn = open_db()
     try:
         cur = conn.execute("DELETE FROM tasks WHERE id=?", (tid,))
         conn.commit()
         if cur.rowcount == 0:
-            return _err("not found", 404)
+            return err("not found", 404)
         return "", 204
     finally:
         conn.close()

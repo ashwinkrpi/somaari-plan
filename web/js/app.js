@@ -7,9 +7,9 @@ import { initPlan } from "./plan.js";
 import { initDone } from "./done.js";
 import { initAbout } from "./about.js";
 import { loadDateFormat } from "./datefmt.js";
+import { IST } from "./dates.js";
 
 const ROUTES = ["today", "calendar", "dashboard", "done", "new", "settings", "about"];
-const IST = "Asia/Kolkata";
 
 function route() {
   const r = location.hash.replace(/^#\/?/, "");

@@ -1,39 +1,29 @@
 """Quick add: one line -> parsed card (rules first, Jev date parts on a miss, never an LLM)."""
 import hashlib
 import json
-import re
 from datetime import date, datetime
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, jsonify, request
 
 from .. import config, dates, quickparse
 from ..ai import questions as Q
 from ..ai import router
-from ..db import IST, connect, now_iso
-from .tasks import norm_step
+from ..db import IST, now_iso
+from .tasks import TYPES, err, norm_step, open_db, valid_date, valid_time
 
 bp = Blueprint("quick", __name__)
 MAX_TEXT = 300
 
 
-def _err(msg, code=400):
-    return jsonify({"error": msg}), code
-
-
 def _today(v):
-    if isinstance(v, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", v):
-        try:
-            return date.fromisoformat(v)
-        except ValueError:
-            pass
-    return datetime.now(IST).date()
+    return date.fromisoformat(v) if valid_date(v) else datetime.now(IST).date()
 
 
 def _jev_card(text, today, cfg):
     """Date-parts questions plus a meeting question on the single line."""
     line = [{"id": "L1", "step": "", "text": text}]
     qs = Q.date_questions(line)
-    qs["m_L1"] = {"type": "noul", "instructions": "Line L1 is a meeting, call or appointment with other people."}
+    qs["m_L1"] = Q.meeting_question("L1")
     r = router.decide(Q.line_state(line, today.isoformat()), qs, "quick", Q.VERSION, cfg)
     if not r["ok"]:
         return None
@@ -78,7 +68,7 @@ def _row(r):
 def log():
     """Pending cards (not yet added), oldest first. ?all=1 includes added ones (last 100)."""
     where = "" if request.args.get("all") == "1" else "WHERE task_id IS NULL"
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         rows = conn.execute(f"SELECT * FROM (SELECT * FROM chat {where} ORDER BY id DESC LIMIT 100) ORDER BY id").fetchall()
         return jsonify([_row(r) for r in rows])
@@ -89,13 +79,13 @@ def log():
 @bp.delete("/api/quick/<int:cid>")
 def discard(cid):
     """Discard one pending card. Added cards are history and stay (409)."""
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         row = conn.execute("SELECT task_id FROM chat WHERE id=?", (cid,)).fetchone()
         if not row:
-            return _err("Not found", 404)
+            return err("Not found", 404)
         if row["task_id"]:
-            return _err("Already added; it's a task now.", 409)
+            return err("Already added; it's a task now.", 409)
         conn.execute("DELETE FROM chat WHERE id=?", (cid,))
         conn.commit()
         return "", 204
@@ -106,7 +96,7 @@ def discard(cid):
 @bp.delete("/api/quick")
 def clear():
     """Discard every pending card. Added cards and their tasks are untouched."""
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         n = conn.execute("DELETE FROM chat WHERE task_id IS NULL").rowcount
         conn.commit()
@@ -120,12 +110,12 @@ def create():
     body = request.get_json(silent=True)
     text = body.get("text") if isinstance(body, dict) else None
     if not isinstance(text, str) or not text.strip():
-        return _err("Type something to add.")
+        return err("Type something to add.")
     text = text.strip()
     if len(text) > MAX_TEXT:
-        return _err(f"Keep it under {MAX_TEXT} characters.")
+        return err(f"Keep it under {MAX_TEXT} characters.")
     card = make_card(text, _today(body.get("today")), config.load_ai())
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         cur = conn.execute("INSERT INTO chat (text, parsed, created_at) VALUES (?,?,?)",
                            (text, json.dumps(card), now_iso()))
@@ -140,13 +130,13 @@ def create():
 def add(cid):
     body = request.get_json(silent=True)
     body = body if isinstance(body, dict) else {}
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         row = conn.execute("SELECT * FROM chat WHERE id=?", (cid,)).fetchone()
         if not row:
-            return _err("Not found", 404)
+            return err("Not found", 404)
         if row["task_id"]:
-            return _err("Already added.", 409)
+            return err("Already added.", 409)
         card = json.loads(row["parsed"])
         title = body.get("title", card["title"])
         ty = body.get("type", card["type"])
@@ -155,19 +145,15 @@ def add(cid):
         try:
             step = norm_step(body.get("step", card.get("step")))
         except ValueError as e:
-            return _err(str(e))
+            return err(str(e))
         if not isinstance(title, str) or not title.strip():
-            return _err("Title is required.")
-        if ty not in ("task", "meeting"):
-            return _err("type must be task or meeting")
-        if not (isinstance(due, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", due)):
-            return _err("due_date must be YYYY-MM-DD")
-        try:
-            date.fromisoformat(due)
-        except ValueError:
-            return _err("due_date must be YYYY-MM-DD")
-        if clock is not None and not (isinstance(clock, str) and re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", clock)):
-            return _err("due_time must be HH:MM")
+            return err("Title is required.")
+        if ty not in TYPES:
+            return err("type must be task or meeting")
+        if not valid_date(due):
+            return err("due_date must be YYYY-MM-DD")
+        if not valid_time(clock):
+            return err("due_time must be HH:MM")
         created = now_iso()
         sha = hashlib.sha256(row["text"].encode()).hexdigest()
         sid = conn.execute("INSERT INTO sources (kind, name, content_sha, created_at) VALUES ('quick',NULL,?,?)",

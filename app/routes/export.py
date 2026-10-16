@@ -1,9 +1,9 @@
 """JSON backup: GET /api/export, POST /api/import (add-only, never overwrites)."""
-from flask import Blueprint, Response, current_app, jsonify, request
+from flask import Blueprint, Response, jsonify, request
 import json
 
-from ..db import connect, now_iso
-from .tasks import PRIORITIES, TYPES, _valid_date, _valid_time
+from ..db import now_iso
+from .tasks import PRIORITIES, TYPES, err, open_db, valid_date, valid_time
 
 bp = Blueprint("export", __name__)
 
@@ -16,13 +16,9 @@ KINDS = ("file", "text", "quick")
 SCHEDULES = (None, "week", "day", "in_text")
 
 
-def _err(msg, code=400):
-    return jsonify({"error": msg}), code
-
-
 @bp.get("/api/export")
 def export():
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         data = {
             "app": "somaari-plan", "version": VERSION, "exported_at": now_iso(),
@@ -41,17 +37,13 @@ def _clean_task(t):
     if not isinstance(t, dict):
         return None
     title = t.get("title")
-    if not isinstance(title, str) or not title.strip() or not _valid_date(t.get("due_date")):
+    if not isinstance(title, str) or not title.strip() or not valid_date(t.get("due_date")):
         return None
     if t.get("priority", "Medium") not in PRIORITIES or t.get("type", "task") not in TYPES:
         return None
-    if not _valid_time(t.get("due_time")):
+    if not valid_time(t.get("due_time")):
         return None
-    for k in ("created_at", "closed_at"):
-        v = t.get(k)
-        if v is not None and not isinstance(v, str):
-            return None
-    if not isinstance(t.get("created_at"), str):
+    if not isinstance(t.get("created_at"), str) or not (t.get("closed_at") is None or isinstance(t["closed_at"], str)):
         return None
     step = t.get("step")
     so = t.get("sort_order", 0)
@@ -72,7 +64,7 @@ def _clean_source(s):
     if s.get("schedule") not in SCHEDULES or not isinstance(s.get("created_at"), str):
         return None
     ad, pd = s.get("anchor_date"), s.get("per_day", 4)
-    if (ad is not None and not _valid_date(ad)) or not isinstance(pd, int) or isinstance(pd, bool):
+    if (ad is not None and not valid_date(ad)) or not isinstance(pd, int) or isinstance(pd, bool):
         return None
     name = s.get("name")
     if name is not None and not isinstance(name, str):
@@ -85,32 +77,32 @@ def _clean_source(s):
 def import_():
     body = request.get_json(silent=True)
     if not isinstance(body, dict) or body.get("app") != "somaari-plan":
-        return _err("This is not a somaari-plan backup")
+        return err("This is not a somaari-plan backup")
     if body.get("version") != VERSION:
-        return _err("Unsupported backup version")
+        return err("Unsupported backup version")
     srcs, tasks, moves = body.get("sources", []), body.get("tasks", []), body.get("moves", [])
     if not isinstance(srcs, list) or not isinstance(tasks, list) or not isinstance(moves, list):
-        return _err("sources, tasks and moves must be lists")
+        return err("sources, tasks and moves must be lists")
     for m in moves:
-        if (not isinstance(m, dict) or not isinstance(m.get("task_id"), int) or not _valid_date(m.get("from_date"))
-                or not _valid_date(m.get("to_date")) or not isinstance(m.get("moved_at"), str)):
-            return _err("A move in the backup is invalid")
+        if (not isinstance(m, dict) or not isinstance(m.get("task_id"), int) or not valid_date(m.get("from_date"))
+                or not valid_date(m.get("to_date")) or not isinstance(m.get("moved_at"), str)):
+            return err("A move in the backup is invalid")
     clean_src = {}
     for s in srcs:
         c = _clean_source(s)
         if c is None or not isinstance(s.get("id"), int):
-            return _err("A source in the backup is invalid")
+            return err("A source in the backup is invalid")
         clean_src[s["id"]] = c
     clean = []
     for t in tasks:
         c = _clean_task(t)
         if c is None:
-            return _err("A task in the backup is invalid")
+            return err("A task in the backup is invalid")
         sid = t.get("source_id")
         if sid is not None and sid not in clean_src:
-            return _err("A task points to a missing source")
+            return err("A task points to a missing source")
         clean.append((c, sid, t.get("id")))
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     try:
         idmap = {}
         for old, c in clean_src.items():

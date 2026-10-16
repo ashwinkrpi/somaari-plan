@@ -7,7 +7,6 @@ export const FORMATS = ["dd/mm/yyyy", "mm/dd/yyyy", "yyyy-mm-dd"];
 let fmt = "dd/mm/yyyy";
 const subs = new Set();
 export const onFormatChange = (fn) => { subs.add(fn); };
-export const dateFormat = () => fmt;
 
 export async function loadDateFormat() {
   try {

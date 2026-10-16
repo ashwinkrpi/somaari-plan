@@ -1,14 +1,13 @@
 """Ingest: upload files / paste text -> editable preview -> commit."""
 import hashlib
 import json
-import re
 from datetime import date, datetime
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, jsonify, request
 
 from .. import config, scheduler
-from ..db import IST, connect, now_iso
-from .tasks import norm_step
+from ..db import IST, now_iso
+from .tasks import PRIORITIES, TYPES, err, norm_step, open_db, valid_date, valid_time
 from ..ingest import mdparse, pipeline
 
 bp = Blueprint("ingest", __name__)
@@ -21,16 +20,9 @@ class BadRequest(Exception):
     pass
 
 
-def _err(msg, code=400):
-    return jsonify({"error": msg}), code
-
-
 def _date(v, what):
-    try:
-        if isinstance(v, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", v):
-            return date.fromisoformat(v)
-    except ValueError:
-        pass
+    if valid_date(v):
+        return date.fromisoformat(v)
     raise BadRequest(f"{what} must be a date (YYYY-MM-DD)")
 
 
@@ -69,17 +61,17 @@ def preview():
     try:
         meta = json.loads(request.form.get("meta") or "{}")
     except ValueError:
-        return _err("meta must be JSON")
+        return err("meta must be JSON")
     if not isinstance(meta, dict):
-        return _err("meta must be JSON")
+        return err("meta must be JSON")
     files = [f for f in request.files.getlist("files") if f and f.filename]
     text = request.form.get("text") or ""
     if not files and not text.strip():
-        return _err("Add a .md file or paste some text.")
+        return err("Add a .md file or paste some text.")
     if len(files) > MAX_FILES:
-        return _err(f"At most {MAX_FILES} files at a time.")
+        return err(f"At most {MAX_FILES} files at a time.")
     if len(text) > MAX_TEXT:
-        return _err("Pasted text is too long.")
+        return err("Pasted text is too long.")
     try:
         today = _date(meta["today"], "today") if meta.get("today") else datetime.now(IST).date()
         fmeta = meta.get("files") if isinstance(meta.get("files"), list) else []
@@ -99,10 +91,10 @@ def preview():
         if text.strip():
             inputs.append(("text", None, text, _options(meta.get("text"), "Pasted text")))
     except BadRequest as e:
-        return _err(str(e))
+        return err(str(e))
 
     cfg = config.load_ai()
-    conn = connect(current_app.config["DB_PATH"])
+    conn = open_db()
     sources, tasks, skipped = [], [], []
     info = {"mode": cfg["mode"], "notes": [], "cached": True, "provider": None, "fallback": None}
     try:
@@ -139,7 +131,7 @@ def preview():
 def commit():
     body = request.get_json(silent=True)
     if not isinstance(body, dict) or not isinstance(body.get("sources"), list) or not isinstance(body.get("tasks"), list):
-        return _err("sources and tasks are required")
+        return err("sources and tasks are required")
     try:
         today = datetime.now(IST).date()
         opts = []
@@ -157,12 +149,12 @@ def commit():
             if not isinstance(src, int) or isinstance(src, bool) or not 0 <= src < len(opts):
                 raise BadRequest("task source is invalid")
             pr, ty = t.get("priority", "Medium"), t.get("type", "task")
-            if pr not in ("High", "Medium", "Low") or ty not in ("task", "meeting"):
+            if pr not in PRIORITIES or ty not in TYPES:
                 raise BadRequest("priority or type is invalid")
             if t.get("due_date"):
                 _date(t["due_date"], "due_date")
             clock = t.get("due_time")
-            if clock is not None and not (isinstance(clock, str) and re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", clock)):
+            if not valid_time(clock):
                 raise BadRequest("due_time must be HH:MM")
             conf = t.get("ai_conf")
             try:
@@ -174,12 +166,12 @@ def commit():
                          "ai_conf": conf if isinstance(conf, (int, float)) and not isinstance(conf, bool) else None,
                          "reviewed": 0 if t.get("reviewed") is False else 1})
     except BadRequest as e:
-        return _err(str(e))
+        return err(str(e))
     for i in range(len(opts)):      # the scheduler fills any task still without a date
         todo = [r for r in rows if r["source"] == i and not r["due_date"]]
         if todo:
-            _place(todo, opts[i] if opts[i]["schedule"] != "in_text" else dict(opts[i]), today)
-    conn = connect(current_app.config["DB_PATH"])
+            _place(todo, opts[i], today)
+    conn = open_db()
     try:
         ids, created = [], now_iso()
         sids = []

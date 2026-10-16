@@ -1,5 +1,5 @@
 import { el, swap } from "./dom.js";
-import { todayIso, addDays, addMonths, rangeLabel, rangeOf, weekStart, monthStart, dayNum, fmtDay, DOW, dowIndex } from "./dates.js";
+import { todayIso, addDays, addMonths, rangeLabel, rangeOf, weekStart, dayNum, fmtDay, DOW, dowIndex } from "./dates.js";
 import { state, subscribe, loadCal } from "./store.js";
 import { taskRow } from "./today.js";
 import { onEditChange } from "./editor.js";

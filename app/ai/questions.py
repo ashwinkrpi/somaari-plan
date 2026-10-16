@@ -16,6 +16,10 @@ def _choice(text, options):
     return {"type": "choice", "instructions": text, "criteria": {o: o for o in options}}
 
 
+def meeting_question(i):
+    return _noul(f"Line {i} is a meeting, call or appointment with other people.")
+
+
 def line_questions(lines):
     """Four questions per line: t_ (is a task), p_ (priority), m_ (meeting), d_ (names a date)."""
     qs = {}
@@ -26,7 +30,7 @@ def line_questions(lines):
                         "criteria": {"High": "blocks later steps or is time-critical",
                                      "Medium": "normal work",
                                      "Low": "optional, nice-to-have or marked later"}}
-        qs["m_" + i] = _noul(f"Line {i} is a meeting, call or appointment with other people.")
+        qs["m_" + i] = meeting_question(i)
         qs["d_" + i] = _noul(f"Line {i} names a specific date or day.")
     return qs
 

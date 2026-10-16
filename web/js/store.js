@@ -29,11 +29,8 @@ export async function loadCal(range) {
   emit();
 }
 export async function toggleDone(task) {
-  const r = await fetch(`/api/tasks/${task.id}`, {
-    method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ closed: !task.closed }),
-  });
-  if (!r.ok) { state.error = "Could not update task"; emit(); return; }
-  await Promise.all([loadToday(), loadCal()]);
+  try { await saveTask(task.id, { closed: !task.closed }); }
+  catch (e) { state.error = "Could not update task"; emit(); }
 }
 export const openToday = () => state.today.filter((t) => !t.closed).length;
 

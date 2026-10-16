@@ -1,5 +1,4 @@
 """Resolve Jev date parts into a calendar date. Pure code (AI_PROMPTS.md section 3)."""
-import calendar
 from datetime import date, timedelta
 
 from .ai.questions import MONTHS, WEEKDAYS

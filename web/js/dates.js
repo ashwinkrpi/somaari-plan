@@ -2,7 +2,7 @@ export const IST = "Asia/Kolkata";
 const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const MONL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-export { MON, MONL, DOW };
+export { DOW };
 
 export function todayIso() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: IST, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());

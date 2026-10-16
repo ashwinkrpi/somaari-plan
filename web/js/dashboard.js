@@ -1,7 +1,7 @@
 import { el, swap } from "./dom.js";
 import { todayIso, addDays, weekStart, rangeLabel, DOW, dayNum, dowIndex } from "./dates.js";
 import { fmtDate, onFormatChange } from "./datefmt.js";
-import { subscribe, toggleDone } from "./store.js";
+import { subscribe, toggleDone, saveTask } from "./store.js";
 import { editButton, editForm, isEditing, onEditChange } from "./editor.js";
 
 const LANES = ["High", "Medium", "Low"];
@@ -18,13 +18,11 @@ async function load() {
   render();
 }
 
-export async function moveTask(id, due_date, priority) {
-  const r = await fetch(`/api/tasks/${id}`, {
-    method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ due_date, priority }),
-  });
+async function moveTask(id, due_date, priority) {
   db.moving = null;
-  db.status = r.ok ? `Moved to ${fmtDate(due_date)}, ${priority}.` : "Could not move task.";
-  await load();
+  db.status = `Moved to ${fmtDate(due_date)}, ${priority}.`;
+  try { await saveTask(id, { due_date, priority }); }   // the store emit reloads the board
+  catch (e) { db.status = "Could not move task."; render(); }
 }
 
 export function summarise(tasks, anchor, lastMoved = 0) {

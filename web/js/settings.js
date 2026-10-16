@@ -18,7 +18,7 @@ function field(id, label, input, hint) {
 }
 const num = (id, v, step, min, max) => el("input", { id, type: "number", step, min, max, value: v });
 
-function chainList(status, available) {
+function chainList(status) {
   const ul = el("ul", { class: "chain", "aria-label": "Generate chain order" });
   const move = (i, d) => { const j = i + d; if (j < 0 || j >= chain.length) return; [chain[i], chain[j]] = [chain[j], chain[i]]; render(`Moved ${chain[j]}.`); };
   chain.forEach((p, i) => ul.append(el("li", {},
