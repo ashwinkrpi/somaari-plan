@@ -6,5 +6,5 @@
 - [x] README + docs/GUIDE.md: what it is, screenshots (light/dark), Pi install, AI setup (TypeSafe key; `mode=llm` for users without one; subscription-vs-API note)
 - [x] Fonts licence (Bricolage Grotesque, OFL) included
 - [x] Remove personal sample data from the seed and `tests/fixtures/`; keep a neutral example plan and regenerate its `.expected.json` (history: D-12)
-- [ ] Fresh-clone install tested on the Pi from docs/GUIDE.md only
+- [x] Fresh-clone install tested on the Pi from docs/GUIDE.md only (2026-10-16)
 - [x] Issues/PR templates optional; CHANGELOG starts at v0.1.0

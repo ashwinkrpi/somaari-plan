@@ -50,7 +50,7 @@ For how it works inside, privacy, the API and development, see the [README](../R
 | You need | Why |
 |---|---|
 | 🖥️ A Linux machine that stays on | A **Raspberry Pi 5** (or any Pi with a 64-bit OS, or any Linux box). Idle under 80 MB of RAM |
-| 🐍 **Python 3.11+** and **git** | Raspberry Pi OS Bookworm ships both. The only Python packages are Flask and Waitress |
+| 🐍 **Python 3.11+** and **git** | Raspberry Pi OS Bookworm ships both. Python packages: Flask, Waitress and somaari-common (shared About info, installed from GitHub by pip) |
 | 🔑 Optional: a **TypeSafe API key** | For the default AI mode. Without one, use an LLM key or no AI at all; see [AI](#ai) |
 
 No Docker, no Node, no build step: the frontend is plain HTML, CSS and JavaScript.
