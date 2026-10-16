@@ -59,6 +59,7 @@ No Docker, no Node, no build step: the frontend is plain HTML, CSS and JavaScrip
 
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh   # once per machine; installs uv to ~/.local/bin
+source $HOME/.local/bin/env                       # or open a new terminal, so this shell finds uv
 git clone https://github.com/ashwinkrpi/somaari-plan.git
 cd somaari-plan
 uv sync                                           # creates .venv and installs the pinned packages
