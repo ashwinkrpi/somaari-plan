@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "somaari-plan"
+dynamic = ["version"]
+description = "Planner web app: turns .md plans, pasted text and quick-add chat into dated tasks"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# The allowed dependency list. Ask before adding to it (CLAUDE.md).
+dependencies = [
+    "flask",
+    "waitress",
+    "somaari-common",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[project.scripts]
+somaari-plan = "app.__main__:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "app.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.uv.sources]
+somaari-common = { git = "https://github.com/ashwinkrpi/somaari-common", subdirectory = "python" }

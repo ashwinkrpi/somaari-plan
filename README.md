@@ -58,13 +58,13 @@ dated tasks you can see by day, week and priority. One person, one Raspberry Pi,
 
 ## 🚀 Install
 
-You need a Raspberry Pi (or any Linux machine) with Python 3.11+ and git:
+You need a Raspberry Pi (or any Linux machine) with Python 3.11+, git and [uv](https://docs.astral.sh/uv/):
 
 ```sh
 git clone https://github.com/ashwinkrpi/somaari-plan.git && cd somaari-plan
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+uv sync
 cp config.example.toml config.toml && cp .env.example .env && chmod 600 .env
-.venv/bin/python -m app       # then open http://<pi-address>:8710
+uv run somaari-plan           # then open http://<pi-address>:8710
 ```
 
 The [guide](docs/GUIDE.md) covers the rest:
@@ -167,9 +167,9 @@ Bind to `127.0.0.1` to keep it on the Pi itself, or to a single VPN address; see
 ## 🛠️ Development
 
 ```sh
-.venv/bin/python -m app --dev      # Flask debug server with reload
-.venv/bin/python -m pytest -q      # tests use mocks; no real AI calls
-.venv/bin/python -m app.ai.smoke jev   # one real call to check a provider (needs a key)
+uv run somaari-plan --dev          # Flask debug server with reload
+uv run pytest -q                   # tests use mocks; no real AI calls
+uv run python -m app.ai.smoke jev  # one real call to check a provider (needs a key)
 ```
 
 Design and build docs are in [docs/](docs/): architecture, data model, AI providers and prompts,

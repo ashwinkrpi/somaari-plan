@@ -7,13 +7,13 @@ Runs on Raspberry Pi 5 (8 GB, Twister OS). Single user, LAN only.
 - Python 3.11 · Flask · Waitress · SQLite (stdlib `sqlite3`) · config via stdlib `tomllib`
 - Outbound HTTP: stdlib `urllib.request` only (no requests/httpx/SDKs)
 - Frontend: plain HTML + CSS + ES modules. No framework, no npm, no bundler, no CDN
-- Ask before adding any dependency. Allowed list: `requirements.txt`
+- Ask before adding any dependency. Allowed list: `pyproject.toml` (`uv add` / `uv add --dev`; commit `uv.lock`)
 
 ## Commands
-- Setup: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
-- Dev: `.venv/bin/python -m app --dev` (Flask debug server)
-- Test: `.venv/bin/python -m pytest -q tests/<module>` (only what you changed; full suite at stage end)
-- Prod: `.venv/bin/python -m app` (Waitress)
+- Setup: `uv sync` (uv in `~/.local/bin`; creates `.venv`)
+- Dev: `uv run somaari-plan --dev` (Flask debug server)
+- Test: `uv run pytest -q tests/<module>` (only what you changed; full suite at stage end)
+- Prod: `uv run somaari-plan` (Waitress); the systemd service runs `.venv/bin/somaari-plan` directly
 - Host/port come from config; never hard-code them (docs/ARCHITECTURE.md → Server config)
 
 ## Hard rules

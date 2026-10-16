@@ -1,4 +1,0 @@
-flask
-waitress
-pytest
-somaari-common @ git+https://github.com/ashwinkrpi/somaari-common#subdirectory=python

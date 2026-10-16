@@ -38,6 +38,11 @@ Decision: _
 
 ## Decided
 
+### D-14 · Adopt uv for setup and running? · After release · Decided
+Question: Replace `python3 -m venv` + `pip install -r requirements.txt` with uv (`uv sync`, `uv run somaari-plan`, `uv.lock`)?
+Options: A) keep venv + pip (no new tool; `somaari-plan` command already added) B) uv (faster installs, pinned lockfile, one command; but a new tool on the Pi and an extra GUIDE install step) — Recommend: A for now, revisit if dependency pinning starts to matter
+Decision: B, use uv. pyproject.toml + uv.lock replace requirements.txt (2026-10-16)
+
 ### D-13 · About in the menu · About section · Decided
 Question: The brief says About goes after New plan, but the menu also has Done and Settings. Built as the last item, small like Settings. OK?
 Decision: A. Last in the menu, small like Settings (2026-10-16)

@@ -5,8 +5,8 @@
   },
   "permissions": {
     "allow": [
-      "Bash(python3 -m venv .venv)",
-      "Bash(.venv/bin/pip install -r requirements.txt)",
+      "Bash(uv sync)",
+      "Bash(uv run pytest:*)",
       "Bash(.venv/bin/python -m pytest:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",

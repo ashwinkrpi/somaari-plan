@@ -50,7 +50,7 @@ For how it works inside, privacy, the API and development, see the [README](../R
 | You need | Why |
 |---|---|
 | 🖥️ A Linux machine that stays on | A **Raspberry Pi 5** (or any Pi with a 64-bit OS, or any Linux box). Idle under 80 MB of RAM |
-| 🐍 **Python 3.11+** and **git** | Raspberry Pi OS Bookworm ships both. Python packages: Flask, Waitress and somaari-common (shared About info, installed from GitHub by pip) |
+| 🐍 **Python 3.11+**, **git** and **[uv](https://docs.astral.sh/uv/)** | Raspberry Pi OS Bookworm ships Python and git. uv sets up the app's Python packages: Flask, Waitress and somaari-common (shared About info, from GitHub), at the versions pinned in `uv.lock` |
 | 🔑 Optional: a **TypeSafe API key** | For the default AI mode. Without one, use an LLM key or no AI at all; see [AI](#ai) |
 
 No Docker, no Node, no build step: the frontend is plain HTML, CSS and JavaScript.
@@ -58,14 +58,17 @@ No Docker, no Node, no build step: the frontend is plain HTML, CSS and JavaScrip
 ### Install on a Raspberry Pi
 
 ```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh   # once per machine; installs uv to ~/.local/bin
 git clone https://github.com/ashwinkrpi/somaari-plan.git
 cd somaari-plan
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+uv sync                                           # creates .venv and installs the pinned packages
 cp config.example.toml config.toml
 cp .env.example .env && chmod 600 .env
-.venv/bin/python -m app
+uv run somaari-plan
 ```
+
+`uv run somaari-plan` is the same as `.venv/bin/somaari-plan` (which the service uses) and
+`.venv/bin/python -m app`.
 
 It prints `somaari-plan on http://0.0.0.0:8710`. Open **`http://<pi-address>:8710`** from any
 device on your network. Stop it with **Ctrl+C**; to keep it running, see
@@ -100,7 +103,7 @@ Description=somaari-plan
 [Service]
 WorkingDirectory=%h/somaari-plan
 EnvironmentFile=%h/somaari-plan/.env
-ExecStart=%h/somaari-plan/.venv/bin/python -m app
+ExecStart=%h/somaari-plan/.venv/bin/somaari-plan
 Restart=on-failure
 
 [Install]
@@ -127,9 +130,9 @@ Adjust the paths if you cloned somewhere other than `~/somaari-plan`. Check on i
 ```sh
 cd ~/somaari-plan
 git pull
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python -m app.stamp             # optional: About shows this commit instead of "dev"
-systemctl --user restart somaari-plan    # or stop and start python -m app
+uv sync                                  # installs any package changes from uv.lock
+uv run python -m app.stamp               # optional: About shows this commit instead of "dev"
+systemctl --user restart somaari-plan    # or stop and start somaari-plan
 ```
 
 Your `config.toml`, `.env` and `data/` are not tracked by git, so they're kept. New options appear
