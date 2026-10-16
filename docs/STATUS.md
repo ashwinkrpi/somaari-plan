@@ -1,7 +1,7 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
 - Cleanup (2026-10-16): routes share err/open_db/valid_date/valid_time/PRIORITIES/TYPES from routes/tasks.py; quick add reuses questions.meeting_question; JS moveTask/toggleDone go through store.saveTask; unused exports/imports/.lab removed. No behaviour change. tests 80.
-- Manual: Dashboard move (drag + Move here) and Mark done still work; a failed move shows "Could not move task."
+- Manual check done (2026-10-16): Dashboard drag, Move here and Done work after the cleanup.
 - D-08 decided (2026-10-16): A, import stays add-only (already built). No open decisions left.
 - D-03 decided (2026-10-16): thresholds stay 0.70 / 0.40 / 0.60 (already the defaults), model `jev-latest`. Docs only. Open decisions left: D-08.
 - D-07 A (2026-10-16): task_moves table logs every due_date change (PATCH; cascade on delete); GET /api/moved?from&to; Dashboard Last week shows "N moved, M not done"; export/import carry moves (add-only, remapped ids). tests 80.
