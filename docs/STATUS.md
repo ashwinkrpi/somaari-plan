@@ -1,5 +1,6 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
+- D-15 (2026-10-17): gemini_cli provider removed (code, config validation, smoke usage, GUIDE/AI_PROVIDERS/ARCHITECTURE/DEPLOY_PI/BUILD_PLAN); gemini_api kept as backup. tests 80.
 - Cleanup (2026-10-16): routes share err/open_db/valid_date/valid_time/PRIORITIES/TYPES from routes/tasks.py; quick add reuses questions.meeting_question; JS moveTask/toggleDone go through store.saveTask; unused exports/imports/.lab removed. No behaviour change. tests 80.
 - Manual check done (2026-10-16): Dashboard drag, Move here and Done work after the cleanup.
 - D-08 decided (2026-10-16): A, import stays add-only (already built). No open decisions left.

@@ -24,11 +24,10 @@ Jev never generates text. Code splits plans into lines and owns titles and dates
 | id | Auth | Notes |
 |---|---|---|
 | `openrouter_free` | `OPENROUTER_API_KEY` | `openrouter/free`; rate-limited; upstream may log prompts, so only the prose sentences are sent |
-| `gemini_cli` | Gemini CLI login | `gemini -p` |
 | `gemini_api` | `GEMINI_API_KEY` | free tier available |
 | `ollama` | none | not built (left out in Stage 5; heavy on the Pi) |
 
-No Claude models are used by the app (decision D-02). A Gemini app subscription includes no API access, so it works only through `gemini_cli`; verify flags with `gemini --help` first.
+No Claude models are used by the app (decision D-02). A Gemini app subscription includes no API access, so it can't be used (`gemini_cli` was removed, D-15).
 
 ## Config
 Modes, providers, keys, thresholds and the `[ai]` block: [GUIDE.md → AI](GUIDE.md#ai) (user-facing; keep it current when these change). `mode = "llm"` uses the full-extraction prompt in AI_PROMPTS.md. The Settings page edits mode, model, chain and thresholds, never keys.

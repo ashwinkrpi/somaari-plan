@@ -43,7 +43,7 @@ Done when: drag and tap-move both persist after reload; summary numbers are corr
 Read: AI_PROVIDERS.md, TESTING.md
 - The TypeSafe Claude Code skill is already installed; load it for Jev API details.
 - `router.py`: `decide()` → `jev.py` (urllib, batching, 429 retry, cache); `generate()` → chain.
-- Providers: `jev`, `mock_jev`, `openrouter_free`, `mock_llm`; then `gemini_cli`, `gemini_api` (`ollama` off). No Claude providers.
+- Providers: `jev`, `mock_jev`, `openrouter_free`, `mock_llm`; then `gemini_api` (`ollama` off; `gemini_cli` dropped, D-15). No Claude providers.
 - `config.toml` + `.env`; modes `jev | llm | off`; thresholds; `GET /api/ai/status` (never keys).
 - Settings page (not in canvas): mode, Jev model, generate chain order, thresholds, test buttons; `GET/PUT /api/settings`.
 Done when: mock tests pass; one real Jev call and one `openrouter_free` call work on the Pi; Jev down → falls back as configured.

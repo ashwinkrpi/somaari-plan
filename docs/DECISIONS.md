@@ -21,6 +21,10 @@ Decision: _ (date)
 
 ## Decided
 
+### D-15 · Drop the gemini_cli provider? · After release · Decided
+Question: `gemini_cli` is unused (chain is `openrouter_free`) and needs PATH/login setup for the service. Remove it?
+Decision: Yes. Remove `gemini_cli`, keep `gemini_api` as a free backup (2026-10-17)
+
 ### D-08 · Import: merge or replace? · Stage 8 · Decided
 Question: Should `POST /api/import` only add missing tasks, or replace everything in the database with the backup?
 Options: A) add-only (skip a task with the same title, due date and created_at; never edits or deletes) B) replace all (wipes current tasks first) — Recommend: A

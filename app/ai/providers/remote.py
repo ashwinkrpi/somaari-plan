@@ -1,8 +1,6 @@
 """Real generate providers. Keys come from env; never logged."""
 import json
 import os
-import shutil
-import subprocess
 import urllib.error
 import urllib.request
 
@@ -12,7 +10,7 @@ class ProviderError(Exception):
 
 
 # Model each provider asks for; logged when a call fails (no model reported back).
-REQUESTED = {"openrouter_free": "openrouter/free", "gemini_api": "gemini-2.0-flash", "gemini_cli": "gemini-cli"}
+REQUESTED = {"openrouter_free": "openrouter/free", "gemini_api": "gemini-2.0-flash"}
 
 
 class Reply(str):
@@ -63,20 +61,7 @@ def gemini_api(prompt, timeout):
         raise ProviderError("unexpected response")
 
 
-def gemini_cli(prompt, timeout):
-    exe = shutil.which("gemini")
-    if not exe:
-        raise ProviderError("gemini CLI not installed")
-    try:
-        p = subprocess.run([exe, "-p", prompt], capture_output=True, text=True, timeout=timeout)
-    except (subprocess.TimeoutExpired, OSError):
-        raise ProviderError("gemini CLI failed")
-    if p.returncode != 0 or not p.stdout.strip():
-        raise ProviderError("gemini CLI failed")
-    return Reply(p.stdout, REQUESTED["gemini_cli"])
-
-
-PROVIDERS = {"openrouter_free": openrouter_free, "gemini_api": gemini_api, "gemini_cli": gemini_cli}
+PROVIDERS = {"openrouter_free": openrouter_free, "gemini_api": gemini_api}
 
 
 def available(pid):
@@ -84,6 +69,4 @@ def available(pid):
         return bool(os.environ.get("OPENROUTER_API_KEY"))
     if pid == "gemini_api":
         return bool(os.environ.get("GEMINI_API_KEY"))
-    if pid == "gemini_cli":
-        return shutil.which("gemini") is not None
     return False

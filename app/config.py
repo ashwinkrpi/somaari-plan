@@ -44,7 +44,7 @@ def resolve_server(cli_host=None, cli_port=None, env=None, toml_path=None):
 
 # ---- AI settings ([ai] in config.toml) ----
 MODES = ("jev", "llm", "off")
-GENERATE_PROVIDERS = ("openrouter_free", "gemini_cli", "gemini_api")
+GENERATE_PROVIDERS = ("openrouter_free", "gemini_api")
 AI_DEFAULTS = {
     "mode": "jev",
     "jev_model": "jev-latest",

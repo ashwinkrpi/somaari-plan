@@ -121,11 +121,6 @@ Adjust the paths if you cloned somewhere other than `~/somaari-plan`. Check on i
 `systemctl --user status somaari-plan`; restart it after changing `config.toml` or `.env` with
 `systemctl --user restart somaari-plan`.
 
-> [!TIP]
-> Using the `gemini_cli` provider? The service doesn't see your shell's `PATH`. Add
-> `Environment=PATH=…` with the folder that holds `gemini` to the `[Service]` section, and log in
-> to the Gemini CLI as the same user.
-
 ### Updating
 
 ```sh
@@ -211,20 +206,18 @@ Then pick a mode under `[ai]` in `config.toml` (or on the [Settings page](#the-s
 |---|---|---|
 | `openrouter_free` | `OPENROUTER_API_KEY` | Free and rate-limited. Upstream may log prompts, so only the prose sentences are sent |
 | `gemini_api` | `GEMINI_API_KEY` | Free tier available |
-| `gemini_cli` | none (CLI login) | Needs the `gemini` CLI installed and logged in for the same user |
 
 Set `generate_chain = []` to never call an LLM.
 
 > [!IMPORTANT]
 > **Subscription vs API:** a chat subscription (Gemini app, ChatGPT, Claude) does not include API
-> access. A Gemini subscription works here only through `gemini_cli`; everything else needs an API
-> key.
+> access. Every provider here needs an API key.
 
 - **When the AI fails** (bad key, no network, rate limit), `jev` falls back to `llm` if a chain is
   set, else to `off`, and the preview tells you to check dates and priorities.
 - **Answers are cached**, so uploading the same plan again makes no AI calls.
 - **Check a provider** from the Pi: `.venv/bin/python -m app.ai.smoke jev` (or `openrouter_free`,
-  `gemini_api`, `gemini_cli`). It prints the model, input tokens and time taken.
+  `gemini_api`). It prints the model, input tokens and time taken.
 
 <details>
 <summary><b>All <code>[ai]</code> and <code>[ui]</code> settings</b></summary>
@@ -487,12 +480,6 @@ flags win over both.
 The AI call failed and the app fell back to `llm` or `off`. Check the key in `.env` (and restart
 after changing it), then test with `.venv/bin/python -m app.ai.smoke jev`. `data/ai.log` shows each
 call.
-</details>
-
-<details>
-<summary><b><code>gemini_cli</code> works in the terminal but not in the app</b></summary>
-
-The service can't find the `gemini` command; see the tip in [Run as a service](#run-as-a-service).
 </details>
 
 <details>
