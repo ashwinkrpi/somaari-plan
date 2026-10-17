@@ -19,7 +19,7 @@ Runs on Raspberry Pi 5 (8 GB, Twister OS). Single user, LAN only.
 ## Hard rules
 1. AI calls only via `app/ai/router.py` (`decide` = Jev, `generate` = LLM fallback).
 2. Tests use `mock_jev` / `mock_llm`. Never spend real tokens in tests.
-3. Jev decides; `openrouter_free` only rewrites loose prose (or does full extraction when `mode = "llm"`). The app never calls Claude models. Details: docs/AI_PROVIDERS.md.
+3. Jev decides; `openrouter_free` only rewrites loose prose (or does full extraction when `mode = "llm"`). Defaults never use Claude models; users may choose any model in `[ai.models]` (D-16). Details: docs/AI_PROVIDERS.md.
 4. Code parses markdown, writes titles, resolves dates and schedules. Jev only answers typed questions; it never generates text.
 5. Tasks store `created_at` / `closed_at` (ISO 8601, Asia/Kolkata). No duration tracking.
 6. Secrets live in `.env` (gitignored). Never print or log keys.

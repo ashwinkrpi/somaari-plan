@@ -21,7 +21,7 @@ app/
     questions.py     Jev question sets (VERSION constant)
     jev.py           TypeSafe HTTP client (urllib)
     smoke.py         manual real-provider smoke test (`python -m app.ai.smoke`)
-    providers/       mock.py (mock_jev, mock_llm) · remote.py (openrouter_free, gemini_api)
+    providers/       mock.py (mock_jev, mock_llm) · remote.py (openrouter_free, gemini_api, openai_compat)
   prompts/           rewrite.txt · extract.txt (LLM fallback only)
 web/
   index.html

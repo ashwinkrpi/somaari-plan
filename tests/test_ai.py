@@ -118,6 +118,8 @@ def test_settings_keeps_server_section(client, tmp_path):
     {"mode": "claude"}, {"generate_chain": ["claude"]}, {"generate_chain": ["gemini_api", "gemini_api"]},
     {"thresholds": {"task_accept": 2}}, {"thresholds": {"task_accept": 0.3}}, {"thresholds": {"x": 1}},
     {"timeout_s": 1}, {"jev_model": "a b;"}, {"rewrite_prose": "yes"},
+    {"models": {"claude": "x"}}, {"models": {"gemini_api": ""}}, {"models": {"openai_compat": "a b"}},
+    {"openai_base_url": "ftp://x"}, {"openai_base_url": "https://a b"},
 ])
 def test_settings_rejects_bad(client, bad):
     assert client.put("/api/settings", json={"ai": bad}).status_code == 400
@@ -145,6 +147,50 @@ def test_openrouter_logs_answering_model(tmp_path, monkeypatch):
     assert lines[0] == {**lines[0], "provider": "openrouter_free", "model": "meta-llama/llama-3.3-70b:free", "input_tokens": 12, "ok": True}
     assert lines[-1]["model"] == "openrouter/free" and lines[-1]["ok"] is False
     assert "ping" not in (tmp_path / "ai.log").read_text()
+
+
+def test_generate_models_are_configurable(monkeypatch):
+    from app.ai.providers import remote
+    monkeypatch.delenv("SOMAARI_AI_MOCK")
+    for k in ("OPENROUTER_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY"):
+        monkeypatch.delenv(k, raising=False)
+    sent = []
+    def post(url, h, body, t):
+        sent.append((url, h, body))
+        if "googleapis" in url:
+            return {"candidates": [{"content": {"parts": [{"text": "ok"}]}}]}
+        return {"choices": [{"message": {"content": "ok"}}]}
+    monkeypatch.setattr(remote, "_post", post)
+    cfg = config.validate_ai({"models": {"openrouter_free": "openai/gpt-4o-mini", "gemini_api": "gemini-2.5-pro",
+                                         "openai_compat": "llama3.2"}, "openai_base_url": "http://192.168.1.20:1234/v1/"})
+    monkeypatch.setenv("OPENROUTER_API_KEY", "k")
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    for pid in ("openrouter_free", "gemini_api", "openai_compat"):
+        r = router.generate("hi", cfg=dict(cfg, generate_chain=[pid]), version="t-models")
+        assert r["ok"] and r["model"] == cfg["models"][pid]
+    assert sent[0][2]["model"] == "openai/gpt-4o-mini"
+    assert sent[1][0].endswith("/models/gemini-2.5-pro:generateContent")
+    assert sent[2][0] == "http://192.168.1.20:1234/v1/chat/completions" and sent[2][1] == {}   # LAN server: no key
+    # another model is a cache miss, so it is really asked
+    cfg["models"]["openrouter_free"] = "meta-llama/llama-3.3-70b:free"
+    router.generate("hi", cfg=dict(cfg, generate_chain=["openrouter_free"]), version="t-models")
+    assert sent[3][2]["model"] == "meta-llama/llama-3.3-70b:free"
+    # a remote OpenAI-compatible server needs OPENAI_API_KEY
+    remote_cfg = dict(cfg, openai_base_url="https://api.openai.com/v1", generate_chain=["openai_compat"])
+    assert not remote.available("openai_compat", remote_cfg)
+    assert not router.generate("hi", cfg=remote_cfg, version="t-models-2")["ok"]
+    monkeypatch.setenv("OPENAI_API_KEY", "k")
+    assert router.generate("hi", cfg=remote_cfg, version="t-models-2")["ok"]
+    assert sent[-1][1] == {"Authorization": "Bearer k"}
+
+
+def test_settings_models_roundtrip(client):
+    r = client.put("/api/settings", json={"ai": {"models": {"openrouter_free": "openai/gpt-4o-mini"}}})
+    a = r.get_json()["ai"]
+    assert r.status_code == 200 and a["models"]["openrouter_free"] == "openai/gpt-4o-mini"
+    assert a["models"]["gemini_api"] == "gemini-2.0-flash"   # others keep their defaults
+    assert "openai_compat" in r.get_json()["providers"]
+    assert client.get("/api/ai/status").get_json()["generate_chain"][0]["model"] == "openai/gpt-4o-mini"
 
 
 def test_settings_date_format(client, tmp_path):

@@ -84,20 +84,21 @@ def generate(prompt, expect_json=False, version="1", cfg=None):
     last = "no provider answered"
     for pid in chain:
         provider = "mock_llm" if mocking() else pid
-        key = _key(provider, version, prompt, expect_json)
+        asked = "mock" if mocking() else remote.requested(pid, cfg)
+        key = _key(provider, asked, version, prompt, expect_json)
         if key in _cache:
             text, data = _cache[key]
             return {"ok": True, "text": text, "data": data, "provider": provider, "cached": True}
         for _ in range(2):
             started = time.time()
             try:
-                text = mock.mock_llm(prompt) if mocking() else remote.PROVIDERS[pid](prompt, cfg["timeout_s"])
+                text = mock.mock_llm(prompt) if mocking() else remote.PROVIDERS[pid](prompt, cfg)
                 data = _parse_json(text) if expect_json else None
             except (remote.ProviderError, ValueError) as e:
                 last = f"{pid}: {e}"
-                _log(provider, "mock" if mocking() else remote.REQUESTED.get(pid, ""), 0, started, False)
+                _log(provider, asked, 0, started, False)
                 continue
-            model = getattr(text, "model", "") or ("mock" if mocking() else remote.REQUESTED.get(pid, ""))
+            model = getattr(text, "model", "") or asked
             _log(provider, model, getattr(text, "input_tokens", 0), started, True)
             text = str(text)
             _cache[key] = (text, data)
@@ -112,7 +113,8 @@ def status(cfg=None):
     return {
         "mode": cfg["mode"],
         "jev": {"model": cfg["jev_model"], "available": m or bool(os.environ.get("TYPESAFE_API_KEY"))},
-        "generate_chain": [{"id": p, "available": m or remote.available(p)} for p in cfg["generate_chain"]],
+        "generate_chain": [{"id": p, "model": cfg["models"].get(p, ""), "available": m or remote.available(p, cfg)}
+                           for p in cfg["generate_chain"]],
         "fallback": fallback_mode(cfg),
         "mock": m,
     }

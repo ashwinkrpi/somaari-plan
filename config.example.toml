@@ -7,7 +7,8 @@ threads = 4
 [ai]
 mode = "jev"                       # jev | llm | off
 jev_model = "jev-latest"
-generate_chain = ["openrouter_free"]   # [] disables all LLM use
+generate_chain = ["openrouter_free"]   # openrouter_free | gemini_api | openai_compat; [] disables all LLM use
+openai_base_url = "https://api.openai.com/v1"   # for openai_compat (OpenAI, Groq, LM Studio, ...)
 rewrite_prose = true
 timeout_s = 60
 
@@ -15,6 +16,11 @@ timeout_s = 60
 task_accept = 0.7
 task_review = 0.4
 confidence_review = 0.6
+
+[ai.models]                        # model each generate provider asks for
+openrouter_free = "openrouter/free"   # free router; any OpenRouter id works
+gemini_api = "gemini-2.0-flash"
+openai_compat = "gpt-4o-mini"
 
 [ui]
 date_format = "dd/mm/yyyy"         # dd/mm/yyyy | mm/dd/yyyy | yyyy-mm-dd

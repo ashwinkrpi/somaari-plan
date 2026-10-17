@@ -23,11 +23,12 @@ Jev never generates text. Code splits plans into lines and owns titles and dates
 ## Generate providers (fallback)
 | id | Auth | Notes |
 |---|---|---|
-| `openrouter_free` | `OPENROUTER_API_KEY` | `openrouter/free`; rate-limited; upstream may log prompts, so only the prose sentences are sent |
-| `gemini_api` | `GEMINI_API_KEY` | free tier available |
+| `openrouter_free` | `OPENROUTER_API_KEY` | default model `openrouter/free`; rate-limited; upstream may log prompts, so only the prose sentences are sent |
+| `gemini_api` | `GEMINI_API_KEY` | default `gemini-2.0-flash`; free tier available |
+| `openai_compat` | `OPENAI_API_KEY` | `POST {openai_base_url}/chat/completions`, default `gpt-4o-mini` at OpenAI; no key needed for a loopback/private-IP host (LM Studio, llama.cpp) |
 | `ollama` | none | not built (left out in Stage 5; heavy on the Pi) |
 
-No Claude models are used by the app (decision D-02). A Gemini app subscription includes no API access, so it can't be used (`gemini_cli` was removed, D-15).
+Every model is set in `[ai.models]` (D-16); the id `openrouter_free` is kept for config compatibility even when a paid model is set. Defaults never use Claude models (D-02); users may pick any model, Claude included. A Gemini app subscription includes no API access, so it can't be used (`gemini_cli` was removed, D-15).
 
 ## Config
 Modes, providers, keys, thresholds and the `[ai]` block: [GUIDE.md → AI](GUIDE.md#ai) (user-facing; keep it current when these change). `mode = "llm"` uses the full-extraction prompt in AI_PROMPTS.md. The Settings page edits mode, model, chain and thresholds, never keys.
@@ -38,7 +39,7 @@ Modes, providers, keys, thresholds and the `[ai]` block: [GUIDE.md → AI](GUIDE
 - Other users without a TypeSafe key: `mode="llm"` with their own chain (e.g. `["gemini_api"]` or `["openrouter_free"]`).
 
 ## Router behaviour
-1. Cache key = sha256(provider + model + question-set/prompt version + state). Hit → no call; pinning a new model misses the cache.
+1. Cache key = sha256(provider + model + question-set/prompt version + state). Hit → no call; pinning or choosing a new model misses the cache.
 2. `decide`: one Jev request per batch. On failure → `mode` falls back to `llm` if `generate_chain` is set, else `off`. The UI says which.
 3. `generate`: try the chain in order; validate JSON; one retry, then next provider.
 4. Log provider, model, input tokens and latency to `data/ai.log`. Never log content or keys For generate providers, `model` is the model that actually answered (e.g. the one `openrouter/free` routed to); on failure, the requested model.

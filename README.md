@@ -98,7 +98,7 @@ flowchart LR
     P --> R[Rules:<br/>dates · times]
     R --> J{AI mode}
     J -- jev --> T[TypeSafe Jev<br/>typed questions]
-    J -- llm --> L[LLM chain<br/>OpenRouter · Gemini]
+    J -- llm --> L[LLM chain<br/>OpenRouter · Gemini · OpenAI-compatible]
     J -- off --> S
     T --> S[Scheduler]
     L --> S

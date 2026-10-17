@@ -40,6 +40,12 @@ async function testProvider(name, status) {
   } catch (e) { status.textContent = `${name} failed: ${e.message}.`; }
 }
 
+const MODEL_HINT = {
+  openrouter_free: "openrouter/free picks a free model. Any OpenRouter id works, e.g. openai/gpt-4o-mini.",
+  gemini_api: "e.g. gemini-2.0-flash.",
+  openai_compat: "e.g. gpt-4o-mini, or the name your local server shows.",
+};
+
 const sample = (f) => f === "yyyy-mm-dd" ? "2026-10-17" : f === "mm/dd/yyyy" ? "10/17/2026" : "17/10/2026";
 
 function render(msg = "") {
@@ -57,6 +63,11 @@ function render(msg = "") {
         data.date_formats.map((f) => el("option", { value: f, selected: f === data.ui.date_format }, f))),
         "Used everywhere dates are shown or typed. Example: 17 Oct 2026 → " + sample(data.ui.date_format) + ".")),
     el("fieldset", {}, el("legend", {}, "Generate chain"), el("p", { class: "hint" }, "Tried top to bottom."), chainList(status)),
+    el("fieldset", {}, el("legend", {}, "Models"),
+      el("p", { class: "hint" }, "The model each generate provider asks for. Paid models are billed to your key."),
+      ...data.providers.map((p) => field(`s-m-${p}`, p, el("input", { id: `s-m-${p}`, type: "text", value: a.models[p] || "" }), MODEL_HINT[p])),
+      field("s-baseurl", "openai_compat base URL", el("input", { id: "s-baseurl", type: "url", value: a.openai_base_url }),
+        "Any OpenAI-compatible server: OpenAI, Groq, Mistral, or LM Studio / llama.cpp on your network (no key needed there).")),
     el("fieldset", {}, el("legend", {}, "Thresholds"),
       field("s-accept", "Task accept (noul at or above)", num("s-accept", t.task_accept, 0.05, 0, 1)),
       field("s-review", "Task review (flagged between review and accept)", num("s-review", t.task_review, 0.05, 0, 1)),
@@ -96,6 +107,7 @@ async function save(ev) {
   const body = { ai: {
     mode: v("s-mode").value, jev_model: v("s-model").value, rewrite_prose: v("s-prose").checked,
     timeout_s: parseInt(v("s-timeout").value, 10), generate_chain: chain,
+    models: Object.fromEntries(data.providers.map((p) => [p, v(`s-m-${p}`).value])), openai_base_url: v("s-baseurl").value,
     thresholds: { task_accept: parseFloat(v("s-accept").value), task_review: parseFloat(v("s-review").value), confidence_review: parseFloat(v("s-conf").value) },
   }, ui: { date_format: v("s-datefmt").value } };
   try {

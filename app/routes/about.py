@@ -6,7 +6,6 @@ from flask import Blueprint, current_app, jsonify
 from somaari_about import as_text, collect, load_debug_fields, load_developer
 
 from .. import __version__, config
-from ..ai.providers.remote import REQUESTED
 
 bp = Blueprint("about", __name__)
 PACKAGES = ("flask", "waitress", "werkzeug")
@@ -24,7 +23,7 @@ def _ai_names():
         return "off (code only)", None
     chain = ai["generate_chain"]
     providers = [f"{p} (fallback)" for p in chain]
-    models = [REQUESTED.get(p, p) for p in chain]
+    models = [ai["models"].get(p, p) for p in chain]
     if ai["mode"] == "jev":
         providers.insert(0, "jev (primary)")
         models.insert(0, ai["jev_model"])

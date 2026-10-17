@@ -21,6 +21,10 @@ Decision: _ (date)
 
 ## Decided
 
+### D-16 · Configurable AI models · After release · Decided
+Question: Users may have other AI accounts (ChatGPT, Claude, …). Make the LLM models configurable?
+Decision: Yes, all of them. `[ai.models]` per provider (Settings page too) and a new `openai_compat` provider (`openai_base_url`, `OPENAI_API_KEY`, no key for LAN servers). Defaults stay free and non-Claude; users may pick any model, Claude included (amends D-02) (2026-10-18)
+
 ### D-15 · Drop the gemini_cli provider? · After release · Decided
 Question: `gemini_cli` is unused (chain is `openrouter_free`) and needs PATH/login setup for the service. Remove it?
 Decision: Yes. Remove `gemini_cli`, keep `gemini_api` as a free backup (2026-10-17)
@@ -83,7 +87,7 @@ Decision: B. Build directly from UI_SPEC tokens (2026-10-07)
 
 ### D-02 · LLM fallback provider · Stage 5 · Decided
 Question: Use Claude (via `claude -p` with the Pro login) for the prose fallback?
-Decision: No. The app uses no Claude models; `openrouter_free` is the fallback for now (2026-10-06)
+Decision: No. The app uses no Claude models; `openrouter_free` is the fallback for now (2026-10-06). Amended by D-16: defaults still never use Claude, but users may choose any model
 
 ### D-06 · Do plan paragraphs become candidates? · Stage 6 · Decided
 Question: AI_PROMPTS §1 makes paragraph sentences `prose` candidates, but the golden fixture (21 candidates) has none, and its Step 2/3 heading fallback only fires if prose is ignored.

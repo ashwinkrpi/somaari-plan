@@ -44,15 +44,19 @@ def resolve_server(cli_host=None, cli_port=None, env=None, toml_path=None):
 
 # ---- AI settings ([ai] in config.toml) ----
 MODES = ("jev", "llm", "off")
-GENERATE_PROVIDERS = ("openrouter_free", "gemini_api")
+GENERATE_PROVIDERS = ("openrouter_free", "gemini_api", "openai_compat")
 AI_DEFAULTS = {
     "mode": "jev",
     "jev_model": "jev-latest",
     "generate_chain": ["openrouter_free"],
+    "openai_base_url": "https://api.openai.com/v1",   # any OpenAI-compatible /chat/completions server
     "rewrite_prose": True,
     "timeout_s": 60,
     "thresholds": {"task_accept": 0.70, "task_review": 0.40, "confidence_review": 0.60},
+    # Model each generate provider asks for (D-16). Defaults never use Claude models (D-02).
+    "models": {"openrouter_free": "openrouter/free", "gemini_api": "gemini-2.0-flash", "openai_compat": "gpt-4o-mini"},
 }
+MODEL_CHARS = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._/:@")
 
 
 def load_ai(path=None):
@@ -60,8 +64,8 @@ def load_ai(path=None):
     ai = {k: (dict(v) if isinstance(v, dict) else list(v) if isinstance(v, list) else v)
           for k, v in AI_DEFAULTS.items()}
     for k, v in raw.items():
-        if k == "thresholds" and isinstance(v, dict):
-            ai["thresholds"].update(v)
+        if k in ("thresholds", "models") and isinstance(v, dict):
+            ai[k].update(v)
         elif k in ai:
             ai[k] = v
     return ai
@@ -86,6 +90,17 @@ def validate_ai(data):
         if not isinstance(c, list) or len(set(c)) != len(c) or any(x not in GENERATE_PROVIDERS for x in c):
             raise ConfigError("generate_chain must be a list of: " + ", ".join(GENERATE_PROVIDERS) + ".")
         out["generate_chain"] = list(c)
+    if "openai_base_url" in data:
+        u = data["openai_base_url"]
+        if not isinstance(u, str) or not u.startswith(("http://", "https://")) or len(u) > 200 or any(c.isspace() for c in u):
+            raise ConfigError("openai_base_url must be an http(s) URL such as https://api.openai.com/v1.")
+        out["openai_base_url"] = u.rstrip("/")
+    for k, v in (data.get("models") or {}).items():
+        if k not in GENERATE_PROVIDERS:
+            raise ConfigError(f"Unknown provider {k!r} in models.")
+        if not isinstance(v, str) or not v.strip() or len(v) > 100 or not set(v.strip()) <= MODEL_CHARS:
+            raise ConfigError(f"Model for {k} must be a model id such as openrouter/free.")
+        out["models"][k] = v.strip()
     if "rewrite_prose" in data:
         if not isinstance(data["rewrite_prose"], bool):
             raise ConfigError("rewrite_prose must be true or false.")

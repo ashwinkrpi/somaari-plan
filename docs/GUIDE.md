@@ -190,6 +190,7 @@ Keys go in `.env` only; they're never shown in the app or written to logs:
 TYPESAFE_API_KEY=…      # for mode = "jev"
 OPENROUTER_API_KEY=…    # for the openrouter_free provider
 GEMINI_API_KEY=…        # for the gemini_api provider
+OPENAI_API_KEY=…        # for the openai_compat provider (not needed for a server on your LAN)
 ```
 
 Then pick a mode under `[ai]` in `config.toml` (or on the [Settings page](#the-settings-page)):
@@ -206,18 +207,32 @@ Then pick a mode under `[ai]` in `config.toml` (or on the [Settings page](#the-s
 |---|---|---|
 | `openrouter_free` | `OPENROUTER_API_KEY` | Free and rate-limited. Upstream may log prompts, so only the prose sentences are sent |
 | `gemini_api` | `GEMINI_API_KEY` | Free tier available |
+| `openai_compat` | `OPENAI_API_KEY` | Any OpenAI-compatible server at `openai_base_url`: OpenAI (default), Groq, Mistral, DeepSeek, or LM Studio / llama.cpp / Ollama on your network (no key needed for those) |
 
 Set `generate_chain = []` to never call an LLM.
 
+**Choosing models.** Each provider's model is set under `[ai.models]` (or on the Settings page):
+
+```toml
+[ai.models]
+openrouter_free = "openrouter/free"    # free router; or any OpenRouter id, e.g. "openai/gpt-4o-mini"
+gemini_api = "gemini-2.0-flash"
+openai_compat = "gpt-4o-mini"          # or the model name your local server shows
+```
+
+The defaults are free or cheap. Paid models (GPT, Claude, Gemini Pro through OpenRouter, or your
+own OpenAI key) work too and are billed to your key.
+
 > [!IMPORTANT]
 > **Subscription vs API:** a chat subscription (Gemini app, ChatGPT, Claude) does not include API
-> access. Every provider here needs an API key.
+> access. Every provider here needs an API key (or a local server). One OpenRouter key reaches
+> GPT, Claude, Gemini, Llama and many others.
 
 - **When the AI fails** (bad key, no network, rate limit), `jev` falls back to `llm` if a chain is
   set, else to `off`, and the preview tells you to check dates and priorities.
 - **Answers are cached**, so uploading the same plan again makes no AI calls.
 - **Check a provider** from the Pi: `.venv/bin/python -m app.ai.smoke jev` (or `openrouter_free`,
-  `gemini_api`). It prints the model, input tokens and time taken.
+  `gemini_api`, `openai_compat`). It prints the model, input tokens and time taken.
 
 <details>
 <summary><b>All <code>[ai]</code> and <code>[ui]</code> settings</b></summary>
@@ -229,6 +244,7 @@ Set `generate_chain = []` to never call an LLM.
 mode = "jev"                           # jev | llm | off
 jev_model = "jev-latest"               # or pin a version, e.g. "jev-1.13.0"
 generate_chain = ["openrouter_free"]   # [] disables all LLM use
+openai_base_url = "https://api.openai.com/v1"   # used by openai_compat
 rewrite_prose = true                   # send prose-heavy blocks to generate_chain
 timeout_s = 60
 
@@ -236,6 +252,11 @@ timeout_s = 60
 task_accept = 0.7                      # at or above: the line is a task
 task_review = 0.4                      # between review and accept: a task, flagged for review
 confidence_review = 0.6                # priority or date confidence below this: flagged
+
+[ai.models]
+openrouter_free = "openrouter/free"
+gemini_api = "gemini-2.0-flash"
+openai_compat = "gpt-4o-mini"
 
 [ui]
 date_format = "dd/mm/yyyy"             # dd/mm/yyyy | mm/dd/yyyy | yyyy-mm-dd
@@ -253,7 +274,7 @@ either way.
 
 **Settings** (bottom of the menu) edits everything in `[ai]` and `[ui]`: mode, Jev model, prose
 rewriting, timeout, date format, the generate chain (add, reorder, remove, and **Test** each
-provider) and the thresholds. **Save settings** writes `config.toml`. It never shows or edits keys,
+provider), each provider's model and the `openai_compat` base URL, and the thresholds. **Save settings** writes `config.toml`. It never shows or edits keys,
 and shows host and port read-only.
 
 > [!NOTE]
