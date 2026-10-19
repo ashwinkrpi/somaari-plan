@@ -17,7 +17,7 @@ For how it works inside, privacy, the API and development, see the [README](../R
 
 </div>
 
-<img src="screenshots/light.png" alt="Dashboard: this week's tasks by day and priority" width="100%">
+<img src="screenshots/theme-warm-tactile.png" alt="Dashboard: this week's tasks by day and priority" width="100%">
 
 > [!NOTE]
 > All screenshots use neutral demo data (a book swap plan and a garden plan), not real tasks.
@@ -270,7 +270,7 @@ either way.
 
 ### The Settings page
 
-<img src="screenshots/settings.png" alt="Settings: AI mode, Jev model, date format, generate chain and thresholds" width="100%">
+<img src="screenshots/settings.png" alt="Settings: AI mode, Jev model, date format and generate chain" width="100%">
 
 **Settings** (bottom of the menu) edits everything in `[ai]` and `[ui]`: mode, Jev model, prose
 rewriting, timeout, date format, the generate chain (add, reorder, remove, and **Test** each

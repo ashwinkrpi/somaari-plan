@@ -29,9 +29,11 @@ dated tasks you can see by day, week and priority. One person, one Raspberry Pi,
 
 </div>
 
-| Light | Dark |
+| Warm Tactile | Liquid Glass |
 |---|---|
-| ![Dashboard, light theme (demo data)](docs/screenshots/light.png) | ![Dashboard, dark theme (demo data)](docs/screenshots/dark.png) |
+| ![Dashboard, Warm Tactile theme (demo data)](docs/screenshots/theme-warm-tactile.png) | ![Dashboard, Liquid Glass theme (demo data)](docs/screenshots/theme-liquid-glass.png) |
+| **Dasara – Jamboo Savari** | **Kannada Rajyotsava** |
+| ![Dashboard, Dasara – Jamboo Savari theme (demo data)](docs/screenshots/theme-dasara-jamboo.png) | ![Dashboard, Kannada Rajyotsava theme (demo data)](docs/screenshots/theme-rajyotsava.png) |
 
 > [!WARNING]
 > There's no login: anyone who can reach the port can read and change your tasks. Keep it on your
