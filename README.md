@@ -175,7 +175,10 @@ uv run python -m app.ai.smoke jev  # one real call to check a provider (needs a 
 ```
 
 Design and build docs are in [docs/](docs/): architecture, data model, AI providers and prompts,
-UI spec. Screenshots in `docs/screenshots/` come from neutral demo data only.
+UI spec. Screenshots in `docs/screenshots/` come from neutral demo data only; somaari.in shows the
+`theme-<id>.png` ones on its Task Planner page. The demo video there is recorded by
+`.github/workflows/site-demo.yml` (`scripts/site-demo/`, headless Chromium, AI off) after each push to
+`web/`, so a UI change reaches the site without re-recording by hand.
 
 ## Licence
 

@@ -1,0 +1,59 @@
+# Re-records the demo loop on somaari.in (the "Watch demo" video and poster on the Task Planner card)
+# whenever the UI changes, and asks Cloudflare Pages to rebuild the site, which downloads it.
+# scripts/site-demo/record.sh does the recording (headless Chromium via Playwright, AI off) with the
+# encoder from somaari-site. The three files are force-pushed as the only commit on the site-demo
+# branch, so main never carries them. Needs the repo secret SOMAARI_SITE_DEPLOY_HOOK.
+name: Update the demo on somaari.in
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", "scripts/site-demo/**", ".github/workflows/site-demo.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-demo
+  cancel-in-progress: true
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ashwinkrpi/somaari-site
+          path: .somaari-site
+          sparse-checkout: scripts/demo
+      - uses: astral-sh/setup-uv@v6
+      - name: Install the app, ffmpeg and Playwright
+        run: |
+          uv sync --frozen
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          uv venv -q "$RUNNER_TEMP/pw"
+          uv pip install -q -p "$RUNNER_TEMP/pw/bin/python" playwright==1.64.0
+          "$RUNNER_TEMP/pw/bin/playwright" install --with-deps chromium ffmpeg
+      - name: Record and encode
+        env:
+          OUT_DIR: ${{ runner.temp }}/site-demo
+          SITE_DIR: .somaari-site
+          PW_PY: ${{ runner.temp }}/pw/bin/python
+        run: scripts/site-demo/record.sh
+      - name: Publish to the site-demo branch
+        working-directory: ${{ runner.temp }}/site-demo
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          printf '# site-demo\n\nThe demo loop on somaari.in, recorded from %s by .github/workflows/site-demo.yml.\nDo not edit: every run replaces this branch.\n' "${GITHUB_SHA::7}" > README.md
+          git init -q -b site-demo
+          git add loop.webm loop.mp4 poster.webp README.md
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Demo loop from ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" site-demo
+      - name: Rebuild somaari.in
+        env:
+          HOOK: ${{ secrets.SOMAARI_SITE_DEPLOY_HOOK }}
+        run: curl -fsS -X POST "$HOOK" > /dev/null
