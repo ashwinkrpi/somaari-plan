@@ -1,5 +1,8 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
+- D-17 (2026-10-19): somaari-site themes replace Kinetic light/dark: warm-tactile (default), liquid-glass, dasara-jamboo, rajyotsava; js/theme.js (blocking, ?theme= preview, IST seasonal schedule same as site), Theme popover in panel footer, fonts self-hosted in web/fonts (OFL-*.txt), Bricolage removed. UI_SPEC/GUIDE/ARCHITECTURE/README updated. tests 88 (+node schedule test).
+- Manual: walk all pages in each theme (?theme=<id>) at 380 px and keyboard (Theme popover: Esc, tab out); README screenshots still show the old look, retake.
+- Fix (2026-10-19): Dasara Theme popover text was cream on cream (now dark ink); panel sticky 100vh above 900px so Theme is reachable on long pages (Done, Settings, About).
 - D-16 (2026-10-18): all LLM models configurable: [ai.models] per provider (Settings → Models), new openai_compat provider (openai_base_url, OPENAI_API_KEY; no key for LAN/loopback hosts); generate cache key includes the model; About shows configured models. Defaults unchanged, never Claude (D-02 amended). tests 87.
 - Manual: Settings → Models at 380 px, both themes; one real call with a non-default OpenRouter model and one with a local LM Studio/llama.cpp server via openai_compat.
 - D-15 (2026-10-17): gemini_cli provider removed (code, config validation, smoke usage, GUIDE/AI_PROVIDERS/ARCHITECTURE/DEPLOY_PI/BUILD_PLAN); gemini_api kept as backup. tests 80.

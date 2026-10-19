@@ -1,4 +1,8 @@
+import json
+import shutil
 import socket
+import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -45,7 +49,7 @@ def test_shell_assets(client):
     html = client.get("/").data.decode()
     for r in ("today", "calendar", "dashboard", "new"):
         assert f'data-route="{r}"' in html and f'id="page-{r}"' in html
-    for p in ("/css/app.css", "/js/app.js", "/fonts/BricolageGrotesque-var.woff2"):
+    for p in ("/css/app.css", "/js/app.js", "/js/theme.js", "/fonts/HankenGrotesk.woff2"):
         assert client.get(p).status_code == 200
 
 
@@ -60,3 +64,23 @@ def test_stage3_assets_and_toggle(client):
     assert done["closed"] and done["closed_at"]
     rng = client.get("/api/tasks?from=2026-10-07&to=2026-10-07").get_json()
     assert rng[0]["closed"] is True
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_theme_schedule():
+    # Same cases as somaari-site/scripts/test-theme.mjs; dates are judged in IST.
+    js = Path(__file__).resolve().parents[1] / "web" / "js" / "theme.js"
+    cases = {
+        "2026-10-16T12:00:00+05:30": "warm-tactile",
+        "2026-10-17T00:00:00+05:30": "dasara-jamboo",
+        "2026-10-20T23:59:00+05:30": "dasara-jamboo",
+        "2026-10-21T00:00:00+05:30": "warm-tactile",
+        "2026-10-31T18:45:00Z": "rajyotsava",   # 1 Nov 00:15 IST
+        "2027-11-07T12:00:00+05:30": "rajyotsava",
+        "2027-11-08T00:00:00+05:30": "warm-tactile",
+        "2027-10-18T12:00:00+05:30": "warm-tactile",  # Dasara entry is 2026 only
+    }
+    script = (f"const t = require({json.dumps(str(js))}); const c = {json.dumps(cases)};"
+              "console.log(JSON.stringify(Object.keys(c).map(d => t.getDefaultTheme(new Date(d)))));")
+    out = subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True).stdout
+    assert json.loads(out) == list(cases.values())

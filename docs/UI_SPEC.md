@@ -1,30 +1,28 @@
-# UI spec — Kinetic Swiss Editorial
+# UI spec — Somaari themes
 
-Source of truth: `design/light.dc.html`, `design/dark.dc.html` (canvas exports). This file summarises them; open a design file only to check one section (`grep -n 'id="p-dash"'` etc.).
+Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `design/light.dc.html`, `design/dark.dc.html` (reference for layout only; open one section with `grep -n 'id="p-dash"'` etc.). Colours, fonts and shapes come from the themes below (D-17, 2026-10-19), the same four as somaari-site.
 
-## Tokens (CSS custom properties on :root; dark via `[data-theme=dark]` and `prefers-color-scheme`)
-| Token | Light | Dark |
-|---|---|---|
-| --bg | #ffffff | #0b0b0b |
-| --fg | #0a0a0a | #f2f2f2 |
-| --panel (left menu) | #111111 | #171717 |
-| --panel-fg | #fafafa | #fafafa |
-| --field | #f6f6f6 | #151515 |
-| --line | #d0d0d0 | #353535 |
-| --track | #e4e4e4 | #2a2a2a |
-| --muted-fg (done text) | #6a6a6a | #9c9c9c |
-| --accent | #ff4f00 | #ff4f00 |
-| --on-accent (text on accent) | #0b0b0c | #0b0b0c |
-| --accent-text (accent as text) | #c23b00 | #ff7a3d |
-| --drop-hover | #ffe3d6 | #3a1a0c |
-| --today-cell | #fff4ee | #1f130d |
-| --weekend (Sat/Sun in Calendar; Dashboard day headers) | #f1f1f1 | #161616 |
-| --weekend-cell (Sat/Sun Dashboard board cells) | #ebebeb | #1e1e1e |
+## Themes
+`web/js/theme.js` (classic blocking script in `<head>`) sets `html[data-theme]` before first paint and fills `<meta name="theme-color">`. Order: `?theme=<id>` (preview, never saved) → saved choice (`localStorage` `somaari-theme`) → seasonal schedule by the date in India (Asia/Kolkata). `:root` holds warm-tactile, so the page keeps it without JS.
 
-Font: `web/fonts/BricolageGrotesque-var.woff2` (90 KB variable font: wght 200–800, opsz 12–96; Latin subset; OFL.txt beside it). One `@font-face` with `font-weight: 200 800; font-display: swap`. Fallback `system-ui, sans-serif`.
-✓ ↗ ↵ aren't in the font and render from the fallback; that's expected.
-Type: page titles 72px/800, tracking −0.05em; big numerals 84–120px/800; body 16–20px.
-Rules: 2px fg rule under page titles; 1px `--line` between rows. No radius, no shadows.
+| id | Picker label | Look | Fonts (body / display) |
+|---|---|---|---|
+| `warm-tactile` (default) | Warm Tactile | paper grain, cream and sand, rust accent | Hanken Grotesk / Fraunces 500 |
+| `liquid-glass` | Liquid Glass | dark navy with blue/teal/pink glows, frosted panel, pill buttons | Onest / Onest 600 |
+| `dasara-jamboo` | Dasara – Jamboo Savari | maroon, gold accent and titles, gold zig-zag fringe on the panel, cream cards with dark ink | Mukta / Rozha One |
+| `rajyotsava` | Kannada Rajyotsava | sand panel with brick-red band, faint outlined "ಕ" in the panel, sand/brick stripe on cards | Mukta / Baloo Tamma 2 700 |
+
+Schedule (keep in step with somaari-site/theme.js): 17–20 Oct 2026 `dasara-jamboo`; 1–7 Nov every year `rajyotsava`; otherwise `warm-tactile`. Tested in `tests/test_app.py::test_theme_schedule` (needs node).
+Picker: Theme button (44px, half-filled circle icon) in the panel footer opens a popover of radios: Auto (seasonal), then the four themes. Esc / click outside / tab out closes it. Opens upward; downward below 900px.
+
+## Tokens (CSS custom properties per `html[data-theme]` in `css/app.css`)
+`--page-bg` (body, may hold grain/glows) · `--bg` (solid surface) · `--fg` · `--card-bg` / `--card-edge` (Dashboard cards, summary band) · `--panel` / `--panel-bg` / `--panel-fg` / `--panel-line` · `--field` (inputs, board cells) · `--line` · `--track` · `--muted-fg` (done text) · `--accent` · `--on-accent` (text on accent) · `--accent-text` (accent as text) · `--focus` · `--drop-hover` · `--today-cell` · `--weekend` (Sat/Sun in Calendar; Dashboard day headers) · `--weekend-cell` (Sat/Sun Dashboard board cells) · `--radius` / `--btn-radius` / `--field-radius` · `--shadow` · `--font` / `--font-display` / `--display-weight` / `--display-tracking`.
+Dasara scopes dark-ink tokens onto `.card`, `.bcell` and `.appearance-menu` (cream on maroon).
+
+Fonts: self-hosted woff2 in `web/fonts/` (Latin subsets; Baloo Tamma 2 also a Kannada subset for "ಕ"), `OFL-<Family>.txt` beside them. No Google Fonts call; a browser downloads only the faces its theme uses.
+✓ ↗ ↵ may render from the fallback font; that's expected.
+Type: page titles 72px in the display font and weight; big numerals 84–120px display font; body 16–20px.
+Rules: 2px fg rule under page titles; 1px `--line` between rows. Radius and shadows come from the theme tokens.
 
 ## Dates
 - Dates are shown and typed in the format chosen in Settings → Display (dd/mm/yyyy default; mm/dd/yyyy; yyyy-mm-dd). Stored and sent as ISO `YYYY-MM-DD`.
@@ -35,7 +33,7 @@ Rules: 2px fg rule under page titles; 1px `--line` between rows. No radius, no s
 - Left panel (flex 1 1 240px, `--panel`): logo "somaari—plan", big date "06" + weekday/month, nav, footer "Week NN / YYYY".
 - Nav buttons (min-height 52px): Today (shows "N open"), Calendar, Dashboard (shows done/planned), Done, New plan ↗, plus Settings and About (small, at the bottom; About last).
 - Active item: `--accent` background, `--on-accent` text, `aria-current="page"`.
-- Main: flex 999 1 640px, padding 28px 36px. Content uses the full width (no max-width; changed 2026-10-08 for large monitors). Forms stay narrow: Settings ≤640px, About ≤760px, Done search ≤480px. Below 900px the panel stacks on top.
+- Main: flex 999 1 640px, padding 28px 36px. Content uses the full width (no max-width; changed 2026-10-08 for large monitors). Forms stay narrow: Settings ≤640px, About ≤760px, Done search ≤480px. Above 900px the panel is sticky and 100vh tall, so its footer (week, Theme) stays in view on long pages. Below 900px the panel stacks on top.
 - Exactly one page visible at a time.
 
 ## Today
@@ -81,4 +79,4 @@ Title "Plan in. Tasks out." Two columns:
 - **Copy debug info** (primary button) copies the spec's text block; `role=status` says copied/failed (falls back to `execCommand` on plain-http LAN). "Show copied text" disclosure shows the exact block.
 
 ## Accessibility
-Buttons for all actions (no clickable divs). Visible focus ring (2px accent, 2px offset). Every input has a label. Contrast: text on accent always `--on-accent`.
+Buttons for all actions (no clickable divs). Visible focus ring (2px `--focus`, 2px offset). Every input has a label. Contrast: text on accent always `--on-accent`.

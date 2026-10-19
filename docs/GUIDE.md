@@ -316,7 +316,7 @@ Build shows `dev` / `unknown` unless you ran `.venv/bin/python -m app.stamp` (se
 | Part | What's there |
 |---|---|
 | **Menu** (left) | Today's date, **Today** (with the number of open tasks), **Calendar**, **Dashboard** (done / planned this week), **Done**, **New plan ↗** and **Settings** |
-| **Footer** | The week number, and the **Theme** button: auto (follows your device), light or dark. Remembered in this browser |
+| **Footer** | The week number, and the **Theme** button: **Auto (seasonal)**, **Warm Tactile**, **Liquid Glass**, **Dasara – Jamboo Savari** or **Kannada Rajyotsava**. Auto shows Warm Tactile most of the year, Dasara for 17–20 October 2026 and Rajyotsava for 1–7 November. Your choice is remembered in this browser; add `?theme=liquid-glass` (or another theme id) to the address to preview one without saving it |
 | **Page** | One page at a time |
 
 Every task has a title, a **priority** (High, Medium, Low), an optional **step** (a tag such as

@@ -26,9 +26,9 @@ app/
 web/
   index.html
   css/app.css
-  js/  app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
+  js/  theme.js (classic script in <head>: theme before first paint, seasonal schedule, picker) · app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
        dashboard.js · done.js · editor.js (inline task editor) · datefmt.js (date format + date field) · plan.js · quick.js · steps.js (step suggestions) · settings.js
-  fonts/             BricolageGrotesque-var.woff2 + OFL.txt (self-hosted, no Google Fonts call)
+  fonts/             theme fonts (Fraunces, Hanken Grotesk, Onest, Mukta, Rozha One, Baloo Tamma 2) woff2 + OFL-<Family>.txt (self-hosted, no Google Fonts call)
 tests/
   fixtures/          example-plan.md · .expected.json · jev/<set>_<sha8>.json
 design/              canvas exports (reference only, not served)

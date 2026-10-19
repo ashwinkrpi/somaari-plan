@@ -44,33 +44,10 @@ function renderDate() {
     "Week " + String(w.week).padStart(2, "0") + " / " + w.year;
 }
 
-const MODES = ["auto", "light", "dark"];
-function applyTheme(mode) {
-  if (mode === "light" || mode === "dark") document.documentElement.dataset.theme = mode;
-  else delete document.documentElement.dataset.theme;
-  const b = document.getElementById("theme-toggle");
-  b.textContent = "Theme: " + mode;
-}
-function initTheme() {
-  let mode = "auto";
-  try { mode = localStorage.getItem("theme") || "auto"; } catch (e) {}
-  if (!MODES.includes(mode)) mode = "auto";
-  applyTheme(mode);
-  document.getElementById("theme-toggle").addEventListener("click", () => {
-    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
-    try {
-      if (mode === "auto") localStorage.removeItem("theme");
-      else localStorage.setItem("theme", mode);
-    } catch (e) {}
-    applyTheme(mode);
-  });
-}
-
 for (const b of document.querySelectorAll(".nav")) {
   b.addEventListener("click", () => { location.hash = "#/" + b.dataset.route; });
 }
 window.addEventListener("hashchange", render);
-initTheme();
 renderDate();
 render();
 await loadDateFormat();   // before pages render dates

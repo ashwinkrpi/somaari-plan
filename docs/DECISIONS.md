@@ -21,6 +21,12 @@ Decision: _ (date)
 
 ## Decided
 
+### D-17 · Site themes in the app · After release · Decided
+Question: Bring somaari-site's themes (warm-tactile, liquid-glass, dasara-jamboo, rajyotsava; Auto = same IST seasonal schedule, default warm-tactile) into the app. What happens to the current Kinetic Swiss light/dark?
+Options: A) Replace them; site themes only B) Keep Kinetic light/dark as extra choices; Auto = seasonal site theme — Recommend: B because the app's look stays available and nothing is lost
+Fonts: self-hosted woff2 + OFL in web/fonts (no CDN rule), not Google Fonts links.
+Decision: A, replace Kinetic light/dark; site themes only, Auto = seasonal (2026-10-19)
+
 ### D-16 · Configurable AI models · After release · Decided
 Question: Users may have other AI accounts (ChatGPT, Claude, …). Make the LLM models configurable?
 Decision: Yes, all of them. `[ai.models]` per provider (Settings page too) and a new `openai_compat` provider (`openai_base_url`, `OPENAI_API_KEY`, no key for LAN servers). Defaults stay free and non-Claude; users may pick any model, Claude included (amends D-02) (2026-10-18)

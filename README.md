@@ -177,7 +177,7 @@ UI spec. Screenshots in `docs/screenshots/` come from neutral demo data only.
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). The bundled Bricolage Grotesque font is under the SIL Open Font License ([web/fonts/OFL.txt](web/fonts/OFL.txt)).
+MIT, see [LICENSE](LICENSE). The bundled theme fonts (Fraunces, Hanken Grotesk, Onest, Mukta, Rozha One, Baloo Tamma 2) are under the SIL Open Font License (`web/fonts/OFL-<Family>.txt`).
 
 <div align="center">
 <br>

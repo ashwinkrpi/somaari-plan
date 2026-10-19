@@ -11,5 +11,5 @@ First public release.
 - AI: TypeSafe Jev for typed decisions; optional LLM (OpenRouter, Gemini or any OpenAI-compatible server; model is configurable) only to rewrite loose prose, or for full extraction with `mode = "llm"`. `mode = "off"` works with no AI at all. Answers are cached, so re-uploading a plan makes no AI calls.
 - About page: version, build, developer info and **Copy debug info** (shared somaari About spec).
 - Backup: JSON export and add-only import from Settings.
-- Light and dark themes, keyboard and 380 px phone width supported; date format setting.
+- Themes shared with somaari.in: Warm Tactile, Liquid Glass, Dasara – Jamboo Savari, Kannada Rajyotsava; Auto picks one by the date in India. Keyboard and 380 px phone width supported; date format setting.
 - Runs on a Raspberry Pi 5 with Flask, Waitress and SQLite; no frontend build step.
