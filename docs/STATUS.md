@@ -1,5 +1,6 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
+- Site demo (2026-10-19): scripts/site-demo/ (record.sh + Playwright record.py, throwaway copy, AI off, ?theme=warm-tactile) and .github/workflows/site-demo.yml: on a web/ push, records the somaari.in demo loop, force-pushes it to the site-demo branch, rebuilds the site. CI-only tooling (playwright, ffmpeg), no app dependency.
 - D-17 (2026-10-19): somaari-site themes replace Kinetic light/dark: warm-tactile (default), liquid-glass, dasara-jamboo, rajyotsava; js/theme.js (blocking, ?theme= preview, IST seasonal schedule same as site), Theme popover in panel footer, fonts self-hosted in web/fonts (OFL-*.txt), Bricolage removed. UI_SPEC/GUIDE/ARCHITECTURE/README updated. tests 88 (+node schedule test).
 - Manual: walk all pages in each theme (?theme=<id>) at 380 px and keyboard (Theme popover: Esc, tab out).
 - Screenshots retaken (2026-10-19) in Warm Tactile, demo seed shifted to 12 Oct, clock fixed Wed 14 Oct; README shows all 4 themes (theme-<id>.png replace light/dark.png).
