@@ -28,7 +28,7 @@ jobs:
           repository: ashwinkrpi/somaari-site
           path: .somaari-site
           sparse-checkout: scripts/demo
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10.3.0
       - name: Install the app, ffmpeg and Playwright
         run: |
           uv sync --frozen
