@@ -3,6 +3,7 @@ __version__ = "0.1.0"  # single version source (CHANGELOG.md tracks it)
 from pathlib import Path
 
 from flask import Flask, jsonify, send_from_directory
+from somaari_theme import static_dir as theme_dir
 
 from .db import DEFAULT_DB, init_db
 from .routes.about import bp as about_bp
@@ -32,6 +33,11 @@ def create_app(db_path=None):
     @app.get("/")
     def index():
         return send_from_directory(WEB_DIR, "index.html")
+
+    # The somaari themes (theme.js, themes.css, fonts) from somaari-common.
+    @app.get("/theme/<path:filename>")
+    def theme(filename):
+        return send_from_directory(theme_dir(), filename)
 
     @app.get("/api/health")
     def health():

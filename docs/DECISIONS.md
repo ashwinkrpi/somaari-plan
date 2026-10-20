@@ -21,6 +21,12 @@ Decision: _ (date)
 
 ## Decided
 
+### D-18 · Themes move to somaari-common · After release · Decided
+Question: theme.js, the schedule, picker radios, fonts and many token values were copied between this app and somaari-site. Move them to one place?
+Options: A) somaari-common theme/, served at /theme/ from the somaari_theme package; app.css keeps only app-only tokens B) keep two copies — Recommend: A
+Fonts: self-hosted (somaari.in drops Google Fonts too); Onest gains its arrow/✓/↻ subsets, so those glyphs change in Liquid Glass only.
+Decision: A (2026-10-19)
+
 ### D-17 · Site themes in the app · After release · Decided
 Question: Bring somaari-site's themes (warm-tactile, liquid-glass, dasara-jamboo, rajyotsava; Auto = same IST seasonal schedule, default warm-tactile) into the app. What happens to the current Kinetic Swiss light/dark?
 Options: A) Replace them; site themes only B) Keep Kinetic light/dark as extra choices; Auto = seasonal site theme — Recommend: B because the app's look stays available and nothing is lost

@@ -26,9 +26,9 @@ app/
 web/
   index.html
   css/app.css
-  js/  theme.js (classic script in <head>: theme before first paint, seasonal schedule, picker) · app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
+  js/  app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
        dashboard.js · done.js · editor.js (inline task editor) · datefmt.js (date format + date field) · plan.js · quick.js · steps.js (step suggestions) · settings.js
-  fonts/             theme fonts (Fraunces, Hanken Grotesk, Onest, Mukta, Rozha One, Baloo Tamma 2) woff2 + OFL-<Family>.txt (self-hosted, no Google Fonts call)
+/theme/              not in this repo: somaari-common theme/ (theme.js: theme before first paint, seasonal schedule, picker; themes.css: fonts + shared tokens; fonts/ + OFL), installed with the somaari-common package and served by app/__init__.py from somaari_theme.static_dir() (D-18)
 tests/
   fixtures/          example-plan.md · .expected.json · jev/<set>_<sha8>.json
 design/              canvas exports (reference only, not served)

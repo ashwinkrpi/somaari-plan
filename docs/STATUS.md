@@ -1,5 +1,6 @@
 # Status
 Update at the end of every session. Max 5 lines per stage. Newest at top.
+- D-18 (2026-10-19): theme.js, fonts and shared tokens moved to somaari-common theme/ (somaari_theme package, served at /theme/ by app/__init__.py); web/js/theme.js, web/fonts removed; app.css keeps only app-only tokens; picker radios built by theme.js. Liquid Glass arrows/✓/↻ now Onest glyphs (only visible change). test_theme_schedule moved to somaari-common; tests 88. Needs `uv lock --upgrade-package somaari-common` once somaari-common is pushed.
 - Site demo (2026-10-19): scripts/site-demo/ (record.sh + Playwright record.py, throwaway copy, AI off, ?theme=warm-tactile) and .github/workflows/site-demo.yml: on a web/ push, records the somaari.in demo loop, force-pushes it to the site-demo branch, rebuilds the site. CI-only tooling (playwright, ffmpeg), no app dependency.
 - D-17 (2026-10-19): somaari-site themes replace Kinetic light/dark: warm-tactile (default), liquid-glass, dasara-jamboo, rajyotsava; js/theme.js (blocking, ?theme= preview, IST seasonal schedule same as site), Theme popover in panel footer, fonts self-hosted in web/fonts (OFL-*.txt), Bricolage removed. UI_SPEC/GUIDE/ARCHITECTURE/README updated. tests 88 (+node schedule test).
 - Manual: walk all pages in each theme (?theme=<id>) at 380 px and keyboard (Theme popover: Esc, tab out).

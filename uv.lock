@@ -250,7 +250,7 @@ wheels = [
 [[package]]
 name = "somaari-common"
 version = "0.0.0"
-source = { git = "https://github.com/ashwinkrpi/somaari-common?subdirectory=python#c1d8f78a86c053adc508a864b19f8adf0c1bbaa8" }
+source = { git = "https://github.com/ashwinkrpi/somaari-common?subdirectory=python#ec478dd3ca7739c4f97f8a2957b42c7b54e46577" }
 
 [[package]]
 name = "somaari-plan"

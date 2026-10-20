@@ -182,7 +182,7 @@ UI spec. Screenshots in `docs/screenshots/` come from neutral demo data only; so
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). The bundled theme fonts (Fraunces, Hanken Grotesk, Onest, Mukta, Rozha One, Baloo Tamma 2) are under the SIL Open Font License (`web/fonts/OFL-<Family>.txt`).
+MIT, see [LICENSE](LICENSE). The bundled theme fonts (Fraunces, Hanken Grotesk, Onest, Mukta, Rozha One, Baloo Tamma 2) are under the SIL Open Font License; they come with the themes from [somaari-common](https://github.com/ashwinkrpi/somaari-common) (`theme/fonts/OFL-<Family>.txt`, served at `/theme/fonts/`).
 
 <div align="center">
 <br>
