@@ -17,7 +17,7 @@ jobs:
   rebuild-site:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # The same rule the site build enforces, so a mistake shows up here and not only in Cloudflare.
       - name: The guide doesn't mention self-hosting
         run: |
