@@ -4,7 +4,10 @@ data/
 config.toml
 __pycache__/
 *.zip
-.claude/settings.local.json
+# Dev-only files kept local, not in the public repo
+CLAUDE.md
+.claude/
+docs/STATUS.md
 .pytest_cache/
 docs/MANUAL_CHECKS.md
 samples/
