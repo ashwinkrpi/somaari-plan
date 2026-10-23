@@ -72,8 +72,8 @@ uv run somaari-plan
 `.venv/bin/python -m app`.
 
 It prints `somaari-plan on http://0.0.0.0:8710`. Open **`http://<pi-address>:8710`** from any
-device on your network. Stop it with **Ctrl+C**; to keep it running, see
-[Run as a service](#run-as-a-service).
+device on your network. Stop it with **Ctrl+C**. To have it start at boot and keep running
+without a terminal open, set it up as a service: see [Run as a service](#run-as-a-service).
 
 Your tasks live in `data/somaari.db` (SQLite), created on first start.
 
@@ -94,32 +94,74 @@ Your tasks live in `data/somaari.db` (SQLite), created on first start.
 
 ### Run as a service
 
-To start it at boot and restart it if it crashes, create a systemd user service in
-`~/.config/systemd/user/somaari-plan.service`:
+`uv run somaari-plan` stops when you press Ctrl+C, close the terminal or restart the Pi. To have
+it **start at boot and restart if it crashes**, run it as a systemd user service instead. It's
+the same app, data and settings; only how it's started changes. It needs no `sudo`.
 
-```ini
-[Unit]
-Description=somaari-plan
+**What you do, once:**
 
-[Service]
-WorkingDirectory=%h/somaari-plan
-EnvironmentFile=%h/somaari-plan/.env
-ExecStart=%h/somaari-plan/.venv/bin/somaari-plan
-Restart=on-failure
+1. **Finish [installing](#install-on-a-raspberry-pi) first**: `uv sync` has run, and
+   `config.toml` and `.env` exist in the app folder.
+2. **Stop any copy you started by hand** (Ctrl+C in its terminal). Otherwise the port is
+   already in use and the service can't start.
+3. **Create the service file.** Run this from the app folder (where `config.toml` is); it
+   fills in that folder's path for you:
 
-[Install]
-WantedBy=default.target
-```
+   ```sh
+   mkdir -p ~/.config/systemd/user
+   cat > ~/.config/systemd/user/somaari-plan.service <<EOF
+   [Unit]
+   Description=somaari-plan
+
+   [Service]
+   WorkingDirectory=$PWD
+   EnvironmentFile=$PWD/.env
+   ExecStart=$PWD/.venv/bin/somaari-plan
+   Restart=on-failure
+
+   [Install]
+   WantedBy=default.target
+   EOF
+   ```
+
+   Check it with `cat ~/.config/systemd/user/somaari-plan.service`: the three paths should
+   point to your app folder.
+4. **Start it now and at every boot:**
+
+   ```sh
+   systemctl --user daemon-reload
+   systemctl --user enable --now somaari-plan
+   ```
+
+5. **Keep it running when nobody is logged in:**
+
+   ```sh
+   loginctl enable-linger "$USER"
+   ```
+
+   Without this, the service only runs while you're logged in to the Pi.
+6. **Check it:** `systemctl --user status somaari-plan` should say `active (running)`, and
+   `http://<pi-address>:8710` should open as before.
+
+**Day to day:**
+
+| To… | Run |
+|---|---|
+| See whether it's running | `systemctl --user status somaari-plan` |
+| Apply a changed `config.toml` or `.env`, or an update | `systemctl --user restart somaari-plan` |
+| Stop it until the next boot | `systemctl --user stop somaari-plan` |
+| Start it again | `systemctl --user start somaari-plan` |
+| Read its log | `journalctl --user -u somaari-plan -n 50` |
+
+**To stop using the service** (and go back to `uv run somaari-plan`):
 
 ```sh
+systemctl --user disable --now somaari-plan
+rm ~/.config/systemd/user/somaari-plan.service
 systemctl --user daemon-reload
-systemctl --user enable --now somaari-plan
-loginctl enable-linger "$USER"   # keep it running after logout and start it at boot
 ```
 
-Adjust the paths if you cloned somewhere other than `~/somaari-plan`. Check on it with
-`systemctl --user status somaari-plan`; restart it after changing `config.toml` or `.env` with
-`systemctl --user restart somaari-plan`.
+Your tasks in `data/` aren't touched.
 
 ### Updating
 

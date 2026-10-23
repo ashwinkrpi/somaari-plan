@@ -69,6 +69,12 @@ cp config.example.toml config.toml && cp .env.example .env && chmod 600 .env
 uv run somaari-plan           # then open http://<pi-address>:8710
 ```
 
+**Start it at boot (optional):** `uv run` stops when you close the terminal or restart the Pi.
+To keep it running, set it up as a systemd user service (no `sudo`): stop the copy above, then
+follow the six steps in [Run as a service](docs/GUIDE.md#run-as-a-service). In short, you create
+`~/.config/systemd/user/somaari-plan.service`, run
+`systemctl --user enable --now somaari-plan`, and run `loginctl enable-linger "$USER"`.
+
 The [guide](docs/GUIDE.md) covers the rest:
 - [Who can reach it](docs/GUIDE.md#who-can-reach-it), [run as a service](docs/GUIDE.md#run-as-a-service)
   (systemd), [updating](docs/GUIDE.md#updating) and [demo data](docs/GUIDE.md#try-it-with-demo-data)

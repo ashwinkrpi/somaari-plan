@@ -13,3 +13,4 @@ First public release.
 - Backup: JSON export and add-only import from Settings.
 - Themes shared with somaari.in: Warm Tactile, Liquid Glass, Dasara – Jamboo Savari, Kannada Rajyotsava; Auto picks one by the date in India. theme.js, the shared tokens and the fonts come from somaari-common (served at `/theme/`). Keyboard and 380 px phone width supported; date format setting.
 - Runs on a Raspberry Pi 5 with Flask, Waitress and SQLite; no frontend build step.
+- Can run as a systemd user service that starts at boot; the guide lists the steps.
