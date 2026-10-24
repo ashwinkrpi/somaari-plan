@@ -10,6 +10,8 @@ CLAUDE.md
 docs/STATUS.md
 .pytest_cache/
 docs/MANUAL_CHECKS.md
+docs/DECISIONS.md
+TODO.md
 samples/
 
 # Raw demo recordings (somaari-site/scripts/demo)
