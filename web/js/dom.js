@@ -25,3 +25,7 @@ export function swap(host, ...kids) {
   const t = cands[key.i] || cands[0];
   if (t && !t.disabled) t.focus();
 }
+
+// Task ID label shown before every task title, like a Jira issue key ("SP-12").
+export const TASK_KEY_PREFIX = "SP-";
+export const taskKey = (t) => el("span", { class: "tkey" }, TASK_KEY_PREFIX + t.id);

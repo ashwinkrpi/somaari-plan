@@ -368,7 +368,7 @@ Every task has a title, a **priority** (High, Medium, Low), an optional **step**
 
 <img src="screenshots/today.png" alt="Today: open tasks sorted by priority" width="100%">
 
-Today's tasks, highest priority first. Each row shows the priority, step, when it was created and
+Today's tasks, highest priority first. Each row starts with the task ID (like `SP-12`; it never changes, and the same ID shows on Calendar, Dashboard and Done), then shows the priority, step, when it was created and
 whether it's open or when it was closed. **Mark done** closes a task (struck through); press it
 again (**Done ✓**) to reopen it.
 
@@ -388,7 +388,7 @@ reopen them.
 - **Week:** seven columns, with a coloured edge per task: orange for High, black for others, grey
   (struck through) for done. Weekends are shaded.
 - **Month:** a Monday-first grid with the number of tasks per day; today is filled orange.
-- **Day:** a numbered list with created and closed times, and **Edit**.
+- **Day:** the same list as Today, each task with its ID (like `SP-12`), created and closed times, and **Edit**.
 
 ← and → move by a day, week or month; **Today** jumps back.
 

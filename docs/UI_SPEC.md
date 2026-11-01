@@ -38,7 +38,7 @@ Rules: 2px fg rule under page titles; 1px `--line` between rows. Radius and shad
 - Exactly one page visible at a time.
 
 ## Today
-Title "Today (N open)". Ordered list sorted by priority. Row: 2-digit index, title (24px/600), meta line: priority badge · step · "Created …" · "Closed …" or orange "Open" tag. Right: "Edit" (1px `--line` border) then "Mark done" / "Done ✓" button (2px border, ≥48px tall). Done = strikethrough + muted text.
+Title "Today (N open)". Ordered list sorted by priority. Row: task ID ("SP-12", 16px/800 muted, the task's database id, not a running number), title (24px/600), meta line: priority badge · step · "Created …" · "Closed …" or orange "Open" tag. Right: "Edit" (1px `--line` border) then "Mark done" / "Done ✓" button (2px border, ≥48px tall). Done = strikethrough + muted text.
 
 ## Editing a task (D-09)
 "Edit" on Today rows, Calendar Day rows and Dashboard cards swaps that row/card for an inline form (2px accent border): Title · Step (tag, suggestions) · Priority · Date · Time, then Save (accent) · Cancel · "Delete…".
@@ -52,14 +52,15 @@ Title = range label. Segmented Day / Week / Month (active = 800 weight + 2px und
 - Week: 7 columns, big day numerals, items with a 3px left rule (accent = High, fg = others, muted = done).
 - Month: Mon-first grid, out-of-month muted, today cell filled accent, "N tasks" label.
 - Weekend: Sat/Sun columns (week) and Sat/Sun headers + cells (month) use `--weekend`; today's highlight wins.
-- Day: numbered rows with created/closed.
+- Day: rows like Today (task ID first) with created/closed.
+- Week items and Dashboard cards start the title with the task ID (muted, 0.9em). Task IDs show on every page that lists tasks: Today, Calendar Day/Week, Dashboard, Done.
 Wide content scrolls horizontally inside its own container.
 
 ## Dashboard
 1. Summary band (3 cells, 1px dividers): This week done/planned · progress by step (4px bars) · Last week done/planned + moved items (from `/api/moved`, D-07) + not done.
 2. Board: header row of days; lanes High / Medium / Low; cells `--field`, today column `--today-cell`.
    Weekend: Sat/Sun headers `--weekend`, Sat/Sun cells `--weekend-cell`; today and drop-hover win.
-   Cards: `--bg`, 1.5px fg border, title 13px/600, step, small "Move" and "Edit" buttons (inline editor as above, fields stacked).
+   Cards: `--bg`, 1.5px fg border, task ID + title 13px/600, step, small "Move" and "Edit" buttons (inline editor as above, fields stacked).
    Open cards due today or earlier also get a small "Done" button (marks done; Today, Calendar and nav counts refresh).
    Done cards: struck-through title, "Move" visible but disabled, not draggable.
    Drag: `draggable`, dragover highlights the cell with `--drop-hover` + dashed accent outline.
@@ -67,7 +68,7 @@ Wide content scrolls horizontally inside its own container.
    Live status line (`role=status`) confirms each move.
 
 ## Done
-Title "Done (N)". Search box (title or step, 250 ms debounce). Finished tasks newest first, grouped by the week they were closed (2px rule + "5 Oct – 11 Oct · N done"). Row: title, meta (priority badge · step · "Due …" · "Closed …"), "Reopen" (2px) and "Reopen on…" (1px) buttons. Reopen keeps a future due date, else moves it to today. "Reopen on…" swaps in a date picker (min today, default tomorrow or the future due date) · Reopen · Cancel; Esc cancels. Status line says where it went ("Reopened for today: …"). Archive = done; there is no separate archive (D-09). Shows the latest 500; search finds older ones.
+Title "Done (N)". Search box (title or step, 250 ms debounce). Finished tasks newest first, grouped by the week they were closed (2px rule + "5 Oct – 11 Oct · N done"). Row: task ID (as Today), title, meta (priority badge · step · "Due …" · "Closed …"), "Reopen" (2px) and "Reopen on…" (1px) buttons. Reopen keeps a future due date, else moves it to today. "Reopen on…" swaps in a date picker (min today, default tomorrow or the future due date) · Reopen · Cancel; Esc cancels. Status line says where it went ("Reopened for today: …"). Archive = done; there is no separate archive (D-09). Shows the latest 500; search finds older ones.
 
 ## New plan ↗
 Title "Plan in. Tasks out." Two columns:

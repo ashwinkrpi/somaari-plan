@@ -1,4 +1,4 @@
-import { el, swap } from "./dom.js";
+import { el, swap, taskKey } from "./dom.js";
 import { fmtStamp, fmtDay, weekStart, rangeLabel, todayIso, addDays } from "./dates.js";
 import { subscribe, saveTask } from "./store.js";
 import { dateField, onFormatChange } from "./datefmt.js";
@@ -41,7 +41,7 @@ function pickRow(t) {
 }
 
 function row(t) {
-  return el("li", { class: "row" },
+  return el("li", { class: "row" }, el("span", { class: "idx" }, taskKey(t)),
     el("div", { class: "body" }, el("div", { class: "ttl" }, t.title),
       el("div", { class: "meta" },
         el("span", { class: "badge p-" + t.priority.toLowerCase() }, t.priority),

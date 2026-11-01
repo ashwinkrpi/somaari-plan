@@ -1,4 +1,4 @@
-import { el, swap } from "./dom.js";
+import { el, swap, taskKey } from "./dom.js";
 import { todayIso, addDays, weekStart, rangeLabel, DOW, dayNum, dowIndex } from "./dates.js";
 import { fmtDate, onFormatChange } from "./datefmt.js";
 import { subscribe, toggleDone, saveTask } from "./store.js";
@@ -69,7 +69,7 @@ function card(t, today) {
   if (isEditing(t)) return el("li", { class: "card editing" }, editForm(t));
   return el("li", { class: "card" + (sel ? " selected" : "") + (t.closed ? " is-done" : ""), draggable: String(!t.closed),
     ondragstart: (e) => { e.dataTransfer.setData("text/plain", String(t.id)); e.dataTransfer.effectAllowed = "move"; } },
-    el("div", { class: "ctitle" }, t.title), t.step ? el("div", { class: "cstep" }, t.step) : null,
+    el("div", { class: "ctitle" }, taskKey(t), " ", t.title), t.step ? el("div", { class: "cstep" }, t.step) : null,
     el("div", { class: "cact" },
       el("button", { type: "button", class: "mv", "aria-pressed": String(sel), disabled: t.closed,
         title: t.closed ? "Reopen the task to move it" : null,

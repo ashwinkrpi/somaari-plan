@@ -1,11 +1,11 @@
-import { el, swap } from "./dom.js";
+import { el, swap, taskKey } from "./dom.js";
 import { fmtStamp } from "./dates.js";
 import { state, subscribe, openToday, toggleDone, loadToday } from "./store.js";
 import { editButton, editForm, isEditing, onEditChange } from "./editor.js";
 
 // prefix keeps Edit button ids unique per page ("t" Today, "c" Calendar day view).
-export function taskRow(t, i, prefix = "t") {
-  const idx = el("span", { class: "idx" }, String(i + 1).padStart(2, "0"));
+export function taskRow(t, prefix = "t") {
+  const idx = el("span", { class: "idx" }, taskKey(t));
   if (isEditing(t)) return el("li", { class: "row editing" }, idx, el("div", { class: "body" }, editForm(t)));
   const meta = el("div", { class: "meta" },
     el("span", { class: "badge p-" + t.priority.toLowerCase() }, t.priority),
@@ -27,7 +27,7 @@ export function renderToday() {
   swap(page.querySelector(".list-host"),
     state.error ? el("div", { class: "empty", role: "alert" }, state.error + " ", el("button", { type: "button", class: "set-btn", onclick: loadToday }, "Try again"))
     : !state.loaded ? el("p", { class: "empty" }, "Loading…")
-    : state.today.length ? el("ol", { class: "rows" }, state.today.map((t, i) => taskRow(t, i, "t")))
+    : state.today.length ? el("ol", { class: "rows" }, state.today.map((t) => taskRow(t, "t")))
     : el("p", { class: "empty" }, "Nothing planned for today."));
 }
 subscribe(renderToday);

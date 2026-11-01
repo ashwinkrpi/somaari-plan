@@ -1,4 +1,4 @@
-import { el, swap } from "./dom.js";
+import { el, swap, taskKey } from "./dom.js";
 import { todayIso, addDays, addMonths, rangeLabel, rangeOf, weekStart, dayNum, fmtDay, DOW, dowIndex } from "./dates.js";
 import { state, subscribe, loadCal } from "./store.js";
 import { taskRow } from "./today.js";
@@ -16,7 +16,7 @@ function byDate() {
   for (const t of state.cal) (m[t.due_date] ||= []).push(t);
   return m;
 }
-const item = (t) => el("li", { class: "ci" + (t.closed ? " done" : t.priority === "High" ? " high" : "") }, t.title);
+const item = (t) => el("li", { class: "ci" + (t.closed ? " done" : t.priority === "High" ? " high" : "") }, taskKey(t), " ", t.title);
 
 function weekView(m) {
   const s = weekStart(cal.anchor), today = todayIso();
@@ -41,7 +41,7 @@ function monthView(m) {
 }
 function dayView(m) {
   const list = m[cal.anchor] || [];
-  return list.length ? el("ol", { class: "rows" }, list.map((t, i) => taskRow(t, i, "c"))) : el("p", { class: "empty" }, "No tasks on " + fmtDay(cal.anchor) + ".");
+  return list.length ? el("ol", { class: "rows" }, list.map((t) => taskRow(t, "c"))) : el("p", { class: "empty" }, "No tasks on " + fmtDay(cal.anchor) + ".");
 }
 
 export function renderCalendar() {
