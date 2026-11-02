@@ -390,6 +390,8 @@ reopen them.
 - **Month:** a Monday-first grid with the number of tasks per day; today is filled orange.
 - **Day:** the same list as Today, each task with its ID (like `SP-12`), created and closed times, and **Edit**.
 
+Click a task in Week, or the task count in Month, to open that date in Day.
+
 ← and → move by a day, week or month; **Today** jumps back.
 
 ### Dashboard
