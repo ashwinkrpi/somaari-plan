@@ -99,20 +99,7 @@ Everything else, with screenshots: [Using the app](docs/GUIDE.md#-using-the-app)
 
 ## 🧠 How it works
 
-```mermaid
-flowchart LR
-    B[🖥️ Browser<br/>HTML · CSS · JS] -- "JSON /api" --> W[Waitress + Flask]
-    W --> P[mdparse<br/>headings · lists]
-    P --> R[Rules:<br/>dates · times]
-    R --> J{AI mode}
-    J -- jev --> T[TypeSafe Jev<br/>typed questions]
-    J -- llm --> L[LLM chain<br/>OpenRouter · Gemini · OpenAI-compatible]
-    J -- off --> S
-    T --> S[Scheduler]
-    L --> S
-    S --> D[(SQLite<br/>data/somaari.db)]
-    W --> D
-```
+<img src="docs/images/architecture.svg" alt="The browser sends JSON to Waitress and Flask. Plans pass through mdparse and the date and time rules, then AI mode picks TypeSafe Jev, the LLM chain, or neither. All three reach the Scheduler, which writes to SQLite; Waitress and Flask also use SQLite directly." width="640">
 
 <details>
 <summary><b>Step by step</b></summary>
