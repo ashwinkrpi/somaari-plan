@@ -16,7 +16,15 @@ function byDate() {
   for (const t of state.cal) (m[t.due_date] ||= []).push(t);
   return m;
 }
-const item = (t) => el("li", { class: "ci" + (t.closed ? " done" : t.priority === "High" ? " high" : "") }, taskKey(t), " ", t.title);
+function openDay(date) {
+  cal.view = "day";
+  cal.anchor = date;
+  fetchRange();
+  // The clicked item goes away with the view; keep keyboard focus on the page.
+  document.querySelector('#page-calendar [data-view="day"]').focus();
+}
+const item = (t) => el("li", { class: "ci" + (t.closed ? " done" : t.priority === "High" ? " high" : "") },
+  el("button", { type: "button", class: "cal-open", onclick: () => openDay(t.due_date) }, taskKey(t), " ", t.title));
 
 function weekView(m) {
   const s = weekStart(cal.anchor), today = todayIso();
@@ -34,7 +42,7 @@ function monthView(m) {
   for (let d = from; d <= to; d = addDays(d, 1)) {
     const n = (m[d] || []).length;
     cells.push(el("div", { class: "mcell" + (d.slice(0, 7) !== cur ? " out" : "") + (dowIndex(d) >= 5 ? " weekend" : "") + (d === today ? " is-today" : "") },
-      el("span", { class: "mnum" }, String(+dayNum(d))), n ? el("span", { class: "mcount" }, `${n} task${n > 1 ? "s" : ""}`) : null));
+      el("span", { class: "mnum" }, String(+dayNum(d))), n ? el("button", { type: "button", class: "mcount cal-open", "aria-label": `${n} task${n > 1 ? "s" : ""} on ${fmtDay(d)}, open day`, onclick: () => openDay(d) }, `${n} task${n > 1 ? "s" : ""}`) : null));
   }
   return el("div", { class: "scroll" }, el("div", { class: "month" },
     DOW.map((x, i) => el("div", { class: "mdow" + (i >= 5 ? " weekend" : "") }, x)), cells));

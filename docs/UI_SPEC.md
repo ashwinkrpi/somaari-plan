@@ -49,8 +49,8 @@ Title "Today (N open)". Ordered list sorted by priority. Row: task ID ("SP-12", 
 
 ## Calendar
 Title = range label. Segmented Day / Week / Month (active = 800 weight + 2px underline, `aria-pressed`).
-- Week: 7 columns, big day numerals, items with a 3px left rule (accent = High, fg = others, muted = done).
-- Month: Mon-first grid, out-of-month muted, today cell filled accent, "N tasks" label.
+- Week: 7 columns, big day numerals, items with a 3px left rule (accent = High, fg = others, muted = done). An item is a button: it opens the Day view for its date, and focus moves to the Day button.
+- Month: Mon-first grid, out-of-month muted, today cell filled accent, "N tasks" label. The label is a button that opens the Day view for that date.
 - Weekend: Sat/Sun columns (week) and Sat/Sun headers + cells (month) use `--weekend`; today's highlight wins.
 - Day: rows like Today (task ID first) with created/closed.
 - Week items and Dashboard cards start the title with the task ID (muted, 0.9em). Task IDs show on every page that lists tasks: Today, Calendar Day/Week, Dashboard, Done.
