@@ -11,8 +11,9 @@ Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `des
 | `liquid-glass` | Liquid Glass | dark navy with blue/teal/pink glows, frosted panel, pill buttons | Onest / Onest 600 |
 | `dasara-jamboo` | Dasara – Jamboo Savari | maroon, gold accent and titles, gold zig-zag fringe on the panel, cream cards with dark ink | Mukta / Rozha One |
 | `rajyotsava` | Kannada Rajyotsava | sand panel with brick-red band, faint outlined "ಕ" in the panel, sand/brick stripe on cards | Mukta / Baloo Tamma 2 700 |
+| `deepa` | Deepavali – Deepa | indigo night, saffron accent, glowing saffron edge and a row of lit diyas on the panel, saffron top edge on cards | Hanken Grotesk / Fraunces |
 
-Schedule (in somaari-common `theme/theme.js`, tested there): 17–20 Oct 2026 `dasara-jamboo`; 1–7 Nov every year `rajyotsava`; otherwise `warm-tactile`.
+Schedule (in somaari-common `theme/theme.js`, tested there): 17–20 Oct 2026 `dasara-jamboo`; 7–10 Nov 2026 `deepa` (wins on 7 Nov); 1–7 Nov every year `rajyotsava`; otherwise `warm-tactile`.
 Picker: Theme button (44px, half-filled circle icon) in the panel footer opens a popover of radios: Auto (seasonal), then the four themes. `theme.js` adds the radios to the empty `<fieldset>`. Esc / click outside / tab out closes it. Opens upward; downward below 900px.
 
 ## Tokens (CSS custom properties per `html[data-theme]`)

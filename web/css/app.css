@@ -40,6 +40,14 @@
   --drop-hover:#f2ddd6;--today-cell:#f6ecc9;--weekend:#ebe4d3;--weekend-cell:#efe8d8;
   --radius:8px;--field-radius:6px;--display-tracking:-.01em;
 }
+:root[data-theme=deepa]{
+  --page-bg:radial-gradient(60vmax 40vmax at 85% 0%,rgb(255 166 48/18%),transparent 70%),radial-gradient(40vmax 30vmax at 0% 100%,rgb(255 120 40/10%),transparent 70%),#16112b;
+  --bg:#16112b;--card-bg:linear-gradient(180deg,#2a2148,#221a3d);--card-edge:#3b2f5c;
+  --panel:#1d1636;--panel-bg:#1d1636;--panel-fg:#fbeedd;--panel-line:#3b2f5c;
+  --field:#221a3d;--line:#3b2f5c;--track:#3b2f5c;--muted-fg:#d4c2ae;--accent-text:#ffb547;
+  --drop-hover:#3a2a4a;--today-cell:#2e2246;--weekend:#1b1533;--weekend-cell:#1a1430;
+  --radius:12px;--field-radius:8px;--shadow:0 12px 28px -16px rgb(255 150 40/35%);--display-tracking:-.02em;
+}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--page-bg);background-attachment:fixed;color:var(--fg);font:16px/1.4 var(--font)}
@@ -267,4 +275,13 @@ input,select,textarea{border-radius:var(--field-radius)}
 @media (max-width:900px){
   :root[data-theme=rajyotsava] .panel{border-right:0;border-bottom:10px solid var(--brick)}
   :root[data-theme=rajyotsava] .panel::after{bottom:auto;top:40px;font-size:140px}
+}
+
+/* ---- deepa: indigo night, a saffron edge on the panel and a row of lit diyas at its foot ---- */
+:root[data-theme=deepa] .panel{position:relative;border-right:2px solid #ffb547;box-shadow:4px 0 24px -8px rgb(255 170 60/45%)}
+:root[data-theme=deepa] .panel::after{content:"";position:absolute;left:0;right:0;bottom:10px;height:26px;background:radial-gradient(4px 7px at 28px 7px,#fff3c4 0 45%,#ffb547 60%,transparent 75%),radial-gradient(10px 10px at 28px 8px,rgb(255 181 71/45%),transparent 70%),radial-gradient(14px 7px at 28px 17px,#c4562a 0 92%,transparent 100%);background-size:56px 26px;background-repeat:repeat-x;background-position:center 0;filter:drop-shadow(0 0 6px rgb(255 170 60/70%));pointer-events:none}
+:root[data-theme=deepa] h1{color:#ffcf7a}
+:root[data-theme=deepa] .card{border-top:3px solid #ffb547}
+@media (max-width:900px){
+  :root[data-theme=deepa] .panel{border-right:0;border-bottom:2px solid #ffb547;box-shadow:0 4px 24px -8px rgb(255 170 60/45%);padding-bottom:40px}
 }
