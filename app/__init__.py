@@ -5,8 +5,10 @@ from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 from somaari_theme import static_dir as theme_dir
 
+from . import plugins
 from .db import DEFAULT_DB, init_db
 from .routes.about import bp as about_bp
+from .routes.plugins import bp as plugins_bp
 from .routes.ai import bp as ai_bp
 from .routes.export import bp as export_bp
 from .routes.ingest import bp as ingest_bp
@@ -17,10 +19,13 @@ from .routes.tasks import bp as tasks_bp
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 
 
-def create_app(db_path=None):
+def create_app(db_path=None, plugin_list=None):
+    """plugin_list: None = discover installed plugins; a list = use exactly these (tests)."""
     app = Flask(__name__, static_folder=str(WEB_DIR), static_url_path="")
     app.config["DB_PATH"] = str(db_path or DEFAULT_DB)
     init_db(app.config["DB_PATH"])
+    plugins.setup(app, plugin_list)
+    app.register_blueprint(plugins_bp)
     app.register_blueprint(tasks_bp)
     app.register_blueprint(ai_bp)
     app.register_blueprint(settings_bp)

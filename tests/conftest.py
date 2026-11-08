@@ -9,6 +9,7 @@ from app.ai.providers import mock
 def ai_mock(tmp_path, monkeypatch):
     """Force mock_jev / mock_llm, temp config and log. No network, no real tokens."""
     monkeypatch.setenv("SOMAARI_AI_MOCK", "1")
+    monkeypatch.setenv("SOMAARI_NO_PLUGINS", "1")   # core tests never see an installed plugin
     monkeypatch.setenv("SOMAARI_CONFIG", str(tmp_path / "config.toml"))
     monkeypatch.setenv("SOMAARI_AI_LOG", str(tmp_path / "ai.log"))
     router._cache.clear()

@@ -15,6 +15,11 @@ dependencies = [
     "somaari-common",
 ]
 
+# Optional plugins (D-21, docs/PLUGINS_PLAN.md). Not installed by `uv sync`;
+# add one with `uv sync --extra telegram`. Each lives in plugins/<name> as its own package.
+[project.optional-dependencies]
+telegram = ["somaari-plan-telegram"]
+
 [dependency-groups]
 dev = ["pytest"]
 
@@ -28,4 +33,5 @@ version = { attr = "app.__version__" }
 include = ["app*"]
 
 [tool.uv.sources]
+somaari-plan-telegram = { path = "plugins/telegram", editable = true }
 somaari-common = { git = "https://github.com/ashwinkrpi/somaari-common", subdirectory = "python" }

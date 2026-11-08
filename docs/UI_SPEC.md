@@ -77,6 +77,10 @@ Title "Plan in. Tasks out." Two columns:
 - Steps (tags): one-line muted hints (13px, `code` for headings) close 01 and 02. 01: "Tags: each `## heading` tags the tasks under it. `## Step 1: Domain (this week)` → Domain". 02: "Tags: same rule as files. Lines with no `## heading` get the Step above, or no tag." 02 has a "Step (tag)" field applied to pasted tasks without a heading step. The preview row has an editable Step box. All step inputs suggest steps already in use (`<datalist>`), max 30 chars.
 - Right: 03 Quick add, a chat log (`role=log`). User bubble right (fg bg), result card left: TASK/MEETING badge, parsed date/time, title, optional "Step (tag)" field, "Add to plan" / "Added ✓", "Discard". The log shows pending cards only: an added card shows "Added ✓" until you leave New plan, then drops off (its task is on Today/Calendar). "Clear N" by the heading (when 2+ pending) discards all pending cards. Added entries stay in the DB as history (D-11). Input + "Add ↵" (Enter submits).
 
+## Settings → plugins (D-21)
+- Below Server, one fieldset per installed plugin, drawn from its declared fields (checkbox, time, text, number): description, read-only status lines (never secrets), fields, **Save <title>** (primary) and one button per action, then a `role=status` line for results.
+- No plugin installed: a single "Plugins" fieldset with one hint line pointing to GUIDE → Plugins. Same field styles as the rest of Settings (44 px controls), all themes, 380 px.
+
 ## About
 - Follows somaari-common/docs/ABOUT_SPEC.md. App name (48px/800) + "vX · build <commit> · <date>" (muted), then Developer and Debug info sections: 20px/800 heading on a 2px fg rule, label/value rows (label 14px `--muted-fg`, 1px `--line` between rows; stacked below 480px). Links in `--accent-text`.
 - **Copy debug info** (primary button) copies the spec's text block; `role=status` says copied/failed (falls back to `execCommand` on plain-http LAN). "Show copied text" disclosure shows the exact block.

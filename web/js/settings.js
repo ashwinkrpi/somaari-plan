@@ -85,7 +85,58 @@ function render(msg = "") {
     el("fieldset", {}, el("legend", {}, "Server (read-only)"),
       el("p", { class: "ro" }, `Host ${s.host} · Port ${s.port} · Threads ${s.threads}`),
       el("p", { class: "hint" }, s.note + " API keys live in .env and are never shown here.")));
-  swap(host(), form);
+  swap(host(), form, pluginsNode);
+}
+
+// ---- Plugins (D-21): optional packages, each drawn from the fields it declares ----
+let pluginsNode = null;
+const JSON_HDR = { "Content-Type": "application/json" };
+
+function pluginForm(p, msg = "") {
+  const id = (k) => `p-${p.name}-${k}`;
+  const status = el("p", { class: "status", role: "status" }, msg);
+  const input = (f) => {
+    const v = p.values[f.key];
+    if (f.type === "bool") return el("div", { class: "fld" },
+      el("label", {}, el("input", { id: id(f.key), type: "checkbox", checked: !!v }), " " + f.label),
+      f.hint ? el("span", { class: "hint" }, f.hint) : null);
+    const type = f.type === "number" ? "number" : f.type === "time" ? "time" : "text";
+    return field(id(f.key), f.label, el("input", { id: id(f.key), type, value: v ?? "" }), f.hint);
+  };
+  const read = () => Object.fromEntries(p.fields.map((f) => {
+    const e = document.getElementById(id(f.key));
+    return [f.key, f.type === "bool" ? e.checked : f.type === "number" ? Number(e.value) : e.value];
+  }));
+  const node = el("form", { class: "set-form", "aria-label": p.title, onsubmit: async (ev) => {
+    ev.preventDefault();
+    try {
+      const np = await api(`/api/plugins/${p.name}`, { method: "PUT", headers: JSON_HDR, body: JSON.stringify(read()) });
+      node.replaceWith(pluginForm(np, `${np.title} settings saved.`));
+    } catch (e) { status.textContent = "Not saved: " + e.message; }
+  } },
+    el("fieldset", {}, el("legend", {}, p.title),
+      p.description ? el("p", { class: "hint" }, p.description) : null,
+      ...p.status.map((line) => el("p", { class: "ro" }, line)),
+      ...p.fields.map(input),
+      el("div", { class: "set-actions" },
+        el("button", { type: "submit", class: "set-btn primary" }, `Save ${p.title}`),
+        ...p.actions.map((a) => el("button", { type: "button", class: "set-btn", onclick: async () => {
+          status.textContent = `${a.label}…`;
+          try {
+            const r = await api(`/api/plugins/${p.name}/actions/${a.id}`, { method: "POST" });
+            status.textContent = r.message;
+          } catch (e) { status.textContent = `${a.label} failed: ${e.message}`; }
+        } }, a.label))),
+      status));
+  return node;
+}
+
+async function loadPlugins() {
+  let list = [];
+  try { list = await api("/api/plugins"); } catch { /* an older server without plugins: show nothing */ return el("div"); }
+  if (!list.length) return el("div", { class: "set-form" }, el("fieldset", {}, el("legend", {}, "Plugins"),
+    el("p", { class: "hint" }, "No plugins installed. Optional features, such as a daily Telegram message with today's tasks, install separately: see the guide, Configuration → Plugins.")));
+  return el("div", {}, list.map((p) => pluginForm(p)));
 }
 
 async function importFile(ev) {
@@ -120,7 +171,7 @@ async function save(ev) {
 
 export async function initSettings() {
   try {
-    data = await api("/api/settings");
+    [data, pluginsNode] = await Promise.all([api("/api/settings"), loadPlugins()]);
     chain = [...data.ai.generate_chain];
     render();
   } catch (e) { host().replaceChildren(el("p", { class: "empty" }, "Could not load settings.")); }

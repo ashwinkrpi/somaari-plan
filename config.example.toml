@@ -24,3 +24,10 @@ openai_compat = "gpt-4o-mini"
 
 [ui]
 date_format = "dd/mm/yyyy"         # dd/mm/yyyy | mm/dd/yyyy | yyyy-mm-dd
+
+# Only read when the Telegram plugin is installed (uv sync --extra telegram). Settings → Telegram edits it.
+# [plugins.telegram]
+# enabled = false
+# send_time = "07:30"              # HH:MM, India time
+# include_overdue = true
+# send_when_empty = false

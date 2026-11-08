@@ -182,6 +182,24 @@ def save_section(name, values, path=None):
     tmp.replace(path)
 
 
+# ---- Plugin settings ([plugins.<name>] in config.toml, D-21) ----
+def load_plugin(name, path=None):
+    section = load_toml(path).get("plugins", {}).get(name, {})
+    return dict(section) if isinstance(section, dict) else {}
+
+
+def save_plugin(name, values, path=None):
+    """Replace [plugins.<name>], keeping every other section and plugin."""
+    path = Path(path) if path else config_path()
+    data = load_toml(path)
+    plugins = data.get("plugins") if isinstance(data.get("plugins"), dict) else {}
+    plugins[name] = values
+    data["plugins"] = plugins
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(dump_toml(data), encoding="utf-8")
+    tmp.replace(path)
+
+
 def load_dotenv(path=None):
     """Load KEY=VALUE lines from .env into os.environ (existing env wins)."""
     path = Path(path) if path else ROOT / ".env"

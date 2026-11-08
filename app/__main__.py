@@ -3,7 +3,7 @@ import os
 import socket
 import sys
 
-from . import create_app
+from . import create_app, plugins
 from .config import ConfigError, load_dotenv, resolve_server
 
 
@@ -37,6 +37,11 @@ def main(argv=None):
         )
     app = create_app()
     print(f"somaari-plan on http://{host}:{port}", flush=True)
+    for name in app.config["PLUGINS"]:
+        print(f"somaari-plan: plugin {name} loaded", flush=True)
+    # Plugin services (D-21) run in the serving process only: not in the --dev reloader parent.
+    if not args.dev or reloader_child:
+        plugins.start_services(app)
     if args.dev:
         app.run(host=host, port=port, debug=True, load_dotenv=False)  # .env already loaded above
     else:

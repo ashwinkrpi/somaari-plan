@@ -168,7 +168,7 @@ Your tasks in `data/` aren't touched.
 ```sh
 cd ~/somaari-plan
 git pull
-uv sync                                  # installs any package changes from uv.lock
+uv sync                                  # installs any package changes from uv.lock (add --extra telegram if you use it)
 uv run python -m app.stamp               # optional: About shows this commit instead of "dev"
 systemctl --user restart somaari-plan    # or stop and start somaari-plan
 ```
@@ -317,7 +317,7 @@ either way.
 **Settings** (bottom of the menu) edits everything in `[ai]` and `[ui]`: mode, Jev model, prose
 rewriting, timeout, date format, the generate chain (add, reorder, remove, and **Test** each
 provider), each provider's model and the `openai_compat` base URL, and the thresholds. **Save settings** writes `config.toml`. It never shows or edits keys,
-and shows host and port read-only.
+and shows host and port read-only. Installed [plugins](#plugins) add their own section below.
 
 > [!NOTE]
 > Saving from the Settings page rewrites `config.toml` without its comments.
@@ -342,6 +342,19 @@ Build shows `dev` / `unknown` unless you ran `.venv/bin/python -m app.stamp` (se
   ```
 
   That keeps two weeks of daily copies. Copy `data/backups/` off the Pi too.
+
+### Plugins
+
+Optional features install separately, so the main app stays small. `uv sync` installs no plugins, and the app works fully without them.
+
+Settings has one section per installed plugin. With no plugins installed, Settings shows "No plugins installed".
+
+| Plugin | What it does | Install |
+|---|---|---|
+| **Telegram** | Sends today's open tasks (and, optionally, overdue ones) to your Telegram chat once a day, at a time set in Settings | [plugins/telegram/README.md](../plugins/telegram/README.md): a bot token and chat id in `.env`, then `uv sync --extra telegram` |
+
+> [!NOTE]
+> With a plugin installed, use `uv sync --extra <name>` when you update. Plain `uv sync` removes plugins. The app still runs, and the plugin's settings stay in `config.toml` for when you add it back.
 
 ### Logs
 
