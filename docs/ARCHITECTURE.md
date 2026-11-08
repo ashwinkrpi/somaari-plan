@@ -6,10 +6,11 @@ app/
   __init__.py        create_app(), blueprint registration
   __main__.py        entry point: resolves host/port, starts Waitress (or Flask with --dev)
   config.py          loads config.toml + .env
+  plugins.py         optional plugins (D-21): entry-point discovery, Context (plugin API v1), start_services
   db.py              sqlite connect, migrate
   schema.sql
   seed.py            13 hand-written neutral demo tasks (Stage 1)
-  routes/            tasks.py · ingest.py · quick.py · ai.py · settings.py · export.py · about.py (GET /api/about)
+  routes/            tasks.py · ingest.py · quick.py · ai.py · settings.py · export.py · about.py (GET /api/about) · plugins.py
   stamp.py           writes git-ignored _build_info.py (commit, UTC date) for About
   scheduler.py       assigns due dates (pure functions, no I/O)
   ingest/mdparse.py  markdown → steps + candidate lines (no AI)
@@ -29,6 +30,8 @@ web/
   js/  app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
        dashboard.js · done.js · editor.js (inline task editor) · datefmt.js (date format + date field) · plan.js · quick.js · steps.js (step suggestions) · settings.js
 /theme/              not in this repo: somaari-common theme/ (theme.js: theme before first paint, seasonal schedule, picker; themes.css: fonts + shared tokens; fonts/ + OFL), installed with the somaari-common package and served by app/__init__.py from somaari_theme.static_dir() (D-18)
+plugins/             optional packages, NOT in the core wheel; installed with `uv sync --extra <name>` (docs/PLUGINS_PLAN.md)
+  telegram/          somaari-plan-telegram: daily message with today's tasks (own pyproject, README, tests)
 tests/
   fixtures/          example-plan.md · .expected.json · jev/<set>_<sha8>.json
 design/              canvas exports (reference only, not served)
@@ -62,6 +65,9 @@ Settings, defaults and precedence (CLI → env → `config.toml` → defaults): 
 | POST | /api/ai/test | one tiny call to `jev` or a named generate provider |
 | GET/PUT | /api/settings | `[ai]` mode, model, chain, thresholds; `[ui]` date_format (writes config.toml; never keys); `[server]` read-only |
 | GET | /api/export · POST /api/import | JSON backup; import is add-only (D-08) |
+| GET | /api/plugins | installed plugins: fields, values, actions, status lines (`[]` when none, D-21) |
+| PUT | /api/plugins/:name | save a plugin's settings to `[plugins.<name>]` (validated by the plugin) |
+| POST | /api/plugins/:name/actions/:id | run a plugin button → `{ok, message}` |
 
 Not built: `GET /api/summary` (the Dashboard computes its summary in `dashboard.js` from `/api/tasks`) and `GET/DELETE /api/sources`.
 
@@ -69,4 +75,5 @@ Not built: `GET /api/summary` (the Dashboard computes its summary in `dashboard.
 - Server renders nothing but `index.html`; the UI fetches JSON.
 - All dates are local (Asia/Kolkata); store ISO strings.
 - AI is optional at runtime: tasks, calendar and board work with AI off.
-- No background workers. AI calls are synchronous with a 60 s timeout; the UI shows a spinner.
+- No background workers in the core. AI calls are synchronous with a 60 s timeout; the UI shows a spinner. A plugin may run one daemon thread, started only by the serving process (D-21).
+- Optional features are plugins (separate packages found by entry point), never flags in the core.

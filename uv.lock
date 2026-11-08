@@ -261,6 +261,11 @@ dependencies = [
     { name = "waitress" },
 ]
 
+[package.optional-dependencies]
+telegram = [
+    { name = "somaari-plan-telegram" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
@@ -270,11 +275,18 @@ dev = [
 requires-dist = [
     { name = "flask" },
     { name = "somaari-common", git = "https://github.com/ashwinkrpi/somaari-common?subdirectory=python" },
+    { name = "somaari-plan-telegram", marker = "extra == 'telegram'", editable = "plugins/telegram" },
     { name = "waitress" },
 ]
+provides-extras = ["telegram"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest" }]
+
+[[package]]
+name = "somaari-plan-telegram"
+version = "0.1.0"
+source = { editable = "plugins/telegram" }
 
 [[package]]
 name = "waitress"

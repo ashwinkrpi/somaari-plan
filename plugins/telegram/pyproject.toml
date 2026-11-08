@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "somaari-plan-telegram"
+version = "0.1.0"
+description = "somaari-plan plugin: sends today's tasks to Telegram at a set time"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# No dependencies: stdlib urllib only. It runs inside somaari-plan, which it does not
+# declare as a dependency (somaari-plan is not on PyPI; install it with `uv sync --extra telegram`).
+dependencies = []
+
+# How somaari-plan finds this plugin (plugin API v1, docs/PLUGINS_PLAN.md).
+[project.entry-points."somaari_plan.plugins"]
+telegram = "somaari_plan_telegram:plugin"
+
+[tool.setuptools.packages.find]
+include = ["somaari_plan_telegram*"]

@@ -57,6 +57,8 @@ dated tasks you can see by day, week and priority. One person, one Raspberry Pi,
 - 🤖 **AI optional**: [TypeSafe](https://typesafe.ai) Jev answers small typed questions, a free LLM
   only rewrites loose prose, and `mode = "off"` works with no AI at all. Answers are cached.
 - 💾 **Backups**: JSON export and add-only import from Settings.
+- 🧩 **Plugins, only if you want them**: for example, [Telegram](plugins/telegram/README.md) sends
+  today's tasks to your phone every morning. They aren't part of the main install.
 - 🌗 **Light and dark**, keyboard friendly, works at phone width.
 - 🪶 **Light on the Pi**: Flask + Waitress + SQLite, plain HTML/CSS/JS, idle under 80 MB of RAM.
 
