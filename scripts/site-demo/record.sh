@@ -4,7 +4,7 @@
 # site-demo branch, where .github/workflows/site-demo.yml puts them; run this by hand only to try it.
 #
 # Runs a throwaway copy of app/ and web/ with an empty database and AI off (no keys, nothing leaves
-# the machine, and the same tasks every run), in the Warm Tactile theme. The sample plan's dates are
+# the machine, and the same tasks every run), in the Rangoli theme. The sample plan's dates are
 # filled in relative to today, so the week view always has tasks.
 #
 #   scripts/site-demo/record.sh
@@ -49,7 +49,7 @@ SERVER_PID=$!
 for ((i = 0; i < 60; i++)); do curl -sf "http://127.0.0.1:$PORT/api/health" >/dev/null && break; sleep 0.25; done
 curl -sf "http://127.0.0.1:$PORT/api/health" >/dev/null || { cat "$COPY/server.log" >&2; exit 1; }
 
-"$PW_PY" "$HERE/record.py" "http://127.0.0.1:$PORT/?theme=warm-tactile#/new" "$COPY/sample-plan.md" "$COPY/rec"
+"$PW_PY" "$HERE/record.py" "http://127.0.0.1:$PORT/?theme=rangoli#/new" "$COPY/sample-plan.md" "$COPY/rec"
 # shellcheck source=/dev/null
 source "$COPY/rec/raw.times"
 export SEGMENTS="$START-$END" POSTER_AT="${POSTER_AT:-$(awk -v s="$START" -v e="$END" 'BEGIN { printf "%.2f", e - s - 1.5 }')}"

@@ -1,15 +1,29 @@
 /* Themes (D-17, D-18): the somaari themes from somaari-common, served at /theme/. theme.js sets
    html[data-theme] before first paint (Auto = IST seasonal schedule); themes.css holds the fonts and the
    tokens every somaari app shares (--fg, --accent, --font ...). The blocks below add this app's own
-   tokens per theme; decorations are at the end of this file. :root holds warm-tactile, so the page keeps
+   tokens per theme; decorations are at the end of this file. :root holds rangoli, so the page keeps
    it without JS. */
 :root,
-:root[data-theme=warm-tactile]{
-  --bg:#ede3d3;--card-bg:#fffaf1;--card-edge:#c9b79b;
-  --panel:#e2d2b8;--panel-bg:radial-gradient(rgb(74 52 30/8%) .7px,transparent 1.3px) 0 0/6px 6px,#e2d2b8;--panel-fg:#2a241e;--panel-line:#c2ad8c;
-  --field:#f5ecdd;--track:#d9c9ac;--muted-fg:#65584a;--accent-text:#9a4424;
-  --drop-hover:#f1d6c2;--today-cell:#f8ead6;--weekend:#e5d9c4;--weekend-cell:#ece1cd;
-  --radius:6px;--field-radius:6px;--shadow:0 6px 14px -8px rgb(90 60 30/35%);--display-tracking:-.02em;
+:root[data-theme=rangoli]{
+  --bg:#fbc96b;--card-edge:#e39a2d;
+  --panel:#fff6e5;--panel-bg:#fff6e5;--panel-fg:#1c1640;--panel-line:#f1c271;
+  --field:#fffaf0;--track:#f1c271;--muted-fg:#4f4778;--accent-text:#9a3412;
+  --drop-hover:#f8b84e;--today-cell:#fde2a8;--weekend:#f5bd5a;--weekend-cell:#f7c25f;
+  --radius:10px;--field-radius:8px;--display-tracking:0;
+}
+:root[data-theme=monsoon]{
+  --bg:#e3ebee;--card-edge:#c8d6dc;
+  --panel:#f7fafb;--panel-bg:#f7fafb;--panel-fg:#13252e;--panel-line:#d5e0e4;
+  --field:#ffffff;--track:#d5e0e4;--muted-fg:#4b6672;--accent-text:#0c5d67;
+  --drop-hover:#cfe6e6;--today-cell:#eef6f7;--weekend:#d9e3e7;--weekend-cell:#dce5e9;
+  --radius:12px;--field-radius:8px;--display-tracking:-.01em;
+}
+:root[data-theme=pi-console]{
+  --bg:#0d120f;--card-edge:#26382b;
+  --panel:#141b16;--panel-bg:#141b16;--panel-fg:#dcf5e2;--panel-line:#26382b;
+  --field:#101712;--track:#26382b;--muted-fg:#8fae98;--accent-text:#5ee39a;
+  --drop-hover:#1d3a27;--today-cell:#15241a;--weekend:#0b0f0d;--weekend-cell:#0a0e0b;
+  --radius:6px;--field-radius:4px;--display-tracking:0;
 }
 :root[data-theme=liquid-glass]{
   --page-bg:radial-gradient(60vmax 60vmax at 0% 0%,rgb(59 91 255/32%),transparent 70%),radial-gradient(50vmax 50vmax at 100% 100%,rgb(19 194 163/22%),transparent 70%),radial-gradient(40vmax 40vmax at 100% 30%,rgb(226 85 122/20%),transparent 70%),#0a0e1c;
@@ -19,19 +33,6 @@
   --drop-hover:#24305c;--today-cell:#18213f;--weekend:#10162b;--weekend-cell:#10152a;
   --radius:14px;--field-radius:10px;--shadow:0 10px 24px -14px rgb(0 0 0/60%),inset 0 1px 0 rgb(255 255 255/10%);--display-tracking:-.03em;
 }
-:root[data-theme=dasara-jamboo]{
-  --bg:#5e0d18;--card-edge:#e8b33a;
-  --panel:#3e0810;--panel-bg:#3e0810;--panel-fg:#fbefd9;--panel-line:#8e523d;
-  --field:#4a0a13;--line:#8e523d;--track:#7a2a30;--muted-fg:#dcc3a0;--accent-text:#e8b33a;
-  --drop-hover:#7a1a26;--today-cell:#74121f;--weekend:#540b15;--weekend-cell:#42090f;
-  --radius:4px;--field-radius:4px;--shadow:none;--display-tracking:0;
-}
-/* Cream cards on maroon: cards, summary cells and the theme popover switch to dark ink. */
-:root[data-theme=dasara-jamboo] :is(.card,.bcell,.appearance-menu){
-  color-scheme:light;
-  --bg:#fbefd9;--fg:#3e0810;--muted-fg:#5e3a2e;--field:#fff7e8;--line:#c8a76a;
-  --accent:#8a1c2c;--on-accent:#fbefd9;--accent-text:#8a1c2c;--focus:#8a1c2c;--track:#e6d3b0;
-}
 :root[data-theme=rajyotsava]{
   --page-bg:var(--grain),#f4f0e6;
   --bg:#f4f0e6;--card-bg:linear-gradient(#e2d3a2 0 4px,#8a3b32 4px 8px,#ffffff 8px);--card-edge:#d8ccb0;
@@ -39,14 +40,6 @@
   --field:#fbf8f0;--line:#d8ccb0;--track:#e4dcc8;--muted-fg:#5c4e33;--accent-text:#8a3b32;
   --drop-hover:#f2ddd6;--today-cell:#f6ecc9;--weekend:#ebe4d3;--weekend-cell:#efe8d8;
   --radius:8px;--field-radius:6px;--display-tracking:-.01em;
-}
-:root[data-theme=deepa]{
-  --page-bg:radial-gradient(60vmax 40vmax at 85% 0%,rgb(255 166 48/18%),transparent 70%),radial-gradient(40vmax 30vmax at 0% 100%,rgb(255 120 40/10%),transparent 70%),#16112b;
-  --bg:#16112b;--card-bg:linear-gradient(180deg,#2a2148,#221a3d);--card-edge:#3b2f5c;
-  --panel:#1d1636;--panel-bg:#1d1636;--panel-fg:#fbeedd;--panel-line:#3b2f5c;
-  --field:#221a3d;--line:#3b2f5c;--track:#3b2f5c;--muted-fg:#d4c2ae;--accent-text:#ffb547;
-  --drop-hover:#3a2a4a;--today-cell:#2e2246;--weekend:#1b1533;--weekend-cell:#1a1430;
-  --radius:12px;--field-radius:8px;--shadow:0 12px 28px -16px rgb(255 150 40/35%);--display-tracking:-.02em;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -258,16 +251,6 @@ input,select,textarea{border-radius:var(--field-radius)}
   :root[data-theme=liquid-glass] .panel{background:rgb(255 255 255/7%);-webkit-backdrop-filter:blur(28px) saturate(140%);backdrop-filter:blur(28px) saturate(140%);border-right:1px solid rgb(255 255 255/12%)}
 }
 
-/* ---- dasara-jamboo: gold edge and zig-zag fringe on the panel, like an elephant's caparison ---- */
-:root[data-theme=dasara-jamboo] .panel{position:relative;border-right:3px solid var(--gold)}
-:root[data-theme=dasara-jamboo] .panel::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% + 3px);width:11px;background-image:linear-gradient(45deg,var(--gold) 25%,transparent 25%),linear-gradient(135deg,var(--gold) 25%,transparent 25%);background-size:22px 22px;background-repeat:repeat-y;background-position:0 -11px;pointer-events:none;z-index:1}
-:root[data-theme=dasara-jamboo] h1{color:var(--gold)}
-:root[data-theme=dasara-jamboo] .card{border-top-width:4px}
-@media (max-width:900px){
-  :root[data-theme=dasara-jamboo] .panel{border-right:0;border-bottom:3px solid var(--gold)}
-  :root[data-theme=dasara-jamboo] .panel::after{top:calc(100% + 3px);bottom:auto;left:0;right:0;width:auto;height:11px;background-image:linear-gradient(135deg,var(--gold) 25%,transparent 25%),linear-gradient(225deg,var(--gold) 25%,transparent 25%);background-repeat:repeat-x;background-position:-11px 0}
-}
-
 /* ---- rajyotsava: sand panel with a brick-red band (the Kannada flag, matte) and a faint outlined "ಕ" ---- */
 :root[data-theme=rajyotsava] .panel{position:relative;isolation:isolate;border-right:10px solid var(--brick)}
 :root[data-theme=rajyotsava] .panel::after{content:"ಕ" / "";position:absolute;z-index:-1;right:8px;bottom:56px;font-family:"Baloo Tamma 2",sans-serif;font-size:180px;font-weight:600;line-height:1;color:transparent;-webkit-text-stroke:2px rgb(138 59 50/16%);pointer-events:none;user-select:none}
@@ -275,13 +258,4 @@ input,select,textarea{border-radius:var(--field-radius)}
 @media (max-width:900px){
   :root[data-theme=rajyotsava] .panel{border-right:0;border-bottom:10px solid var(--brick)}
   :root[data-theme=rajyotsava] .panel::after{bottom:auto;top:40px;font-size:140px}
-}
-
-/* ---- deepa: indigo night, a saffron edge on the panel and a row of lit diyas at its foot ---- */
-:root[data-theme=deepa] .panel{position:relative;border-right:2px solid #ffb547;box-shadow:4px 0 24px -8px rgb(255 170 60/45%)}
-:root[data-theme=deepa] .panel::after{content:"";position:absolute;left:0;right:0;bottom:10px;height:26px;background:radial-gradient(4px 7px at 28px 7px,#fff3c4 0 45%,#ffb547 60%,transparent 75%),radial-gradient(10px 10px at 28px 8px,rgb(255 181 71/45%),transparent 70%),radial-gradient(14px 7px at 28px 17px,#c4562a 0 92%,transparent 100%);background-size:56px 26px;background-repeat:repeat-x;background-position:center 0;filter:drop-shadow(0 0 6px rgb(255 170 60/70%));pointer-events:none}
-:root[data-theme=deepa] h1{color:#ffcf7a}
-:root[data-theme=deepa] .card{border-top:3px solid #ffb547}
-@media (max-width:900px){
-  :root[data-theme=deepa] .panel{border-right:0;border-bottom:2px solid #ffb547;box-shadow:0 4px 24px -8px rgb(255 170 60/45%);padding-bottom:40px}
 }

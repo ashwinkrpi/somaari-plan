@@ -11,7 +11,7 @@ First public release.
 - AI: TypeSafe Jev for typed decisions; optional LLM (OpenRouter, Gemini or any OpenAI-compatible server; model is configurable) only to rewrite loose prose, or for full extraction with `mode = "llm"`. `mode = "off"` works with no AI at all. Answers are cached, so re-uploading a plan makes no AI calls.
 - About page: version, build, developer info and **Copy debug info** (shared somaari About spec).
 - Backup: JSON export and add-only import from Settings.
-- Themes shared with somaari.in: Warm Tactile, Liquid Glass, Dasara – Jamboo Savari, Kannada Rajyotsava; Auto picks one by the date in India. theme.js, the shared tokens and the fonts come from somaari-common (served at `/theme/`). Keyboard and 380 px phone width supported; date format setting.
+- Themes shared with somaari.in: Rangoli (default), Monsoon, Pi Console, Liquid Glass, Kannada Rajyotsava; Auto picks one by the date in India. theme.js, the shared tokens and the fonts come from somaari-common (served at `/theme/`). Keyboard and 380 px phone width supported; date format setting.
 - Runs on a Raspberry Pi 5 with Flask, Waitress and SQLite; no frontend build step.
 - Plugins (optional, installed separately): the core finds packages in the `somaari_plan.plugins` entry-point group and shows their settings and buttons in Settings. First plugin, **Telegram** (`plugins/telegram`, `uv sync --extra telegram`): today's open tasks sent to Telegram once a day at a time set in Settings.
 - Can run as a systemd user service that starts at boot; the guide lists the steps.

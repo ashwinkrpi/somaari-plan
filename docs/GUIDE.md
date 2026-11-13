@@ -17,7 +17,7 @@ For how it works inside, privacy, the API and development, see the [README](../R
 
 </div>
 
-<img src="screenshots/theme-warm-tactile.png" alt="Dashboard: this week's tasks by day and priority" width="100%">
+<img src="screenshots/theme-rangoli.png" alt="Dashboard: this week's tasks by day and priority" width="100%">
 
 > [!NOTE]
 > All screenshots use neutral demo data (a book swap plan and a garden plan), not real tasks.
@@ -371,7 +371,7 @@ Settings has one section per installed plugin. With no plugins installed, Settin
 | Part | What's there |
 |---|---|
 | **Menu** (left) | Today's date, **Today** (with the number of open tasks), **Calendar**, **Dashboard** (done / planned this week), **Done**, **New plan ↗** and **Settings** |
-| **Footer** | The week number, and the **Theme** button: **Auto (seasonal)**, **Warm Tactile**, **Liquid Glass**, **Dasara – Jamboo Savari** or **Kannada Rajyotsava**. Auto shows Warm Tactile most of the year, Dasara for 17–20 October 2026 and Rajyotsava for 1–7 November. Your choice is remembered in this browser; add `?theme=liquid-glass` (or another theme id) to the address to preview one without saving it |
+| **Footer** | The week number, and the **Theme** button: **Auto (seasonal)**, **Rangoli**, **Monsoon**, **Pi Console**, **Liquid Glass** or **Kannada Rajyotsava**. Auto shows Rangoli most of the year and Rajyotsava for 1–7 November. Your choice is remembered in this browser; add `?theme=liquid-glass` (or another theme id) to the address to preview one without saving it |
 | **Page** | One page at a time |
 
 Every task has a title, a **priority** (High, Medium, Low), an optional **step** (a tag such as
