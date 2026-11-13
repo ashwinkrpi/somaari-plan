@@ -71,7 +71,7 @@ function card(t, today) {
     ondragstart: (e) => { e.dataTransfer.setData("text/plain", String(t.id)); e.dataTransfer.effectAllowed = "move"; } },
     el("div", { class: "ctitle" }, taskKey(t), " ", t.title), t.step ? el("div", { class: "cstep" }, t.step) : null,
     el("div", { class: "cact" },
-      el("button", { type: "button", class: "mv", "aria-pressed": String(sel), disabled: t.closed,
+      el("button", { type: "button", class: "mv", "data-k": `move-${t.id}`, "aria-pressed": String(sel), disabled: t.closed,
         title: t.closed ? "Reopen the task to move it" : null,
         onclick: () => { db.moving = sel ? null : t.id; db.status = sel ? "" : `Moving: ${t.title}. Choose a cell.`; render(); } },
         sel ? "Selected" : "Move"),

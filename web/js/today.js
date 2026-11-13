@@ -12,7 +12,7 @@ export function taskRow(t, prefix = "t") {
     t.step ? el("span", {}, t.step) : null,
     el("span", {}, "Created " + fmtStamp(t.created_at)),
     t.closed ? el("span", {}, "Closed " + fmtStamp(t.closed_at)) : el("span", { class: "tag-open" }, "Open"));
-  const btn = el("button", { type: "button", class: "done-btn", "aria-pressed": String(t.closed),
+  const btn = el("button", { type: "button", class: "done-btn", "data-k": `done-${prefix}${t.id}`, "aria-pressed": String(t.closed),
     onclick: () => toggleDone(t) }, t.closed ? "Done ✓" : "Mark done");
   return el("li", { class: "row" + (t.closed ? " is-done" : "") }, idx,
     el("div", { class: "body" }, el("div", { class: "ttl" }, t.title), meta),

@@ -9,7 +9,8 @@ export function el(tag, attrs = {}, ...kids) {
 }
 
 // Replace a host's children but keep keyboard focus on the same control.
-const sig = (n) => (n.id ? "#" + n.id : n.tagName + "|" + (n.getAttribute("aria-label") || n.textContent.trim().slice(0, 40)));
+// data-k marks a control whose label changes when pressed (Mark done -> Done ✓, Move -> Selected).
+const sig = (n) => (n.id ? "#" + n.id : n.tagName + "|" + (n.dataset.k || n.getAttribute("aria-label") || n.textContent.trim().slice(0, 40)));
 
 export function swap(host, ...kids) {
   const a = document.activeElement;

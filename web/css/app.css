@@ -142,7 +142,7 @@ h1{font-size:72px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:0 0
 .mv:disabled,.edit-btn:disabled{opacity:.45;cursor:not-allowed}.card.is-done{cursor:default}
 .nav-small{min-height:44px;font-size:16px;font-weight:400}
 .set-form{display:flex;flex-direction:column;gap:20px;max-width:640px;margin-top:20px}
-.set-form fieldset{border:0;border-top:1px solid var(--line);margin:0;padding:12px 0 0}
+.set-form fieldset{min-width:0;border:0;border-top:1px solid var(--line);margin:0;padding:12px 0 0}
 .set-form legend{font-weight:800;font-size:18px;padding:0 8px 0 0}
 .fld{display:flex;flex-direction:column;gap:4px;margin:10px 0}
 .fld label{font-size:14px;color:var(--muted-fg)}
@@ -150,7 +150,7 @@ h1{font-size:72px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:0 0
 .fld .hint{font-size:13px;color:var(--muted-fg)}
 .chain{list-style:none;margin:0;padding:0}
 .chain li{display:flex;align-items:center;gap:8px;min-height:44px;border-bottom:1px solid var(--line)}
-.chain .cname{flex:1}
+.chain .cname{flex:1;min-width:0;overflow-wrap:anywhere}
 .chain button,.set-btn{min-height:44px;padding:0 14px;background:transparent;border:1px solid var(--fg);font-weight:600}
 .chain button{min-width:44px;padding:0 8px}
 .set-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:800}
