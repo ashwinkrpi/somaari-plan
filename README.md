@@ -34,8 +34,6 @@ dated tasks you can see by day, week and priority. One person, one Raspberry Pi,
 | ![Dashboard, Rangoli theme (demo data)](docs/screenshots/theme-rangoli.png) | ![Dashboard, Monsoon theme (demo data)](docs/screenshots/theme-monsoon.png) |
 | **Pi Console** | **Liquid Glass** |
 | ![Dashboard, Pi Console theme (demo data)](docs/screenshots/theme-pi-console.png) | ![Dashboard, Liquid Glass theme (demo data)](docs/screenshots/theme-liquid-glass.png) |
-| **Kannada Rajyotsava** | |
-| ![Dashboard, Kannada Rajyotsava theme (demo data)](docs/screenshots/theme-rajyotsava.png) | |
 
 > [!WARNING]
 > There's no login: anyone who can reach the port can read and change your tasks. Keep it on your
@@ -180,7 +178,7 @@ data and fixed date every run). The demo video there is recorded by
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). The bundled theme fonts (Hanken Grotesk, Marcellus, Literata, IBM Plex Sans, JetBrains Mono, Onest, Mukta, Baloo Tamma 2) are under the SIL Open Font License; they come with the themes from [somaari-common](https://github.com/ashwinkrpi/somaari-common) (`theme/fonts/OFL-<Family>.txt`, served at `/theme/fonts/`).
+MIT, see [LICENSE](LICENSE). The bundled theme fonts (Hanken Grotesk, Marcellus, Literata, IBM Plex Sans, JetBrains Mono, Onest) are under the SIL Open Font License; they come with the themes from [somaari-common](https://github.com/ashwinkrpi/somaari-common) (`theme/fonts/OFL-<Family>.txt`, served at `/theme/fonts/`).
 
 <div align="center">
 <br>

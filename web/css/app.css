@@ -33,14 +33,6 @@
   --drop-hover:#24305c;--today-cell:#18213f;--weekend:#10162b;--weekend-cell:#10152a;
   --radius:14px;--field-radius:10px;--shadow:0 10px 24px -14px rgb(0 0 0/60%),inset 0 1px 0 rgb(255 255 255/10%);--display-tracking:-.03em;
 }
-:root[data-theme=rajyotsava]{
-  --page-bg:var(--grain),#f4f0e6;
-  --bg:#f4f0e6;--card-bg:linear-gradient(#e2d3a2 0 4px,#8a3b32 4px 8px,#ffffff 8px);--card-edge:#d8ccb0;
-  --panel:#e2d3a2;--panel-bg:var(--grain),#e2d3a2;--panel-fg:#1c1408;--panel-line:#c4b07a;
-  --field:#fbf8f0;--line:#d8ccb0;--track:#e4dcc8;--muted-fg:#5c4e33;--accent-text:#8a3b32;
-  --drop-hover:#f2ddd6;--today-cell:#f6ecc9;--weekend:#ebe4d3;--weekend-cell:#efe8d8;
-  --radius:8px;--field-radius:6px;--display-tracking:-.01em;
-}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--page-bg);background-attachment:fixed;color:var(--fg);font:16px/1.4 var(--font)}
@@ -249,13 +241,4 @@ input,select,textarea{border-radius:var(--field-radius)}
 /* ---- liquid-glass: frosted panel over the glow page ---- */
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   :root[data-theme=liquid-glass] .panel{background:rgb(255 255 255/7%);-webkit-backdrop-filter:blur(28px) saturate(140%);backdrop-filter:blur(28px) saturate(140%);border-right:1px solid rgb(255 255 255/12%)}
-}
-
-/* ---- rajyotsava: sand panel with a brick-red band (the Kannada flag, matte) and a faint outlined "ಕ" ---- */
-:root[data-theme=rajyotsava] .panel{position:relative;isolation:isolate;border-right:10px solid var(--brick)}
-:root[data-theme=rajyotsava] .panel::after{content:"ಕ" / "";position:absolute;z-index:-1;right:8px;bottom:56px;font-family:"Baloo Tamma 2",sans-serif;font-size:180px;font-weight:600;line-height:1;color:transparent;-webkit-text-stroke:2px rgb(138 59 50/16%);pointer-events:none;user-select:none}
-:root[data-theme=rajyotsava] .card,:root[data-theme=rajyotsava] .bcell{padding-top:14px}
-@media (max-width:900px){
-  :root[data-theme=rajyotsava] .panel{border-right:0;border-bottom:10px solid var(--brick)}
-  :root[data-theme=rajyotsava] .panel::after{bottom:auto;top:40px;font-size:140px}
 }

@@ -9,7 +9,7 @@ import sys
 from playwright.sync_api import sync_playwright
 
 CLOCK = "2026-10-14T09:00:00+05:30"   # Wed 14 Oct, the seed week moved on by take.sh
-THEMES = ["rangoli", "monsoon", "pi-console", "liquid-glass", "rajyotsava"]
+THEMES = ["rangoli", "monsoon", "pi-console", "liquid-glass"]
 
 # (file, theme, route, width, height, action)
 SHOTS = [(f"theme-{t}.png", t, "dashboard", 1400, 1020, None) for t in THEMES] + [

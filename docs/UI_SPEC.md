@@ -1,6 +1,6 @@
 # UI spec — Somaari themes
 
-Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `design/light.dc.html`, `design/dark.dc.html` (reference for layout only; open one section with `grep -n 'id="p-dash"'` etc.). Colours, fonts and shapes come from the themes below (D-17, 2026-10-19), the same five as somaari-site, shared through somaari-common (D-18): its `docs/THEME_SPEC.md` is the standard.
+Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `design/light.dc.html`, `design/dark.dc.html` (reference for layout only; open one section with `grep -n 'id="p-dash"'` etc.). Colours, fonts and shapes come from the themes below (D-17, 2026-10-19), the same four as somaari-site, shared through somaari-common (D-18): its `docs/THEME_SPEC.md` is the standard.
 
 ## Themes
 `/theme/theme.js` (from somaari-common, served by the `/theme/<path>` route from `somaari_theme.static_dir()`; classic blocking script in `<head>`) sets `html[data-theme]` before first paint and fills `<meta name="theme-color">`. Order: `?theme=<id>` (preview, never saved) → saved choice (`localStorage` `somaari-theme`) → seasonal schedule by the date in India (Asia/Kolkata). `:root` holds rangoli, so the page keeps it without JS.
@@ -11,16 +11,15 @@ Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `des
 | `monsoon` | Monsoon | plain grey-blue page, white-ish panel and cards with a soft shadow, teal accent | Hanken Grotesk / Literata 600 |
 | `pi-console` | Pi Console | plain near-black page, dark green-grey panel and cards, terminal-green accent | IBM Plex Sans / JetBrains Mono 700 |
 | `liquid-glass` | Liquid Glass | dark navy with blue/teal/pink glows, frosted panel, pill buttons | Onest / Onest 600 |
-| `rajyotsava` | Kannada Rajyotsava | sand panel with brick-red band, faint outlined "ಕ" in the panel, sand/brick stripe on cards | Mukta / Baloo Tamma 2 700 |
 
-Schedule (in somaari-common `theme/theme.js`, tested there): 1–7 Nov every year `rajyotsava`; otherwise `rangoli`. (Warm Tactile, Dasara – Jamboo Savari and Deepavali – Deepa were removed on 2026-11-13, D-22.)
-Picker: Theme button (44px, half-filled circle icon) in the panel footer opens a popover of radios: Auto (seasonal), then the five themes. `theme.js` adds the radios to the empty `<fieldset>`. Esc / click outside / tab out closes it. Opens upward; downward below 900px.
+Schedule (in somaari-common `theme/theme.js`, tested there): empty for now, so Auto always shows `rangoli`. (Warm Tactile, Dasara – Jamboo Savari, Deepavali – Deepa and Kannada Rajyotsava were removed on 2026-11-13, D-22.)
+Picker: Theme button (44px, half-filled circle icon) in the panel footer opens a popover of radios: Auto (seasonal), then the four themes. `theme.js` adds the radios to the empty `<fieldset>`. Esc / click outside / tab out closes it. Opens upward; downward below 900px.
 
 ## Tokens (CSS custom properties per `html[data-theme]`)
-Shared ones come from `/theme/themes.css` and are never redefined here: `color-scheme`, `--fg`, `--accent`, `--on-accent`, `--focus`, `--btn-radius`, `--font`, `--font-display`, `--display-weight` in every theme, plus some per theme (THEME_SPEC §4: `--page-bg`, `--card-bg`, `--line` and `--shadow` for rangoli, monsoon and pi-console; `--shadow`, `--grain`, `--sand`, `--brick` for rajyotsava). `css/app.css` sets the rest per theme:
+Shared ones come from `/theme/themes.css` and are never redefined here: `color-scheme`, `--fg`, `--accent`, `--on-accent`, `--focus`, `--btn-radius`, `--font`, `--font-display`, `--display-weight` in every theme, plus some per theme (THEME_SPEC §4: `--page-bg`, `--card-bg`, `--line` and `--shadow` for rangoli, monsoon and pi-console). `css/app.css` sets the rest per theme:
 `--page-bg` (body, may hold grain/glows) · `--bg` (solid surface) · `--fg` · `--card-bg` / `--card-edge` (Dashboard cards, summary band) · `--panel` / `--panel-bg` / `--panel-fg` / `--panel-line` · `--field` (inputs, board cells) · `--line` · `--track` · `--muted-fg` (done text) · `--accent` · `--on-accent` (text on accent) · `--accent-text` (accent as text) · `--focus` · `--drop-hover` · `--today-cell` · `--weekend` (Sat/Sun in Calendar; Dashboard day headers) · `--weekend-cell` (Sat/Sun Dashboard board cells) · `--radius` / `--btn-radius` / `--field-radius` · `--shadow` · `--font` / `--font-display` / `--display-weight` / `--display-tracking`.
 
-Fonts: self-hosted woff2 from somaari-common, at `/theme/fonts/` (Latin subsets; Baloo Tamma 2 also a Kannada subset for "ಕ"; Onest also its arrows, ✓ and ↻), `OFL-<Family>.txt` beside them. No Google Fonts call; a browser downloads only the faces its theme uses.
+Fonts: self-hosted woff2 from somaari-common, at `/theme/fonts/` (Latin subsets; Onest also its arrows, ✓ and ↻), `OFL-<Family>.txt` beside them. No Google Fonts call; a browser downloads only the faces its theme uses.
 Outside Liquid Glass, ✓ ↗ ↵ ← → may render from the fallback font; that's expected.
 Type: page titles 72px in the display font and weight; big numerals 84–120px display font; body 16–20px.
 Rules: 2px fg rule under page titles; 1px `--line` between rows. Radius and shadows come from the theme tokens.
