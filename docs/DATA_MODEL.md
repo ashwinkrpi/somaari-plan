@@ -63,4 +63,4 @@ CREATE TABLE chat (
 - User-entered steps (preview, paste, quick add, PATCH) are whitespace-collapsed and cut to 30 chars; blank → NULL.
 - Reopening (closed → open) never leaves a task in the past: a past `due_date` becomes today; an explicit past date is refused (400). Future due dates are kept.
 - Archive = done: there is no archive flag. Done tasks stay where they are; the Done page lists them by `closed_at` (D-09).
-- Deleting a source keeps its tasks (source_id → NULL) unless the user chooses "remove tasks too".
+- Sources can't be deleted yet (`/api/sources` isn't built). If one is deleted, its tasks stay (`ON DELETE SET NULL` sets `source_id` to NULL); a "remove tasks too" choice is planned, not built.

@@ -28,12 +28,16 @@ web/
   index.html
   css/app.css
   js/  app.js (router) · store.js (shared task state) · dom.js · dates.js · today.js · calendar.js
-       dashboard.js · done.js · editor.js (inline task editor) · datefmt.js (date format + date field) · plan.js · quick.js · steps.js (step suggestions) · settings.js
+       dashboard.js · done.js · editor.js (inline task editor) · datefmt.js (date format + date field) · plan.js · quick.js · steps.js (step suggestions) · settings.js · about.js
 /theme/              not in this repo: somaari-common theme/ (theme.js: theme before first paint, seasonal schedule, picker; themes.css: fonts + shared tokens; fonts/ + OFL), installed with the somaari-common package and served by app/__init__.py from somaari_theme.static_dir() (D-18)
 plugins/             optional packages, NOT in the core wheel; installed with `uv sync --extra <name>` (docs/PLUGINS_PLAN.md)
   telegram/          somaari-plan-telegram: daily message with today's tasks (own pyproject, README, tests)
 tests/
   fixtures/          example-plan.md · .expected.json · jev/<set>_<sha8>.json
+scripts/
+  screenshots/       take.sh: retakes the docs screenshots from neutral demo data
+  site-demo/         records the demo loop shown on somaari.in (run by site-demo.yml)
+.github/workflows/   site-demo.yml (re-record the demo after a push to web/) · site-docs.yml (rebuild somaari.in after a push to docs/)
 design/              canvas exports (reference only, not served)
 data/                somaari.db (gitignored)
 ```
@@ -48,6 +52,8 @@ Settings, defaults and precedence (CLI → env → `config.toml` → defaults): 
 ## API (JSON)
 | Method | Path | Notes |
 |---|---|---|
+| GET | /api/health | `{"ok": true}`; for checking the app is reachable |
+| GET | /api/about | About block and debug info (somaari-common ABOUT_SPEC) |
 | GET | /api/tasks?from=YYYY-MM-DD&to=YYYY-MM-DD | due_date in range |
 | POST | /api/tasks | single task |
 | PATCH | /api/tasks/:id | title, step, due_date, due_time, priority, closed (bool); reopening moves a past due date to today; a due_date change is logged in task_moves |
