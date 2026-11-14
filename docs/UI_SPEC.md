@@ -7,9 +7,9 @@ Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `des
 
 | id | Picker label | Look | Fonts (body / display) |
 |---|---|---|---|
-| `rangoli` (default) | Rangoli | plain marigold page, cream panel and cards with an indigo underline, indigo accent, vermilion accent text | Hanken Grotesk / Marcellus 400 |
+| `rangoli` (no-JS look) | Rangoli | plain marigold page, cream panel and cards with an indigo underline, indigo accent, vermilion accent text | Hanken Grotesk / Marcellus 400 |
 | `monsoon` | Monsoon | plain grey-blue page, white-ish panel and cards with a soft shadow, teal accent | Hanken Grotesk / Literata 600 |
-| `pi-console` | Pi Console | plain near-black page, dark warm-brown panel and cards, tangerine-orange accent | IBM Plex Sans / JetBrains Mono 700 |
+| `pi-console` (default) | Pi Console | plain near-black page, dark warm-brown panel and cards, tangerine-orange accent | IBM Plex Sans / JetBrains Mono 700 |
 | `liquid-glass` | Liquid Glass | dark navy with blue/teal/pink glows, frosted panel, pill buttons | Onest / Onest 600 |
 
 Schedule (in somaari-common `theme/theme.js`, tested there): empty for now, so Auto always shows `rangoli`. (Warm Tactile, Dasara – Jamboo Savari, Deepavali – Deepa and Kannada Rajyotsava were removed on 2026-11-13, D-22.)
