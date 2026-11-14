@@ -19,10 +19,10 @@
   --radius:12px;--field-radius:8px;--display-tracking:-.01em;
 }
 :root[data-theme=pi-console]{
-  --bg:#0d120f;--card-edge:#26382b;
-  --panel:#141b16;--panel-bg:#141b16;--panel-fg:#dcf5e2;--panel-line:#26382b;
-  --field:#101712;--track:#26382b;--muted-fg:#8fae98;--accent-text:#5ee39a;
-  --drop-hover:#1d3a27;--today-cell:#15241a;--weekend:#0b0f0d;--weekend-cell:#0a0e0b;
+  --bg:#120e0b;--card-edge:#3a2a1e;
+  --panel:#1b1510;--panel-bg:#1b1510;--panel-fg:#f7e6d8;--panel-line:#3a2a1e;
+  --field:#17120d;--track:#3a2a1e;--muted-fg:#b8987e;--accent-text:#ffa155;
+  --drop-hover:#3d2614;--today-cell:#241910;--weekend:#0f0c09;--weekend-cell:#0e0b08;
   --radius:6px;--field-radius:4px;--display-tracking:0;
 }
 :root[data-theme=liquid-glass]{
