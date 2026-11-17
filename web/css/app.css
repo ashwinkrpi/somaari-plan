@@ -1,37 +1,36 @@
 /* Themes (D-17, D-18): the somaari themes from somaari-common, served at /theme/. theme.js sets
    html[data-theme] before first paint (Auto = IST seasonal schedule); themes.css holds the fonts and the
-   tokens every somaari app shares (--fg, --accent, --font ...). The blocks below add this app's own
-   tokens per theme; decorations are at the end of this file. :root holds rangoli, so the page keeps
-   it without JS. */
-:root,
-:root[data-theme=rangoli]{
-  --bg:#fbc96b;--card-edge:#e39a2d;
-  --panel:#fff6e5;--panel-bg:#fff6e5;--panel-fg:#1c1640;--panel-line:#f1c271;
-  --field:#fffaf0;--track:#f1c271;--muted-fg:#4f4778;--accent-text:#9a3412;
+   standard tokens every theme sets (--fg, --subtle, --line, --card-bg, --field-bg, --accent-text,
+   --radius, --field-radius, --display-tracking ... somaari-common THEME_SPEC section 4). This app's own
+   tokens are derived from them once, for every theme, so a theme added in somaari-common needs no change
+   here. The per-theme blocks after it are optional fine-tuning (exact calendar shades, liquid-glass's
+   glows); decorations are at the end of this file. :root holds the no-JS theme (rangoli). */
+:root,:root[data-theme]{
+  --bg:var(--page-bg);--card-edge:var(--line);
+  --panel:var(--card-bg);--panel-bg:var(--card-bg);--panel-fg:var(--fg);--panel-line:var(--line);
+  --field:var(--field-bg);--track:var(--line);--muted-fg:var(--subtle);
+  --drop-hover:color-mix(in srgb,var(--accent) 18%,var(--page-bg));
+  --today-cell:color-mix(in srgb,var(--accent) 10%,var(--card-bg));
+  --weekend:color-mix(in srgb,var(--page-bg) 94%,#000);--weekend-cell:color-mix(in srgb,var(--page-bg) 95%,#000);
+}
+/* Optional fine-tuning per theme (taste; a theme needs none). */
+:root:not([data-theme]),:root[data-theme=rangoli]{
+  --panel-line:#f1c271;--track:#f1c271;
   --drop-hover:#f8b84e;--today-cell:#fde2a8;--weekend:#f5bd5a;--weekend-cell:#f7c25f;
-  --radius:10px;--field-radius:8px;--display-tracking:0;
 }
 :root[data-theme=monsoon]{
-  --bg:#e3ebee;--card-edge:#c8d6dc;
-  --panel:#f7fafb;--panel-bg:#f7fafb;--panel-fg:#13252e;--panel-line:#d5e0e4;
-  --field:#ffffff;--track:#d5e0e4;--muted-fg:#4b6672;--accent-text:#0c5d67;
+  --panel-line:#d5e0e4;--track:#d5e0e4;
   --drop-hover:#cfe6e6;--today-cell:#eef6f7;--weekend:#d9e3e7;--weekend-cell:#dce5e9;
-  --radius:12px;--field-radius:8px;--display-tracking:-.01em;
 }
 :root[data-theme=graphite]{
-  --bg:#111214;--card-edge:#2c2e33;
-  --panel:#18191c;--panel-bg:#18191c;--panel-fg:#ededef;--panel-line:#2c2e33;
-  --field:#1f2024;--track:#33363b;--muted-fg:#9b9da3;--accent-text:#f7b13a;
-  --drop-hover:#2e2716;--today-cell:#211d15;--weekend:#0d0e10;--weekend-cell:#0c0d0f;
-  --radius:10px;--field-radius:8px;--display-tracking:-.02em;
+  --track:#33363b;--drop-hover:#2e2716;--today-cell:#211d15;--weekend:#0d0e10;--weekend-cell:#0c0d0f;
 }
 :root[data-theme=liquid-glass]{
   --page-bg:radial-gradient(60vmax 60vmax at 0% 0%,rgb(59 91 255/32%),transparent 70%),radial-gradient(50vmax 50vmax at 100% 100%,rgb(19 194 163/22%),transparent 70%),radial-gradient(40vmax 40vmax at 100% 30%,rgb(226 85 122/20%),transparent 70%),#0a0e1c;
-  --bg:#0a0e1c;--card-bg:#1a2038;--card-edge:rgb(255 255 255/18%);
-  --panel:#1a2038;--panel-bg:#1a2038;--panel-fg:#f3f5fb;--panel-line:rgb(255 255 255/18%);
-  --field:#151b33;--line:#2a3150;--track:#2a3150;--muted-fg:#a3acc4;--accent-text:#b3c6ff;
+  --bg:#0a0e1c;--card-edge:rgb(255 255 255/18%);--panel-line:rgb(255 255 255/18%);
+  --line:#2a3150;--track:#2a3150;--muted-fg:#a3acc4;
   --drop-hover:#24305c;--today-cell:#18213f;--weekend:#10162b;--weekend-cell:#10152a;
-  --radius:14px;--field-radius:10px;--shadow:0 10px 24px -14px rgb(0 0 0/60%),inset 0 1px 0 rgb(255 255 255/10%);--display-tracking:-.03em;
+  --shadow:0 10px 24px -14px rgb(0 0 0/60%),inset 0 1px 0 rgb(255 255 255/10%);
 }
 *{box-sizing:border-box}
 html,body{margin:0}

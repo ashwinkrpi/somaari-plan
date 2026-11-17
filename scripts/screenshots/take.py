@@ -4,15 +4,25 @@ Usage: python take.py BASE_URL OUT_DIR
 """
 
 import os
+import re
 import sys
+import urllib.request
 
 from playwright.sync_api import sync_playwright
 
 CLOCK = "2026-10-14T09:00:00+05:30"   # Wed 14 Oct, the seed week moved on by take.sh
-THEMES = ["rangoli", "monsoon", "graphite", "liquid-glass"]
 
-# (file, theme, route, width, height, action)
-SHOTS = [(f"theme-{t}.png", t, "dashboard", 1400, 1020, None) for t in THEMES] + [
+
+def themes(base):
+    """Every theme id in the served somaari-common theme.js, in picker order (one theme-<id>.png each)."""
+    with urllib.request.urlopen(base.rstrip("/") + "/theme/theme.js") as r:
+        js = r.read().decode("utf-8")
+    block = js[js.index("var THEMES = {"):js.index("};", js.index("var THEMES = {"))]
+    return re.findall(r'"([a-z0-9-]+)"\s*:\s*\{', block)
+
+
+# (file, theme, route, width, height, action); the theme-<id>.png shots are added per theme in main().
+SHOTS = [
     ("today.png", "rangoli", "today", 1400, 560, None),
     ("edit.png", "rangoli", "today", 1400, 560, "edit"),
     ("done.png", "rangoli", "done", 1400, 620, None),
@@ -23,9 +33,10 @@ SHOTS = [(f"theme-{t}.png", t, "dashboard", 1400, 1020, None) for t in THEMES] +
 
 
 def main(base, out_dir):
+    shots = [(f"theme-{t}.png", t, "dashboard", 1400, 1020, None) for t in themes(base)] + SHOTS
     with sync_playwright() as p:
         browser = p.chromium.launch(executable_path=os.environ.get("CHROMIUM") or None)
-        for name, theme, route, w, h, action in SHOTS:
+        for name, theme, route, w, h, action in shots:
             ctx = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=1,
                                       timezone_id="Asia/Kolkata", locale="en-IN")
             page = ctx.new_page()
