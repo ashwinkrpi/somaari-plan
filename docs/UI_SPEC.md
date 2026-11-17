@@ -9,10 +9,10 @@ Layout (panel, pages, sizes) still follows the Kinetic Swiss canvas exports `des
 |---|---|---|---|
 | `rangoli` (no-JS look) | Rangoli | plain marigold page, cream panel and cards with an indigo underline, indigo accent, vermilion accent text | Hanken Grotesk / Marcellus 400 |
 | `monsoon` | Monsoon | plain grey-blue page, white-ish panel and cards with a soft shadow, teal accent | Hanken Grotesk / Literata 600 |
-| `pi-console` (default) | Pi Console | plain near-black page, dark warm-brown panel and cards, tangerine-orange accent | IBM Plex Sans / JetBrains Mono 700 |
+| `graphite` (default) | Graphite | plain cool-grey near-black page, graphite panel and cards, marigold-orange accent | Inter / Inter Tight 700 |
 | `liquid-glass` | Liquid Glass | dark navy with blue/teal/pink glows, frosted panel, pill buttons | Onest / Onest 600 |
 
-Schedule (in somaari-common `theme/theme.js`, tested there): empty for now, so Auto always shows `rangoli`. (Warm Tactile, Dasara – Jamboo Savari, Deepavali – Deepa and Kannada Rajyotsava were removed on 2026-11-13, D-22.)
+Schedule (in somaari-common `theme/theme.js`, tested there): empty for now, so Auto always shows the default, `graphite`. (Warm Tactile, Dasara – Jamboo Savari, Deepavali – Deepa and Kannada Rajyotsava were removed on 2026-11-13, D-22; Pi Console was replaced by Graphite on 2026-11-17.)
 Picker: Theme button (44px, half-filled circle icon) in the panel footer opens a popover of radios: Auto (seasonal), then the four themes. `theme.js` adds the radios to the empty `<fieldset>`. Esc / click outside / tab out closes it. Opens upward; downward below 900px.
 
 ## Tokens (CSS custom properties per `html[data-theme]`)

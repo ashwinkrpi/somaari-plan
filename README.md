@@ -32,8 +32,8 @@ dated tasks you can see by day, week and priority. One person, one Raspberry Pi,
 | Rangoli | Monsoon |
 |---|---|
 | ![Dashboard, Rangoli theme (demo data)](docs/screenshots/theme-rangoli.png) | ![Dashboard, Monsoon theme (demo data)](docs/screenshots/theme-monsoon.png) |
-| **Pi Console** | **Liquid Glass** |
-| ![Dashboard, Pi Console theme (demo data)](docs/screenshots/theme-pi-console.png) | ![Dashboard, Liquid Glass theme (demo data)](docs/screenshots/theme-liquid-glass.png) |
+| **Graphite** | **Liquid Glass** |
+| ![Dashboard, Graphite theme (demo data)](docs/screenshots/theme-graphite.png) | ![Dashboard, Liquid Glass theme (demo data)](docs/screenshots/theme-liquid-glass.png) |
 
 > [!WARNING]
 > There's no login: anyone who can reach the port can read and change your tasks. Keep it on your
