@@ -57,7 +57,7 @@ Medium
 • SP-150  Review the backup job
 
 Overdue (1)
-• Mon 23 Nov  SP-141  Add GitHub link to Instagram bio  (somaari-disk social)
+• Mon 23 Nov  SP-140  Pin the launch post on X  (somaari-disk social)
 ```
 
 ## Updating and removing
