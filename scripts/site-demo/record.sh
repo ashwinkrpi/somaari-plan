@@ -15,7 +15,7 @@ set -euo pipefail
 HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 REPO="$(cd -- "$HERE/../.." && pwd -P)"
 OUT_DIR="${OUT_DIR:-/tmp/somaari-plan-site-demo}"
-SITE_DIR="${SITE_DIR:-$REPO/../somaari-website/somaari-site}"
+SITE_DIR="${SITE_DIR:-$REPO/../somaari-site/site}"
 PY="${PY:-$REPO/.venv/bin/python}"
 PW_PY="${PW_PY:-python3}"
 PORT="${PORT:-8790}"
