@@ -34,4 +34,4 @@ include = ["app*"]
 
 [tool.uv.sources]
 somaari-plan-telegram = { path = "plugins/telegram", editable = true }
-somaari-common = { git = "https://github.com/ashwinkrpi/somaari-common", subdirectory = "python" }
+somaari-common = { git = "https://github.com/ashwinkrpi/somaari-site", subdirectory = "common/python" }
