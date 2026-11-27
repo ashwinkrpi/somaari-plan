@@ -250,7 +250,7 @@ wheels = [
 [[package]]
 name = "somaari-common"
 version = "0.0.0"
-source = { git = "https://github.com/ashwinkrpi/somaari-common?subdirectory=python#fc59443b8f9090cf543b9d9c2b5dc9a1a9ca07e8" }
+source = { git = "https://github.com/ashwinkrpi/somaari-site?subdirectory=common%2Fpython#266ab99db2a1258bab992373a0ae15a765d19b05" }
 
 [[package]]
 name = "somaari-plan"
@@ -274,7 +274,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "flask" },
-    { name = "somaari-common", git = "https://github.com/ashwinkrpi/somaari-common?subdirectory=python" },
+    { name = "somaari-common", git = "https://github.com/ashwinkrpi/somaari-site?subdirectory=common%2Fpython" },
     { name = "somaari-plan-telegram", marker = "extra == 'telegram'", editable = "plugins/telegram" },
     { name = "waitress" },
 ]
